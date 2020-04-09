@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://totoroay.coding.me/</id>
+    <id>https://totoroay.github.io/</id>
     <title>totoroay</title>
-    <updated>2020-04-09T11:50:57.861Z</updated>
+    <updated>2020-04-09T11:51:35.459Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="https://totoroay.coding.me/"/>
-    <link rel="self" href="https://totoroay.coding.me/atom.xml"/>
+    <link rel="alternate" href="https://totoroay.github.io/"/>
+    <link rel="self" href="https://totoroay.github.io/atom.xml"/>
     <subtitle>记录生活</subtitle>
-    <logo>https://totoroay.coding.me/images/avatar.png</logo>
-    <icon>https://totoroay.coding.me/favicon.ico</icon>
+    <logo>https://totoroay.github.io/images/avatar.png</logo>
+    <icon>https://totoroay.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, totoroay</rights>
     <entry>
         <title type="html"><![CDATA[Mybatis配置文件!]]></title>
-        <id>https://totoroay.coding.me/post/mybatis-pei-zhi-wen-jian/</id>
-        <link href="https://totoroay.coding.me/post/mybatis-pei-zhi-wen-jian/">
+        <id>https://totoroay.github.io/post/mybatis-pei-zhi-wen-jian/</id>
+        <link href="https://totoroay.github.io/post/mybatis-pei-zhi-wen-jian/">
         </link>
         <updated>2020-04-09T09:19:39.000Z</updated>
         <content type="html"><![CDATA[<h1 id="父工程xml配置">父工程xml配置</h1>
@@ -78,8 +78,8 @@
     </entry>
     <entry>
         <title type="html"><![CDATA[Hello Gridea]]></title>
-        <id>https://totoroay.coding.me/post/hello-gridea/</id>
-        <link href="https://totoroay.coding.me/post/hello-gridea/">
+        <id>https://totoroay.github.io/post/hello-gridea/</id>
+        <link href="https://totoroay.github.io/post/hello-gridea/">
         </link>
         <updated>2018-12-11T16:00:00.000Z</updated>
         <summary type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
