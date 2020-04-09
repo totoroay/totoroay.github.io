@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://totoroay.github.io/</id>
     <title>totoroay</title>
-    <updated>2020-04-09T09:34:20.740Z</updated>
+    <updated>2020-04-09T09:46:11.475Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://totoroay.github.io/"/>
     <link rel="self" href="https://totoroay.github.io/atom.xml"/>
@@ -11,12 +11,13 @@
     <icon>https://totoroay.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, totoroay</rights>
     <entry>
-        <title type="html"><![CDATA[Mybatis配置文件]]></title>
+        <title type="html"><![CDATA[Mybatis配置文件!]]></title>
         <id>https://totoroay.github.io/post/mybatis-pei-zhi-wen-jian/</id>
         <link href="https://totoroay.github.io/post/mybatis-pei-zhi-wen-jian/">
         </link>
         <updated>2020-04-09T09:19:39.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="父工程xml配置">父工程xml配置</h1>
+        <content type="html"><![CDATA[<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1586425385291.png" alt="" loading="lazy"></figure>
+<h1 id="父工程xml配置">父工程xml配置</h1>
 <pre><code class="language-xml">    &lt;!--父工程--&gt;
     &lt;groupId&gt;org.example&lt;/groupId&gt;
     &lt;artifactId&gt;mybatis&lt;/artifactId&gt;
