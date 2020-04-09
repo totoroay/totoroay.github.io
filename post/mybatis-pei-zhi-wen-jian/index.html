@@ -16,7 +16,7 @@
 
   </head>
   <body>
-    <div class="main px-4 flex flex-col lg:flex-row">
+    <div id="app" class="main px-4 flex flex-col lg:flex-row">
       <div id="sidebar" class="sidebar-wrapper lg:static lg:w-1/4">
   <div class="lg:sticky top-0">
     <div class="sidebar-content">
@@ -30,29 +30,9 @@
       
         <div class="animated fadeInLeft" style="animation-delay: 0.4s">
           <p class="my-4 text-gray-600 font-light hidden lg:block">
-            记录生活
+            文章目录
           </p>
-          <div class="animated fadeInLeft social-container hidden lg:block" style="animation-delay: 0.6s">
-            
-              
-            
-              
-            
-              
-            
-              
-            
-              
-            
-              
-            
-              
-            
-              
-            
-              
-            
-              
+          <div class="toc-container hidden lg:block">
             
           </div>
         </div>
@@ -97,55 +77,94 @@
 </div>
 <div class="mask" onclick="closeMenu()">
 </div>
-      <div class="content-wrapper py-32 lg:p-8 lg:w-3/4">
-        <h2 class="latest-article text-lg text-gray-700 mb-8">
-          <i class="ri-article-line"></i>
-          最新文章
-        </h2>
-        
-  <section class="post-item md:flex pb-12 animated fadeIn" :style="{ 'animation-delay': `${0 * 0.2}s` }">
-    
-    <div class="content">
-      <a href="https://totoroay.github.io/post/mybatis-pei-zhi-wen-jian/">
-        <h2 class="post-title text-xl font-extrabold mt-5 md:mt-0">Mybatis配置文件</h2>
-      </a>
-      <div class="post-abstract text-gray-700 font-light my-4">
-        
-      </div>
-      <div class="text-gray-400 text-sm font-light">2020-04-09 / 2 min read</div>
-    </div>
-  </section>
-
-  <section class="post-item md:flex pb-12 animated fadeIn" :style="{ 'animation-delay': `${1 * 0.2}s` }">
-    
-      <a href="https://totoroay.github.io/post/hello-gridea/" class="feature-image-wrapper bg-gray-100 rounded-lg flex-shrink-0 mr-8 w-full h-56 h-32 md:w-56 md:h-40">
-        <div class="post-feature-image lazy w-full h-56 h-32 md:w-56 md:h-40" data-bg="'https://totoroay.github.io//post-images/hello-gridea.png'">
+      <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
+        <h1 class="text-3xl font-bold lg:mt-16">Mybatis配置文件</h1>
+        <div class="text-sm text-gray-700 lg:my-8">
+          2020-04-09 / 2 min read
         </div>
-      </a>
-    
-    <div class="content">
-      <a href="https://totoroay.github.io/post/hello-gridea/">
-        <h2 class="post-title text-xl font-extrabold mt-5 md:mt-0">Hello Gridea</h2>
-      </a>
-      <div class="post-abstract text-gray-700 font-light my-4">
-        <p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
-✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
+        
+        <div class="post-content yue">
+          <p>父工程xml配置</p>
+<pre><code class="language-xml">    &lt;!--父工程--&gt;
+    &lt;groupId&gt;org.example&lt;/groupId&gt;
+    &lt;artifactId&gt;mybatis&lt;/artifactId&gt;
+    &lt;packaging&gt;pom&lt;/packaging&gt;
+    &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+    &lt;modules&gt;
+        &lt;module&gt;mybatis-01&lt;/module&gt;
+        &lt;module&gt;mybatis-02&lt;/module&gt;
+        &lt;module&gt;mybatis-02&lt;/module&gt;
+        &lt;module&gt;mybatis-03&lt;/module&gt;
+    &lt;/modules&gt;
 
-      </div>
-      <div class="text-gray-400 text-sm font-light">2018-12-12 / 2 min read</div>
-    </div>
-  </section>
+    &lt;!--导入依赖--&gt;
+    &lt;dependencies&gt;
+        &lt;!--mysql驱动--&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;mysql&lt;/groupId&gt;
+            &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
+            &lt;version&gt;5.1.47&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;!--mybatis--&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.mybatis&lt;/groupId&gt;
+            &lt;artifactId&gt;mybatis&lt;/artifactId&gt;
+            &lt;version&gt;3.5.2&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;!--junit--&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;junit&lt;/groupId&gt;
+            &lt;artifactId&gt;junit&lt;/artifactId&gt;
+            &lt;version&gt;4.12&lt;/version&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;
 
-        <div class="read-more">
+    &lt;!--在build中配置resources，来防止我们资源导出失败的问题--&gt;
+    &lt;build&gt;
+        &lt;resources&gt;
+            &lt;resource&gt;
+                &lt;directory&gt;src/main/resources&lt;/directory&gt;
+                &lt;includes&gt;
+                    &lt;include&gt;**/*.properties&lt;/include&gt;
+                    &lt;include&gt;**/*.xml&lt;/include&gt;
+                &lt;/includes&gt;
+                &lt;filtering&gt;true&lt;/filtering&gt;
+            &lt;/resource&gt;
+            &lt;resource&gt;
+                &lt;directory&gt;src/main/java&lt;/directory&gt;
+                &lt;includes&gt;
+                    &lt;include&gt;**/*.properties&lt;/include&gt;
+                    &lt;include&gt;**/*.xml&lt;/include&gt;
+                &lt;/includes&gt;
+                &lt;filtering&gt;true&lt;/filtering&gt;
+            &lt;/resource&gt;
+        &lt;/resources&gt;
+    &lt;/build&gt;
+
+&lt;/project&gt;</code></pre>
+
+        </div>
+
+        
+
+
+        <div class="flex justify-between py-8">
+          
+
+          
+            <div class="next-post">
+              <a href="https://totoroay.github.io/post/hello-gridea/">
+                <h3 class="post-title">
+                  Hello Gridea
+                  <i class="ri-arrow-right-line"></i>
+                </h3>
+              </a>
+            </div>
           
         </div>
-        <div class="index-page">
-          <div class="pagination-container animated fadeIn">
-  
-  
-</div>
 
-        </div>
+        
+
       </div>
     </div>
 
