@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://totoroay.github.io/</id>
     <title>totoroay</title>
-    <updated>2020-04-25T09:27:36.224Z</updated>
+    <updated>2020-04-25T09:37:52.986Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://totoroay.github.io/"/>
     <link rel="self" href="https://totoroay.github.io/atom.xml"/>
@@ -16,9 +16,8 @@
         <link href="https://totoroay.github.io/post/ssm-zheng-he/">
         </link>
         <updated>2020-04-25T09:23:41.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="ssm整合">SSM整合</h1>
-<h2 id="整体架构">整体架构</h2>
-<img src="E:\笔记\SSM整合\images\猎豹浏览器截图20200425164722.png" style="zoom: 80%;" />
+        <content type="html"><![CDATA[<h2 id="整体架构">整体架构</h2>
+<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1587807061832.png" alt="" loading="lazy"></figure>
 <h2 id="数据库及建表">数据库及建表</h2>
 <pre><code class="language-sql">CREATE DATABASE `ssmbuild`;
 
@@ -42,8 +41,8 @@ INSERT  INTO `books`(`bookID`,`bookName`,`bookCounts`,`detail`)VALUES
 <h2 id="基本环境搭建">基本环境搭建</h2>
 <h5 id="1-新建一个空的maven项目">1、新建一个空的Maven项目</h5>
 <h5 id="2-添加web支持">2、添加web支持</h5>
-<img src="E:\笔记\SSM整合\images\猎豹浏览器截图20200425162744.png" style="zoom: 80%;" />
-<img src="E:\笔记\SSM整合\images\QQ截图20200425163148.png" style="zoom:50%;" />
+<p><img src="https://totoroay.github.io//post-images/1587807215470.png" alt="" loading="lazy"><br>
+<img src="https://totoroay.github.io//post-images/1587807239144.png" alt="" loading="lazy"></p>
 <h5 id="3-导入相关依赖">3、导入相关依赖</h5>
 <pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
 &lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot;
@@ -155,9 +154,9 @@ INSERT  INTO `books`(`bookID`,`bookName`,`bookCounts`,`detail`)VALUES
 &lt;/project&gt;
 </code></pre>
 <h5 id="4-打war包">4、打war包</h5>
-<figure data-type="image" tabindex="1"><img src="E:%5C%E7%AC%94%E8%AE%B0%5CSSM%E6%95%B4%E5%90%88%5Cimages%5C%E7%8C%8E%E8%B1%B9%E6%B5%8F%E8%A7%88%E5%99%A8%E6%88%AA%E5%9B%BE20200425163846.png" alt="" loading="lazy"></figure>
-<img src="E:\笔记\SSM整合\images\猎豹浏览器截图20200425164011.png" style="zoom:50%;" />
-<img src="E:\笔记\SSM整合\images\猎豹浏览器截图20200425164113.png" style="zoom: 67%;" />
+<p><img src="https://totoroay.github.io//post-images/1587807356487.png" alt="" loading="lazy"><br>
+<img src="https://totoroay.github.io//post-images/1587807371220.png" alt="" loading="lazy"><br>
+<img src="https://totoroay.github.io//post-images/1587807395323.png" alt="" loading="lazy"></p>
 <p>全选点击ok</p>
 <h5 id="5-建立基本结构">5、建立基本结构</h5>
 <pre><code class="language-java">com.totoroay.pojo

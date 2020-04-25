@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>totoroay</title>
 <meta name="description" content="记录生活" />
-<link rel="shortcut icon" href="https://totoroay.github.io//favicon.ico?v=1587806841456">
+<link rel="shortcut icon" href="https://totoroay.github.io//favicon.ico?v=1587807443693">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
@@ -23,7 +23,7 @@
       <div class="flex lg:block p-4 lg:px-0 items-center fixed lg:static lg:block top-0 right-0 left-0 bg-white z-50">
         <i class="ri-menu-2-line lg:mt-4 text-2xl cursor-pointer animated fadeIn" onclick="openMenu()"></i>
         <a href="https://totoroay.github.io/">
-          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://totoroay.github.io//images/avatar.png?v=1587806841456" alt="">
+          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://totoroay.github.io//images/avatar.png?v=1587807443693" alt="">
         </a>
         <h1 class="animated fadeInLeft lg:text-4xl font-extrabold lg:mt-8 mt-0 text-xl" style="animation-delay: 0.2s">totoroay</h1>
       </div>
@@ -34,7 +34,7 @@
           </p>
           <div class="toc-container hidden lg:block">
             <ul class="markdownIt-TOC">
-<li><a href="#ssm%E6%95%B4%E5%90%88">SSM整合</a>
+<li>
 <ul>
 <li><a href="#%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84">整体架构</a></li>
 <li><a href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E5%8F%8A%E5%BB%BA%E8%A1%A8">数据库及建表</a></li>
@@ -131,9 +131,8 @@
           <img class="post-feature-image rounded-lg mx-auto my-4" src="https://totoroay.github.io//post-images/ssm-zheng-he.png" alt="">
         
         <div class="post-content yue">
-          <h1 id="ssm整合">SSM整合</h1>
-<h2 id="整体架构">整体架构</h2>
-<img src="E:\笔记\SSM整合\images\猎豹浏览器截图20200425164722.png" style="zoom: 80%;" />
+          <h2 id="整体架构">整体架构</h2>
+<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1587807061832.png" alt="" loading="lazy"></figure>
 <h2 id="数据库及建表">数据库及建表</h2>
 <pre><code class="language-sql">CREATE DATABASE `ssmbuild`;
 
@@ -157,8 +156,8 @@ INSERT  INTO `books`(`bookID`,`bookName`,`bookCounts`,`detail`)VALUES
 <h2 id="基本环境搭建">基本环境搭建</h2>
 <h5 id="1-新建一个空的maven项目">1、新建一个空的Maven项目</h5>
 <h5 id="2-添加web支持">2、添加web支持</h5>
-<img src="E:\笔记\SSM整合\images\猎豹浏览器截图20200425162744.png" style="zoom: 80%;" />
-<img src="E:\笔记\SSM整合\images\QQ截图20200425163148.png" style="zoom:50%;" />
+<p><img src="https://totoroay.github.io//post-images/1587807215470.png" alt="" loading="lazy"><br>
+<img src="https://totoroay.github.io//post-images/1587807239144.png" alt="" loading="lazy"></p>
 <h5 id="3-导入相关依赖">3、导入相关依赖</h5>
 <pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
 &lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot;
@@ -270,9 +269,9 @@ INSERT  INTO `books`(`bookID`,`bookName`,`bookCounts`,`detail`)VALUES
 &lt;/project&gt;
 </code></pre>
 <h5 id="4-打war包">4、打war包</h5>
-<figure data-type="image" tabindex="1"><img src="E:%5C%E7%AC%94%E8%AE%B0%5CSSM%E6%95%B4%E5%90%88%5Cimages%5C%E7%8C%8E%E8%B1%B9%E6%B5%8F%E8%A7%88%E5%99%A8%E6%88%AA%E5%9B%BE20200425163846.png" alt="" loading="lazy"></figure>
-<img src="E:\笔记\SSM整合\images\猎豹浏览器截图20200425164011.png" style="zoom:50%;" />
-<img src="E:\笔记\SSM整合\images\猎豹浏览器截图20200425164113.png" style="zoom: 67%;" />
+<p><img src="https://totoroay.github.io//post-images/1587807356487.png" alt="" loading="lazy"><br>
+<img src="https://totoroay.github.io//post-images/1587807371220.png" alt="" loading="lazy"><br>
+<img src="https://totoroay.github.io//post-images/1587807395323.png" alt="" loading="lazy"></p>
 <p>全选点击ok</p>
 <h5 id="5-建立基本结构">5、建立基本结构</h5>
 <pre><code class="language-java">com.totoroay.pojo
