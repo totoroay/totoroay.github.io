@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>totoroay</title>
 <meta name="description" content="记录生活" />
-<link rel="shortcut icon" href="https://totoroay.github.io//favicon.ico?v=1587807924964">
+<link rel="shortcut icon" href="https://totoroay.github.io//favicon.ico?v=1587823742317">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
@@ -23,7 +23,7 @@
       <div class="flex lg:block p-4 lg:px-0 items-center fixed lg:static lg:block top-0 right-0 left-0 bg-white z-50">
         <i class="ri-menu-2-line lg:mt-4 text-2xl cursor-pointer animated fadeIn" onclick="openMenu()"></i>
         <a href="https://totoroay.github.io/">
-          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://totoroay.github.io//images/avatar.png?v=1587807924964" alt="">
+          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://totoroay.github.io//images/avatar.png?v=1587823742317" alt="">
         </a>
         <h1 class="animated fadeInLeft lg:text-4xl font-extrabold lg:mt-8 mt-0 text-xl" style="animation-delay: 0.2s">totoroay</h1>
       </div>
@@ -36,12 +36,33 @@
             <ul class="markdownIt-TOC">
 <li>
 <ul>
-<li>
+<li><a href="#1-%E6%A0%B8%E5%BF%83%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6">1、核心配置文件</a></li>
+<li><a href="#2-%E6%A8%A1%E7%B3%8A%E6%9F%A5%E8%AF%A2">2、模糊查询</a></li>
+<li><a href="#3-mapper%E7%9A%84%E4%B8%89%E7%A7%8D%E6%B3%A8%E5%86%8C%E6%96%B9%E5%BC%8F">3、mapper的三种注册方式</a></li>
+<li><a href="#4-%E4%BD%BF%E7%94%A8%E6%B3%A8%E8%A7%A3%E5%BC%80%E5%8F%91">4、使用注解开发</a></li>
+<li><a href="#5-mybatis%E8%AF%A6%E7%BB%86%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B">5、Mybatis详细执行流程</a></li>
+<li><a href="#6-%E5%8A%A8%E6%80%81sql">6、动态SQL</a>
 <ul>
-<li><a href="#11-%E4%BB%80%E4%B9%88%E6%98%AFmybatis">1.1、什么是Mybatis</a></li>
-<li><a href="#12-%E6%8C%81%E4%B9%85%E5%8C%96">1.2、持久化</a></li>
-<li><a href="#13-%E6%8C%81%E4%B9%85%E5%B1%82">1.3、持久层</a></li>
-<li><a href="#14-%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81mybatis">1.4 为什么需要Mybatis？</a></li>
+<li><a href="#%E6%90%AD%E5%BB%BA%E7%8E%AF%E5%A2%83">搭建环境</a></li>
+<li><a href="#choose-when-otherwise">choose (when, otherwise)</a></li>
+<li><a href="#trim-whereset">trim (where,set)</a></li>
+<li><a href="#sql%E7%89%87%E6%AE%B5">SQL片段</a></li>
+<li><a href="#foreach">Foreach</a></li>
+</ul>
+</li>
+<li><a href="#7-%E5%A4%9A%E5%AF%B9%E4%B8%80%E5%A4%84%E7%90%86">7、多对一处理</a>
+<ul>
+<li><a href="#%E6%B5%8B%E8%AF%95%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA">测试环境搭建</a></li>
+<li><a href="#%E6%8C%89%E7%85%A7%E6%9F%A5%E8%AF%A2%E5%B5%8C%E5%A5%97%E5%A4%84%E7%90%86%E5%AD%90%E6%9F%A5%E8%AF%A2">按照查询嵌套处理（子查询）</a></li>
+<li><a href="#%E6%8C%89%E7%85%A7%E7%BB%93%E6%9E%9C%E5%B5%8C%E5%A5%97%E5%A4%84%E7%90%86%E8%81%94%E8%A1%A8%E6%9F%A5%E8%AF%A2-%E6%8E%A8%E8%8D%90%E4%BD%BF%E7%94%A8">按照结果嵌套处理（联表查询 推荐使用）</a></li>
+</ul>
+</li>
+<li><a href="#8-%E4%B8%80%E5%AF%B9%E5%A4%9A%E5%A4%84%E7%90%86">8、一对多处理</a>
+<ul>
+<li><a href="#%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA">环境搭建</a></li>
+<li><a href="#%E6%8C%89%E7%85%A7%E7%BB%93%E6%9E%9C%E5%B5%8C%E5%A5%97%E5%A4%84%E7%90%86">按照结果嵌套处理</a></li>
+<li><a href="#%E6%8C%89%E7%85%A7%E6%9F%A5%E8%AF%A2%E5%B5%8C%E5%A5%97%E5%A4%84%E7%90%86">按照查询嵌套处理</a></li>
+<li><a href="#%E5%B0%8F%E7%BB%93">小结</a></li>
 </ul>
 </li>
 </ul>
@@ -92,84 +113,441 @@
 <div class="mask" onclick="closeMenu()">
 </div>
       <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
-        <h1 class="text-3xl font-bold lg:mt-16">Mybatis简介</h1>
+        <h1 class="text-3xl font-bold lg:mt-16">Mybatis笔记</h1>
         <div class="text-sm text-gray-700 lg:my-8">
-          2020-04-12 / 2 min read
+          2020-04-10 / 12 min read
         </div>
         
           <img class="post-feature-image rounded-lg mx-auto my-4" src="https://totoroay.github.io//post-images/mybatis-bi-ji.png" alt="">
         
         <div class="post-content yue">
-          <h3 id="11-什么是mybatis">1.1、什么是Mybatis</h3>
+          <h2 id="1-核心配置文件">1、核心配置文件</h2>
 <ul>
-<li>MyBatis 是一款优秀的<strong>持久层框架</strong></li>
-<li>它支持定制化 SQL、存储过程以及高级映射。</li>
-<li>MyBatis 避免了几乎所有的 JDBC 代码和手动设置参数以及获取结果集。</li>
-<li>MyBatis 可以使用简单的 XML 或注解来配置和映射原生类型、接口和 Java 的 POJO（Plain Old Java Objects，普通老式 Java 对象）为数据库中的记录。</li>
-<li>MyBatis 本是<a href="https://baike.baidu.com/item/apache/6265">apache</a>的一个开源项目<a href="https://baike.baidu.com/item/iBatis">iBatis</a>, 2010年这个项目由apache software foundation 迁移到了google code，并且改名为MyBatis 。</li>
-<li>2013年11月迁移到Github。</li>
+<li>mybatis-config.xml</li>
+<li>配置顺序</li>
 </ul>
-<p>如何获得Mybatis？</p>
+<pre><code class="language-xml">configuration（配置）
+properties（属性）
+settings（设置）
+typeAliases（类型别名）
+typeHandlers（类型处理器）
+objectFactory（对象工厂）
+plugins（插件）
+environments（环境配置）
+environment（环境变量）
+transactionManager（事务管理器）
+dataSource（数据源）
+databaseIdProvider（数据库厂商标识）
+mappers（映射器）
+</code></pre>
+<h2 id="2-模糊查询">2、模糊查询</h2>
 <ul>
+<li>推荐在java代码中这样写（安全）</li>
+</ul>
+<pre><code class="language-java">List&lt;User&gt; userList = mapper.getUserLike(&quot;%李%&quot;);
+</code></pre>
+<ul>
+<li><mark>不推荐</mark>在mapper中使用通配符</li>
+</ul>
+<pre><code class="language-xml">&lt;select id=&quot;getUserListLike&quot; resultType=&quot;com.totoroay.pojo.User&quot;&gt;
+	select * from mybatis.user where name like &quot;%&quot;#{value}&quot;%&quot;
+&lt;/select&gt;
+</code></pre>
+<h2 id="3-mapper的三种注册方式">3、mapper的三种注册方式</h2>
+<p>方式一： 【推荐使用】</p>
+<pre><code class="language-xml">&lt;mappers&gt;
+    &lt;mapper resource=&quot;com/totoroay/mapper/UserMapper.xml&quot;/&gt;
+&lt;/mappers&gt;
+</code></pre>
+<p>方式二：使用class文件绑定注册</p>
+<pre><code class="language-xml">&lt;mappers&gt;
+    &lt;mapper class=&quot;com.totoroay.mapper.UserMapper&quot;/&gt;
+&lt;/mappers&gt;
+</code></pre>
+<p>注意点：</p>
+<ul>
+<li>接口和他的Mapper配置文件必须同名！</li>
+<li>接口和他的Mapper配置文件必须在同一个包下！</li>
+</ul>
+<p>方式三：使用扫描包进行注入绑定</p>
+<pre><code class="language-xml">&lt;mappers&gt;
+    &lt;package name=&quot;com.totoroay.mapper&quot;/&gt;
+&lt;/mappers&gt;
+</code></pre>
+<p>注意点：</p>
+<ul>
+<li>接口和他的Mapper配置文件必须同名！</li>
+<li>接口和他的Mapper配置文件必须在同一个包下！</li>
+</ul>
+<h2 id="4-使用注解开发">4、使用注解开发</h2>
+<p>会用即可，配合xml配置完成任务，适用于简单SQL</p>
+<p><mark>本质：反射机制实现</mark></p>
+<p><mark>底层：动态代理！</mark></p>
+<ol>
+<li>注解在接口上实现</li>
+</ol>
+<pre><code class="language-java">@Select(&quot;select * from user&quot;)
+List&lt;User&gt; getUsers();
+</code></pre>
+<ol start="2">
+<li>需要在核心配置文件中绑定接口！</li>
+</ol>
+<pre><code class="language-xml">&lt;!--绑定接口--&gt;
+&lt;mappers&gt;
+    &lt;mapper class=&quot;com.totoroay.mapper.UserMapper&quot;/&gt;
+&lt;/mappers&gt;
+</code></pre>
+<ol start="3">
+<li>CRUD	编写接口，增加注解</li>
+</ol>
+<pre><code class="language-java">public interface UserMapper {
+
+    @Select(&quot;select * from user&quot;)
+    List&lt;User&gt; getUsers();
+
+    // 方法存在多个参数，所有的参数前面必须加上 @Param(&quot;id&quot;)注解
+    @Select(&quot;select * from user where id = #{id}&quot;)
+    User getUserByID(@Param(&quot;id&quot;) int id);
+
+    @Insert(&quot;insert into user(id,name,pwd) values (#{id},#{name},#{password})&quot;)
+    int addUser(User user);
+
+    @Update(&quot;update user set name=#{name},pwd=#{password} where id = #{id}&quot;)
+    int updateUser(User user);
+    
+    @Delete(&quot;delete from user where id = #{uid}&quot;)
+    int deleteUser(@Param(&quot;uid&quot;) int id);
+}
+</code></pre>
+<h2 id="5-mybatis详细执行流程">5、Mybatis详细执行流程</h2>
+<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1587820878648.png" alt="" loading="lazy"></figure>
+<h2 id="6-动态sql">6、动态SQL</h2>
+<p><mark><strong>先在Mysql中写出完整的SQL,再对应的去修改成为我们的动态SQL实现通用即可！</strong></mark></p>
+<p><mark><strong>什么是动态SQL：动态SQL就是指根据不同的条件生成不同的SQL语句</strong></mark></p>
+<p>利用动态 SQL 这一特性可以彻底摆脱这种痛苦。</p>
+<pre><code class="language-xml">if
+choose (when, otherwise)
+trim (where, set)
+foreach
+</code></pre>
+<h3 id="搭建环境">搭建环境</h3>
+<pre><code class="language-sql">CREATE TABLE `blog` (
+  `id` varchar(50) NOT NULL COMMENT '博客id',
+  `title` varchar(100) NOT NULL COMMENT '博客标题',
+  `author` varchar(30) NOT NULL COMMENT '博客作者',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `views` int(30) NOT NULL COMMENT '浏览量'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+</code></pre>
+<ol>
 <li>
-<p>maven仓库：</p>
-<pre><code class="language-xml">&lt;!-- https://mvnrepository.com/artifact/org.mybatis/mybatis --&gt;
-&lt;dependency&gt;
-    &lt;groupId&gt;org.mybatis&lt;/groupId&gt;
-    &lt;artifactId&gt;mybatis&lt;/artifactId&gt;
-    &lt;version&gt;3.5.2&lt;/version&gt;
-&lt;/dependency&gt;
+<p>编写实体类</p>
+<pre><code class="language-java"></code></pre>
+</li>
+</ol>
+<p>@Data<br>
+public class Blog {<br>
+private int id;<br>
+private String title;<br>
+private String author;<br>
+private Date createTime;<br>
+private int views;<br>
+}</p>
+<pre><code>
+2. 编写实体类对应Mapper接口 和 Mapper.XML文件
+
+### IF
+
+```xml
+&lt;select id=&quot;queryBlogIF&quot; parameterType=&quot;map&quot; resultType=&quot;blog&quot;&gt;
+ select * from mybatis.blog where 1=1
+ &lt;if test=&quot;title != null&quot;&gt;
+     and title = #{title}
+ &lt;/if&gt;
+ &lt;if test=&quot;author != null&quot;&gt;
+     and author = #{author}
+ &lt;/if&gt;
+&lt;/select&gt;
+</code></pre>
+<h3 id="choose-when-otherwise">choose (when, otherwise)</h3>
+<pre><code class="language-xml">&lt;select id=&quot;queryBlogChoose&quot; parameterType=&quot;map&quot; resultType=&quot;blog&quot;&gt;
+    select * from mybatis.blog
+    &lt;where&gt;
+        &lt;choose&gt;
+            &lt;when test=&quot;title != null&quot;&gt;
+                title = #{title}
+            &lt;/when&gt;
+            &lt;when test=&quot;author != null&quot;&gt;
+                and author = #{author}
+            &lt;/when&gt;
+            &lt;otherwise&gt;
+                and views = #{views}
+            &lt;/otherwise&gt;
+        &lt;/choose&gt;
+    &lt;/where&gt;
+&lt;/select&gt;
+</code></pre>
+<h3 id="trim-whereset">trim (where,set)</h3>
+<pre><code class="language-xml">select * from mybatis.blog
+&lt;where&gt;
+    &lt;if test=&quot;title != null&quot;&gt;
+        title = #{title}
+    &lt;/if&gt;
+    &lt;if test=&quot;author != null&quot;&gt;
+        and author = #{author}
+    &lt;/if&gt;
+&lt;/where&gt;
+</code></pre>
+<pre><code class="language-xml">&lt;update id=&quot;updateBlog&quot; parameterType=&quot;map&quot;&gt;
+    update mybatis.blog
+    &lt;set&gt;
+        &lt;if test=&quot;title != null&quot;&gt;
+            title = #{title},
+        &lt;/if&gt;
+        &lt;if test=&quot;author != null&quot;&gt;
+            author = #{author}
+        &lt;/if&gt;
+    &lt;/set&gt;
+    where id = #{id}
+&lt;/update&gt;
+
+</code></pre>
+<p><mark><strong>所谓的动态SQL，本质还是SQL语句 ， 只是我们可以在SQL层面，去执行一个逻辑代码</strong></mark></p>
+<h3 id="sql片段">SQL片段</h3>
+<p>有的时候，我们可能会将一些功能的部分抽取出来，方便复用！</p>
+<ol>
+<li>
+<p>使用SQL标签抽取公共的部分</p>
+<pre><code class="language-xml">&lt;sql id=&quot;if-title-author&quot;&gt;
+    &lt;if test=&quot;title != null&quot;&gt;
+        title = #{title}
+    &lt;/if&gt;
+    &lt;if test=&quot;author != null&quot;&gt;
+        and author = #{author}
+    &lt;/if&gt;
+&lt;/sql&gt;
 </code></pre>
 </li>
 <li>
-<p>Github ： <a href="https://github.com/mybatis/mybatis-3/releases">https://github.com/mybatis/mybatis-3/releases</a></p>
+<p>在需要使用的地方使用Include标签引用即可</p>
+<pre><code class="language-xml">&lt;select id=&quot;queryBlogIF&quot; parameterType=&quot;map&quot; resultType=&quot;blog&quot;&gt;
+    select * from mybatis.blog
+    &lt;where&gt;
+        &lt;include refid=&quot;if-title-author&quot;&gt;&lt;/include&gt;
+    &lt;/where&gt;
+&lt;/select&gt;
+</code></pre>
 </li>
-<li>
-<p>中文文档：<a href="https://mybatis.org/mybatis-3/zh/index.html">https://mybatis.org/mybatis-3/zh/index.html</a></p>
-</li>
-<li>
-<p>Maven仓库：<a href="https://mvnrepository.com/">https://mvnrepository.com/</a></p>
-</li>
-</ul>
-<h3 id="12-持久化">1.2、持久化</h3>
-<p>数据持久化</p>
+</ol>
+<p>注意事项：</p>
 <ul>
-<li>持久化就是将程序的数据在持久状态和瞬时状态转化的过程</li>
-<li>内存：<strong>断电即失</strong></li>
-<li>数据库(Jdbc)，io文件持久化。</li>
-<li>生活：冷藏. 罐头。</li>
+<li>最好基于单表来定义SQL片段！</li>
+<li>不要存在where标签</li>
 </ul>
-<p><strong>为什么需要需要持久化？</strong></p>
+<h3 id="foreach">Foreach</h3>
+<pre><code class="language-sql">select * from user where 1=1 and 
+
+  &lt;foreach item=&quot;id&quot; collection=&quot;ids&quot;
+      open=&quot;(&quot; separator=&quot;or&quot; close=&quot;)&quot;&gt;
+        #{id}
+  &lt;/foreach&gt;
+
+(id=1 or id=2 or id=3)
+
+</code></pre>
+<figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1587820945965.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="3"><img src="https://totoroay.github.io//post-images/1587820973478.png" alt="" loading="lazy"></figure>
+<pre><code class="language-xml">&lt;!--
+        select * from mybatis.blog where 1=1 and (id=1 or id = 2 or id=3)
+
+        我们现在传递一个万能的map ， 这map中可以存在一个集合！
+--&gt;
+&lt;select id=&quot;queryBlogForeach&quot; parameterType=&quot;map&quot; resultType=&quot;blog&quot;&gt;
+    select * from mybatis.blog
+
+    &lt;where&gt;
+        &lt;foreach collection=&quot;ids&quot; item=&quot;id&quot; open=&quot;and (&quot; close=&quot;)&quot; separator=&quot;or&quot;&gt;
+            id = #{id}
+        &lt;/foreach&gt;
+    &lt;/where&gt;
+
+&lt;/select&gt;
+
+</code></pre>
+<p><mark>动态SQL就是在拼接SQL语句，我们只要保证SQL的正确性，按照SQL的格式，去排列组合就可以了</mark></p>
+<h2 id="7-多对一处理">7、多对一处理</h2>
+<p>多对一：</p>
+<figure data-type="image" tabindex="4"><img src="https://totoroay.github.io//post-images/1587823677622.png" alt="" loading="lazy"></figure>
 <ul>
-<li>
-<p>有一些对象，不能让他丢掉。</p>
+<li>多个学生，对应一个老师</li>
+<li>对于学生这边而言，  <strong>关联</strong> ..  多个学生，关联一个老师  【多对一】</li>
+<li>对于老师而言， <strong>集合</strong> ， 一个老师，有很多学生 【一对多】</li>
+</ul>
+<figure data-type="image" tabindex="5"><img src="https://totoroay.github.io//post-images/1587823695885.png" alt="" loading="lazy"></figure>
+<p>SQL：</p>
+<pre><code class="language-sql">CREATE TABLE `teacher` (
+  `id` INT(10) NOT NULL,
+  `name` VARCHAR(30) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8
+
+INSERT INTO teacher(`id`, `name`) VALUES (1, '秦老师'); 
+
+CREATE TABLE `student` (
+  `id` INT(10) NOT NULL,
+  `name` VARCHAR(30) DEFAULT NULL,
+  `tid` INT(10) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fktid` (`tid`),
+  CONSTRAINT `fktid` FOREIGN KEY (`tid`) REFERENCES `teacher` (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8;
+
+INSERT INTO `student` (`id`, `name`, `tid`) VALUES ('1', '小明', '1'); 
+INSERT INTO `student` (`id`, `name`, `tid`) VALUES ('2', '小红', '1'); 
+INSERT INTO `student` (`id`, `name`, `tid`) VALUES ('3', '小张', '1'); 
+INSERT INTO `student` (`id`, `name`, `tid`) VALUES ('4', '小李', '1'); 
+INSERT INTO `student` (`id`, `name`, `tid`) VALUES ('5', '小王', '1');
+
+</code></pre>
+<h3 id="测试环境搭建">测试环境搭建</h3>
+<ol>
+<li>导入lombok</li>
+<li>新建实体类 Teacher，Student</li>
+<li>建立Mapper接口</li>
+<li>建立Mapper.XML文件</li>
+<li>在核心配置文件中绑定注册我们的Mapper接口或者文件！【方式很多，随心选】</li>
+<li>测试查询是否能够成功！</li>
+</ol>
+<h3 id="按照查询嵌套处理子查询">按照查询嵌套处理（子查询）</h3>
+<pre><code class="language-xml">&lt;!--
+    思路:
+        1. 查询所有的学生信息
+        2. 根据查询出来的学生的tid，寻找对应的老师！  子查询
+    --&gt;
+
+&lt;select id=&quot;getStudent&quot; resultMap=&quot;StudentTeacher&quot;&gt;
+    select * from student
+&lt;/select&gt;
+
+&lt;resultMap id=&quot;StudentTeacher&quot; type=&quot;Student&quot;&gt;
+    &lt;result property=&quot;id&quot; column=&quot;id&quot;/&gt;
+    &lt;result property=&quot;name&quot; column=&quot;name&quot;/&gt;
+    &lt;!--复杂的属性，我们需要单独处理 对象： association 集合： collection --&gt;
+    &lt;association property=&quot;teacher&quot; column=&quot;tid&quot; javaType=&quot;Teacher&quot; select=&quot;getTeacher&quot;/&gt;
+&lt;/resultMap&gt;
+
+&lt;select id=&quot;getTeacher&quot; resultType=&quot;Teacher&quot;&gt;
+    select * from teacher where id = #{id}
+&lt;/select&gt;
+
+</code></pre>
+<h3 id="按照结果嵌套处理联表查询-推荐使用">按照结果嵌套处理（联表查询 推荐使用）</h3>
+<pre><code class="language-xml">&lt;!--按照结果嵌套处理--&gt;
+&lt;select id=&quot;getStudent2&quot; resultMap=&quot;StudentTeacher2&quot;&gt;
+    select s.id sid,s.name sname,t.name tname
+    from student s,teacher t
+    where s.tid = t.id;
+&lt;/select&gt;
+
+&lt;resultMap id=&quot;StudentTeacher2&quot; type=&quot;Student&quot;&gt;
+    &lt;result property=&quot;id&quot; column=&quot;sid&quot;/&gt;
+    &lt;result property=&quot;name&quot; column=&quot;sname&quot;/&gt;
+    &lt;association property=&quot;teacher&quot; javaType=&quot;Teacher&quot;&gt;
+        &lt;result property=&quot;name&quot; column=&quot;tname&quot;/&gt;
+    &lt;/association&gt;
+&lt;/resultMap&gt;
+</code></pre>
+<p>回顾Mysql 多对一查询方式：</p>
+<ul>
+<li>子查询		按照查询嵌套处理</li>
+<li>联表查询    按照结果嵌套处理</li>
+</ul>
+<h2 id="8-一对多处理">8、一对多处理</h2>
+<p>比如：一个老师拥有多个学生！</p>
+<p>对于老师而言，就是一对多的关系!</p>
+<h3 id="环境搭建">环境搭建</h3>
+<ol>
+<li>环境搭建，和刚才一样</li>
+</ol>
+<p><strong>实体类</strong></p>
+<pre><code class="language-java">@Data
+public class Student {
+
+    private int id;
+    private String name;
+    private int tid;
+
+}
+
+</code></pre>
+<pre><code class="language-java">@Data
+public class Teacher {
+    private int id;
+    private String name;
+
+    //一个老师拥有多个学生
+    private List&lt;Student&gt; students;
+}
+</code></pre>
+<h3 id="按照结果嵌套处理">按照结果嵌套处理</h3>
+<pre><code class="language-xml">    &lt;!--按结果嵌套查询--&gt;
+    &lt;select id=&quot;getTeacher&quot; resultMap=&quot;TeacherStudent&quot;&gt;
+        select s.id sid, s.name sname, t.name tname,t.id tid
+        from student s,teacher t
+        where s.tid = t.id and t.id = #{tid}
+    &lt;/select&gt;
+
+    &lt;resultMap id=&quot;TeacherStudent&quot; type=&quot;Teacher&quot;&gt;
+        &lt;result property=&quot;id&quot; column=&quot;tid&quot;/&gt;
+        &lt;result property=&quot;name&quot; column=&quot;tname&quot;/&gt;
+        &lt;!--复杂的属性，我们需要单独处理 对象： association 集合： collection
+        javaType=&quot;&quot; 指定属性的类型！
+        集合中的泛型信息，我们使用ofType获取
+        --&gt;
+        &lt;collection property=&quot;students&quot; ofType=&quot;Student&quot;&gt;
+            &lt;result property=&quot;id&quot; column=&quot;sid&quot;/&gt;
+            &lt;result property=&quot;name&quot; column=&quot;sname&quot;/&gt;
+            &lt;result property=&quot;tid&quot; column=&quot;tid&quot;/&gt;
+        &lt;/collection&gt;
+    &lt;/resultMap&gt;
+</code></pre>
+<h3 id="按照查询嵌套处理">按照查询嵌套处理</h3>
+<pre><code class="language-xml">&lt;select id=&quot;getTeacher2&quot; resultMap=&quot;TeacherStudent2&quot;&gt;
+    select * from mybatis.teacher where id = #{tid}
+&lt;/select&gt;
+
+&lt;resultMap id=&quot;TeacherStudent2&quot; type=&quot;Teacher&quot;&gt;
+    &lt;collection property=&quot;students&quot; javaType=&quot;ArrayList&quot; ofType=&quot;Student&quot; select=&quot;getStudentByTeacherId&quot; column=&quot;id&quot;/&gt;
+&lt;/resultMap&gt;
+
+&lt;select id=&quot;getStudentByTeacherId&quot; resultType=&quot;Student&quot;&gt;
+    select * from mybatis.student where tid = #{tid}
+&lt;/select&gt;
+</code></pre>
+<h3 id="小结">小结</h3>
+<ol>
+<li>关联 - association   【多对一】</li>
+<li>集合 - collection   【一对多】</li>
+<li>javaType    &amp;   ofType
+<ol>
+<li>JavaType  用来指定实体类中属性的类型</li>
+<li>ofType  用来指定映射到List或者集合中的 pojo类型，泛型中的约束类型！</li>
+</ol>
 </li>
-<li>
-<p>内存太贵了</p>
-</li>
-</ul>
-<h3 id="13-持久层">1.3、持久层</h3>
-<p>Dao层，Service层，Controller层….</p>
+</ol>
+<p>注意点：</p>
 <ul>
-<li>完成持久化工作的代码块</li>
-<li>层界限十分明显。</li>
+<li>保证SQL的可读性，尽量保证通俗易懂</li>
+<li>注意一对多和多对一中，属性名和字段的问题！</li>
+<li>如果问题不好排查错误，可以使用日志 ， 建议使用 Log4j</li>
 </ul>
-<h3 id="14-为什么需要mybatis">1.4 为什么需要Mybatis？</h3>
+<p><strong>慢SQL       1s        1000s</strong></p>
+<p>面试高频</p>
 <ul>
-<li>帮助程序猿将数据存入到数据库中。</li>
-<li>方便</li>
-<li>传统的JDBC代码太复杂了。简化。框架。自动化。</li>
-<li>不用Mybatis也可以。更容易上手。 <strong>技术没有高低之分</strong></li>
-<li>优点：
-<ul>
-<li>简单易学</li>
-<li>灵活</li>
-<li>sql和代码的分离，提高了可维护性。</li>
-<li>提供映射标签，支持对象与数据库的orm字段关系映射</li>
-<li>提供对象关系映射标签，支持对象关系组建维护</li>
-<li>提供xml标签，支持编写动态sql。</li>
-</ul>
-</li>
+<li>Mysql引擎</li>
+<li>InnoDB底层原理</li>
+<li>索引</li>
+<li>索引优化！</li>
 </ul>
 
         </div>
