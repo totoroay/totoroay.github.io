@@ -1,22 +1,137 @@
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://totoroay.github.io/</id>
-    <title>totoroay</title>
-    <updated>2020-04-25T09:27:36.224Z</updated>
-    <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="https://totoroay.github.io/"/>
-    <link rel="self" href="https://totoroay.github.io/atom.xml"/>
-    <subtitle>记录生活</subtitle>
-    <logo>https://totoroay.github.io/images/avatar.png</logo>
-    <icon>https://totoroay.github.io/favicon.ico</icon>
-    <rights>All rights reserved 2020, totoroay</rights>
-    <entry>
-        <title type="html"><![CDATA[SSM整合]]></title>
-        <id>https://totoroay.github.io/post/ssm-zheng-he/</id>
-        <link href="https://totoroay.github.io/post/ssm-zheng-he/">
-        </link>
-        <updated>2020-04-25T09:23:41.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="ssm整合">SSM整合</h1>
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>totoroay</title>
+<meta name="description" content="记录生活" />
+<link rel="shortcut icon" href="https://totoroay.github.io//favicon.ico?v=1587806841456">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+
+<link rel="stylesheet" href="https://totoroay.github.io//styles/main.css">
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main px-4 flex flex-col lg:flex-row">
+      <div id="sidebar" class="sidebar-wrapper lg:static lg:w-1/4">
+  <div class="lg:sticky top-0">
+    <div class="sidebar-content">
+      <div class="flex lg:block p-4 lg:px-0 items-center fixed lg:static lg:block top-0 right-0 left-0 bg-white z-50">
+        <i class="ri-menu-2-line lg:mt-4 text-2xl cursor-pointer animated fadeIn" onclick="openMenu()"></i>
+        <a href="https://totoroay.github.io/">
+          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://totoroay.github.io//images/avatar.png?v=1587806841456" alt="">
+        </a>
+        <h1 class="animated fadeInLeft lg:text-4xl font-extrabold lg:mt-8 mt-0 text-xl" style="animation-delay: 0.2s">totoroay</h1>
+      </div>
+      
+        <div class="animated fadeInLeft" style="animation-delay: 0.4s">
+          <p class="my-4 text-gray-600 font-light hidden lg:block">
+            文章目录
+          </p>
+          <div class="toc-container hidden lg:block">
+            <ul class="markdownIt-TOC">
+<li><a href="#ssm%E6%95%B4%E5%90%88">SSM整合</a>
+<ul>
+<li><a href="#%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84">整体架构</a></li>
+<li><a href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E5%8F%8A%E5%BB%BA%E8%A1%A8">数据库及建表</a></li>
+<li><a href="#%E5%9F%BA%E6%9C%AC%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA">基本环境搭建</a><br>
+*<br>
+*<br>
+* <a href="#1-%E6%96%B0%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%A9%BA%E7%9A%84maven%E9%A1%B9%E7%9B%AE">1、新建一个空的Maven项目</a><br>
+* <a href="#2-%E6%B7%BB%E5%8A%A0web%E6%94%AF%E6%8C%81">2、添加web支持</a><br>
+* <a href="#3-%E5%AF%BC%E5%85%A5%E7%9B%B8%E5%85%B3%E4%BE%9D%E8%B5%96">3、导入相关依赖</a><br>
+* <a href="#4-%E6%89%93war%E5%8C%85">4、打war包</a><br>
+* <a href="#5-%E5%BB%BA%E7%AB%8B%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84">5、建立基本结构</a></li>
+<li><a href="#resources%E7%9B%AE%E5%BD%95%E4%B8%8B%E5%90%84%E4%B8%AA%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6">resources目录下各个配置文件</a><br>
+*<br>
+*<br>
+*<br>
+* <a href="#1-mybatis-configxml">1、mybatis-config.xml</a><br>
+* <a href="#2-databaseproperties">2、database.properties</a><br>
+* <a href="#3-spring-daoxml">3、spring-dao.xml</a><br>
+* <a href="#4-spring-servicexml">4、spring-service.xml</a><br>
+* <a href="#5-spring-mvcxml">5、spring-mvc.xml</a><br>
+* <a href="#6-applicationcontextxml">6、applicationContext.xml</a><br>
+* <a href="#7-webxml">7、web.xml</a></li>
+<li><a href="#%E5%90%8E%E7%AB%AF%E4%BB%A3%E7%A0%81">后端代码</a><br>
+*<br>
+*<br>
+*<br>
+* <a href="#1-%E5%AE%9E%E4%BD%93%E7%B1%BBbooks">1、实体类：Books</a><br>
+* <a href="#2-mapper%E6%8E%A5%E5%8F%A3bookmapper">2、mapper接口：BookMapper</a><br>
+* <a href="#3-%E6%B3%A8%E5%86%8Cbookmapper">3、注册BookMapper</a><br>
+* <a href="#4-bookservice%E6%8E%A5%E5%8F%A3">4、BookService接口</a><br>
+* <a href="#5-bookservice%E5%AE%9E%E7%8E%B0%E7%B1%BB">5、BookService实现类</a><br>
+* <a href="#6-bookcontroller">6、BookController</a></li>
+<li><a href="#%E5%89%8D%E7%AB%AF%E4%BB%A3%E7%A0%81">前端代码</a><br>
+*<br>
+*<br>
+*<br>
+* <a href="#1-indexjsp">1、index.jsp</a><br>
+* <a href="#2-allbookjsp">2、allBook.jsp</a><br>
+* <a href="#3-addbookjsp">3、addBook.jsp</a><br>
+* <a href="#4-updatebookjsp">4、updateBook.jsp</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      
+    </div>
+  </div>
+</div>
+
+<div class="menu-container">
+  <i class="ri-arrow-left-line text-2xl cursor-pointer animated fadeIn close-menu-btn" onclick="closeMenu()"></i>
+  <div>
+    
+      
+        <a href="/" class="menu" style="animation-delay: 0s">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu" style="animation-delay: 0.2s">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu" style="animation-delay: 0.4s">
+          标签（分类）
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu" style="animation-delay: 0.6000000000000001s">
+          关于博主
+        </a>
+      
+    
+  </div>
+  <div class="site-footer">
+    <div class="py-4 text-gray-700"></div>
+    <a class="rss" href="https://totoroay.github.io//atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+<div class="mask" onclick="closeMenu()">
+</div>
+      <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
+        <h1 class="text-3xl font-bold lg:mt-16">SSM整合</h1>
+        <div class="text-sm text-gray-700 lg:my-8">
+          2020-04-25 / 29 min read
+        </div>
+        
+          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://totoroay.github.io//post-images/ssm-zheng-he.png" alt="">
+        
+        <div class="post-content yue">
+          <h1 id="ssm整合">SSM整合</h1>
 <h2 id="整体架构">整体架构</h2>
 <img src="E:\笔记\SSM整合\images\猎豹浏览器截图20200425164722.png" style="zoom: 80%;" />
 <h2 id="数据库及建表">数据库及建表</h2>
@@ -843,388 +958,155 @@ public class BookController {
     &lt;/div&gt;
 &lt;/div&gt;
 </code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Mybatis环境搭建]]></title>
-        <id>https://totoroay.github.io/post/mybatis-huan-jing-da-jian/</id>
-        <link href="https://totoroay.github.io/post/mybatis-huan-jing-da-jian/">
-        </link>
-        <updated>2020-04-12T11:34:37.000Z</updated>
-        <content type="html"><![CDATA[<h2 id="1-新建项目">1、新建项目</h2>
-<h3 id="编写sql">编写SQL</h3>
-<pre><code class="language-sql">CREATE DATABASE `mybatis`;
 
-USE `mybatis`;
+        </div>
 
-CREATE TABLE `user`(
-  `id` INT(20) NOT NULL PRIMARY KEY,
-  `name` VARCHAR(30) DEFAULT NULL,
-  `pwd` VARCHAR(30) DEFAULT NULL
-)ENGINE=INNODB DEFAULT CHARSET=utf8;
+        
 
-INSERT INTO `user`(`id`,`name`,`pwd`) VALUES 
-(1,'totoroay','totoroay'),
-(2,'二哈','22'),
-(3,'张三','333')
-(4,'李四','4444')
-</code></pre>
-<ol>
-<li>
-<p>新建一个普通的maven项目</p>
-</li>
-<li>
-<p>删除src目录</p>
-</li>
-<li>
-<p>导入maven依赖</p>
-<pre><code class="language-xml"> &lt;!--父工程--&gt;
- 
- &lt;!--导入依赖--&gt;
- &lt;dependencies&gt;
-     &lt;!--mysql驱动--&gt;
-     &lt;dependency&gt;
-         &lt;groupId&gt;mysql&lt;/groupId&gt;
-         &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
-         &lt;version&gt;5.1.47&lt;/version&gt;
-     &lt;/dependency&gt;
-     &lt;!--mybatis--&gt;
-     &lt;dependency&gt;
-         &lt;groupId&gt;org.mybatis&lt;/groupId&gt;
-         &lt;artifactId&gt;mybatis&lt;/artifactId&gt;
-         &lt;version&gt;3.5.2&lt;/version&gt;
-     &lt;/dependency&gt;
-     &lt;!--junit--&gt;
-     &lt;dependency&gt;
-         &lt;groupId&gt;junit&lt;/groupId&gt;
-         &lt;artifactId&gt;junit&lt;/artifactId&gt;
-         &lt;version&gt;4.12&lt;/version&gt;
-     &lt;/dependency&gt;
-     &lt;!--log4j--&gt;
-     &lt;dependency&gt;
-         &lt;groupId&gt;log4j&lt;/groupId&gt;
-         &lt;artifactId&gt;log4j&lt;/artifactId&gt;
-         &lt;version&gt;1.2.17&lt;/version&gt;
-     &lt;/dependency&gt;
-     &lt;!--导入lombok插件，还需在setting-&gt;Plugins中下载--&gt;
-     &lt;dependency&gt;
-         &lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
-         &lt;artifactId&gt;lombok&lt;/artifactId&gt;
-         &lt;version&gt;1.18.10&lt;/version&gt;
-     &lt;/dependency&gt;
- &lt;/dependencies&gt;
 
- &lt;!--在build中配置resources，来防止我们资源导出失败的问题--&gt;
- &lt;build&gt;
-     &lt;resources&gt;
-         &lt;resource&gt;
-             &lt;directory&gt;src/main/resources&lt;/directory&gt;
-             &lt;includes&gt;
-                 &lt;include&gt;**/*.properties&lt;/include&gt;
-                 &lt;include&gt;**/*.xml&lt;/include&gt;
-             &lt;/includes&gt;
-             &lt;filtering&gt;true&lt;/filtering&gt;
-         &lt;/resource&gt;
-         &lt;resource&gt;
-             &lt;directory&gt;src/main/java&lt;/directory&gt;
-             &lt;includes&gt;
-                 &lt;include&gt;**/*.properties&lt;/include&gt;
-                 &lt;include&gt;**/*.xml&lt;/include&gt;
-             &lt;/includes&gt;
-             &lt;filtering&gt;true&lt;/filtering&gt;
-         &lt;/resource&gt;
-     &lt;/resources&gt;
- &lt;/build&gt;
-</code></pre>
-</li>
-</ol>
-<h2 id="2-创建一个模块">2、创建一个模块</h2>
-<ul>
-<li>
-<p>在resources目录下编写mybatis的核心配置文件：mybatis-config.xml</p>
-<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
-  &lt;!DOCTYPE configuration
-      PUBLIC &quot;-//mybatis.org//DTD Config 3.0//EN&quot;
-      &quot;http://mybatis.org/dtd/mybatis-3-config.dtd&quot;&gt;
-  &lt;!--configuration核心配置文件--&gt;
-  &lt;configuration&gt;
+        <div class="flex justify-between py-8">
+          
 
-  &lt;!--引入外部配置文件--&gt;
-  &lt;properties resource=&quot;db.properties&quot;/&gt;
+          
+            <div class="next-post">
+              <a href="https://totoroay.github.io/post/mybatis-huan-jing-da-jian/">
+                <h3 class="post-title">
+                  Mybatis环境搭建
+                  <i class="ri-arrow-right-line"></i>
+                </h3>
+              </a>
+            </div>
+          
+        </div>
 
-  &lt;settings&gt;
-      &lt;!--日志--&gt;
-      &lt;setting name=&quot;logImpl&quot; value=&quot;STDOUT_LOGGING&quot;/&gt;
-      &lt;!--log4j日志--&gt;
-      &lt;!--&lt;setting name=&quot;logImpl&quot; value=&quot;LOG4J&quot;/&gt;--&gt;
-      &lt;!--开启驼峰命名--&gt;
-      &lt;setting name=&quot;mapUnderscoreToCamelCase&quot; value=&quot;true&quot;/&gt;
-      &lt;!--显示开启缓存--&gt;
-      &lt;setting name=&quot;cacheEnabled&quot; value=&quot;true&quot;/&gt;
-  &lt;/settings&gt;
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
 
-  &lt;!--设置别名--&gt;
-  &lt;typeAliases&gt;
-      &lt;package name=&quot;com.totoroay.pojo&quot;/&gt;
-  &lt;/typeAliases&gt;
+<div id="gitalk-container"></div>
 
-  &lt;environments default=&quot;development&quot;&gt;
-      &lt;environment id=&quot;development&quot;&gt;
-          &lt;transactionManager type=&quot;JDBC&quot;/&gt;
-          &lt;dataSource type=&quot;POOLED&quot;&gt;
-              &lt;property name=&quot;driver&quot; value=&quot;${driver}&quot;/&gt;
-              &lt;property name=&quot;url&quot; value=&quot;${url}&quot;/&gt;
-              &lt;property name=&quot;username&quot; value=&quot;${username}&quot;/&gt;
-              &lt;property name=&quot;password&quot; value=&quot;${password}&quot;/&gt;
-          &lt;/dataSource&gt;
-      &lt;/environment&gt;
+<script>
 
-      &lt;environment id=&quot;test&quot;&gt;
-          &lt;transactionManager type=&quot;JDBC&quot;/&gt;
-          &lt;dataSource type=&quot;POOLED&quot;&gt;
-              &lt;property name=&quot;driver&quot; value=&quot;com.mysql.jdbc.Driver&quot;/&gt;
-              &lt;property name=&quot;url&quot; value=&quot;jdbc:mysql://localhost:3306/mybatis?useSSL=true&amp;amp;useUnicode=true&amp;amp;characterEncoding=UTF-8&quot;/&gt;
-              &lt;property name=&quot;username&quot; value=&quot;root&quot;/&gt;
-              &lt;property name=&quot;password&quot; value=&quot;root&quot;/&gt;
-          &lt;/dataSource&gt;
-      &lt;/environment&gt;
-  &lt;/environments&gt;
+  var gitalk = new Gitalk({
+    clientID: '76af3abf5b345815d20f',
+    clientSecret: 'cd22dd44f3d5b861d2552cd4270bee0b3b1ad9cc',
+    repo: 'totoroay.github.io',
+    owner: 'totoroay',
+    admin: ['totoroay'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
 
-  &lt;mappers&gt;
-      &lt;mapper resource=&quot;mapper/UserMapper.xml&quot;/&gt;
-  &lt;/mappers&gt;
-  &lt;/configuration&gt;
-</code></pre>
-</li>
-<li>
-<p>同样在resources目录下编写外部配置文件：db.properties</p>
-<pre><code class="language-properties">  driver=com.mysql.jdbc.Driver
-  url=jdbc:mysql://localhost:3306/mybatis?useSSL=true&amp;amp;useUnicode=true&amp; amp;characterEncoding=UTF-8
-  username=root
-  password=root
-</code></pre>
-</li>
-<li>
-<p>编写log4j外部配置文件：log4j.properties</p>
-<pre><code class="language-properties">  #将等级为DEBUG的日志信息输出到console和file这两个目的地，console和file的定义在下面码
-  log4j.rootLogger=DEBUG,console,file
+  gitalk.render('gitalk-container')
 
-  #控制台输出的相关设置
-  log4j.appender.console = org.apache.log4j.ConsoleAppender
-  log4j.appender.console.Target = System.out
-  log4j.appender.console.Threshold=DEBUG
-  log4j.appender.console.layout = org.apache.log4j.PatternLayout
-  log4j.appender.console.layout.ConversionPattern=[%c]-%m%n
+</script>
 
-  #文件输出的相关设置
-  log4j.appender.file = org.apache.log4j.RollingFileAppender
-  log4j.appender.file.File=./log/totoroay.log
-  log4j.appender.file.MaxFileSize=10mb
-  log4j.appender.file.Threshold=DEBUG
-  log4j.appender.file.layout=org.apache.log4j.PatternLayout
-  log4j.appender.file.layout.ConversionPattern=[%p][%d{yy-MM-dd}][%c]%m%n
+          
 
-  #日志输出级别
-  log4j.logger.org.mybatis=DEBUG
-  log4j.logger.java.sql=DEBUG
-  log4j.logger.java.sql.Statement=DEBUG
-  log4j.logger.java.sql.ResultSet=DEBUG
-  log4j.logger.java.sql.PreparedStatement=DEBUG
-</code></pre>
-</li>
-<li>
-<p>编写mybatis工具类</p>
-<pre><code class="language-java">//sqlSessionFactory --&gt; sqlSession
-public class MybatisUtils {
+          
+        
 
-    private static SqlSessionFactory sqlSessionFactory;
+      </div>
+    </div>
 
-    static{
-        try {
-            //使用Mybatis第一步：获取sqlSessionFactory对象
-            String resource = &quot;mybatis-config.xml&quot;;
-            InputStream inputStream = Resources.getResourceAsStream(resource);
-            sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
-        } catch (IOException e) {
-            e.printStackTrace();
+    <script src="https://totoroay.github.io//media/prism.js"></script>  
+<script>
+
+Prism.highlightAll()
+let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+// This should probably be throttled.
+// Especially because it triggers during smooth scrolling.
+// https://lodash.com/docs/4.17.10#throttle
+// You could do like...
+// window.addEventListener("scroll", () => {
+//    _.throttle(doThatStuff, 100);
+// });
+// Only not doing it here to keep this Pen dependency-free.
+
+window.addEventListener("scroll", event => {
+  let fromTop = window.scrollY;
+
+  mainNavLinks.forEach((link, index) => {
+    let section = document.getElementById(decodeURI(link.hash).substring(1));
+    let nextSection = null
+    if (mainNavLinks[index + 1]) {
+      nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+    }
+    if (section.offsetTop <= fromTop) {
+      if (nextSection) {
+        if (nextSection.offsetTop > fromTop) {
+          link.classList.add("current");
+        } else {
+          link.classList.remove("current");    
         }
-
+      } else {
+        link.classList.add("current");
+      }
+    } else {
+      link.classList.remove("current");
     }
+  });
+});
 
-    //既然有了 SqlSessionFactory，顾名思义，我们就可以从中获得 SqlSession 的实例了。
-    // SqlSession 完全包含了面向数据库执行 SQL 命令所需的所有方法。
-    public static SqlSession  getSqlSession(){
-        return sqlSessionFactory.openSession();
-    }
 
-}
-</code></pre>
-</li>
-</ul>
-<h2 id="3-编写代码">3、编写代码</h2>
-<ul>
-<li>编写用户实体类：User</li>
-</ul>
-<pre><code class="language-java">@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class User implements Serializable {
-    private int id;
-    private String name;
-    private String pwd;
-}
-</code></pre>
-<ul>
-<li>编写接口：UserMapper</li>
-</ul>
-<pre><code class="language-java">public interface UserMapper {
-    User queryUserById(int id);
-    int updateUser(User user);
-}
-</code></pre>
-<ul>
-<li>在resources目录下新建mapper创建实现接口的xml配置文件：UserMapper.xml</li>
-</ul>
-<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
-&lt;!DOCTYPE mapper
-        PUBLIC &quot;-//mybatis.org//DTD Config 3.0//EN&quot;
-        &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;
-&lt;mapper namespace=&quot;com.totoroay.dao.UserMapper&quot;&gt;
-    &lt;cache eviction=&quot;FIFO&quot; flushInterval=&quot;60000&quot; size=&quot;512&quot; readOnly=&quot;true&quot;/&gt;
+document.addEventListener("DOMContentLoaded", function() {
+  var lazyImages = [].slice.call(document.querySelectorAll(".post-feature-image.lazy"));
 
-    &lt;select id=&quot;queryUserById&quot; resultType=&quot;User&quot;&gt;
-        select * from user where id = #{id}
-    &lt;/select&gt;
-
-    &lt;update id=&quot;updateUser&quot; parameterType=&quot;user&quot;&gt;
-        update user set name = #{name}, pwd = #{pwd} where id = #{id};
-    &lt;/update&gt;
-
-&lt;/mapper&gt;
-</code></pre>
-<h2 id="4-测试">4、 测试</h2>
-<pre><code class="language-java">@Test
-    public void findAllUser(){
-        SqlSession sqlSession = MybatisUtils.getSqlSession();
-        UserMapper mapper = sqlSession.getMapper(UserMapper.class);
-        List&lt;User&gt; allUser = mapper.findAllUser();
-        for (User user : allUser) {
-            System.out.println(user);
+  if ("IntersectionObserver" in window) {
+    let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          let lazyImage = entry.target
+          lazyImage.style.backgroundImage = `url(${lazyImage.dataset.bg})`
+          lazyImage.classList.remove("lazy")
+          lazyImageObserver.unobserve(lazyImage)
         }
-        sqlSession.close();
-    }
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Mybatis简介]]></title>
-        <id>https://totoroay.github.io/post/mybatis-bi-ji/</id>
-        <link href="https://totoroay.github.io/post/mybatis-bi-ji/">
-        </link>
-        <updated>2020-04-12T11:18:15.000Z</updated>
-        <content type="html"><![CDATA[<h3 id="11-什么是mybatis">1.1、什么是Mybatis</h3>
-<ul>
-<li>MyBatis 是一款优秀的<strong>持久层框架</strong></li>
-<li>它支持定制化 SQL、存储过程以及高级映射。</li>
-<li>MyBatis 避免了几乎所有的 JDBC 代码和手动设置参数以及获取结果集。</li>
-<li>MyBatis 可以使用简单的 XML 或注解来配置和映射原生类型、接口和 Java 的 POJO（Plain Old Java Objects，普通老式 Java 对象）为数据库中的记录。</li>
-<li>MyBatis 本是<a href="https://baike.baidu.com/item/apache/6265">apache</a>的一个开源项目<a href="https://baike.baidu.com/item/iBatis">iBatis</a>, 2010年这个项目由apache software foundation 迁移到了google code，并且改名为MyBatis 。</li>
-<li>2013年11月迁移到Github。</li>
-</ul>
-<p>如何获得Mybatis？</p>
-<ul>
-<li>
-<p>maven仓库：</p>
-<pre><code class="language-xml">&lt;!-- https://mvnrepository.com/artifact/org.mybatis/mybatis --&gt;
-&lt;dependency&gt;
-    &lt;groupId&gt;org.mybatis&lt;/groupId&gt;
-    &lt;artifactId&gt;mybatis&lt;/artifactId&gt;
-    &lt;version&gt;3.5.2&lt;/version&gt;
-&lt;/dependency&gt;
-</code></pre>
-</li>
-<li>
-<p>Github ： <a href="https://github.com/mybatis/mybatis-3/releases">https://github.com/mybatis/mybatis-3/releases</a></p>
-</li>
-<li>
-<p>中文文档：<a href="https://mybatis.org/mybatis-3/zh/index.html">https://mybatis.org/mybatis-3/zh/index.html</a></p>
-</li>
-<li>
-<p>Maven仓库：<a href="https://mvnrepository.com/">https://mvnrepository.com/</a></p>
-</li>
-</ul>
-<h3 id="12-持久化">1.2、持久化</h3>
-<p>数据持久化</p>
-<ul>
-<li>持久化就是将程序的数据在持久状态和瞬时状态转化的过程</li>
-<li>内存：<strong>断电即失</strong></li>
-<li>数据库(Jdbc)，io文件持久化。</li>
-<li>生活：冷藏. 罐头。</li>
-</ul>
-<p><strong>为什么需要需要持久化？</strong></p>
-<ul>
-<li>
-<p>有一些对象，不能让他丢掉。</p>
-</li>
-<li>
-<p>内存太贵了</p>
-</li>
-</ul>
-<h3 id="13-持久层">1.3、持久层</h3>
-<p>Dao层，Service层，Controller层….</p>
-<ul>
-<li>完成持久化工作的代码块</li>
-<li>层界限十分明显。</li>
-</ul>
-<h3 id="14-为什么需要mybatis">1.4 为什么需要Mybatis？</h3>
-<ul>
-<li>帮助程序猿将数据存入到数据库中。</li>
-<li>方便</li>
-<li>传统的JDBC代码太复杂了。简化。框架。自动化。</li>
-<li>不用Mybatis也可以。更容易上手。 <strong>技术没有高低之分</strong></li>
-<li>优点：
-<ul>
-<li>简单易学</li>
-<li>灵活</li>
-<li>sql和代码的分离，提高了可维护性。</li>
-<li>提供映射标签，支持对象与数据库的orm字段关系映射</li>
-<li>提供对象关系映射标签，支持对象关系组建维护</li>
-<li>提供xml标签，支持编写动态sql。</li>
-</ul>
-</li>
-</ul>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Hello Gridea]]></title>
-        <id>https://totoroay.github.io/post/hello-gridea/</id>
-        <link href="https://totoroay.github.io/post/hello-gridea/">
-        </link>
-        <updated>2018-12-11T16:00:00.000Z</updated>
-        <summary type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
-✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
-✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
-<!-- more -->
-<p><a href="https://github.com/getgridea/gridea">Github</a><br>
-<a href="https://gridea.dev/">Gridea 主页</a><br>
-<a href="http://fehey.com/">示例网站</a></p>
-<h2 id="特性">特性👇</h2>
-<p>📝  你可以使用最酷的 <strong>Markdown</strong> 语法，进行快速创作</p>
-<p>🌉  你可以给文章配上精美的封面图和在文章任意位置插入图片</p>
-<p>🏷️  你可以对文章进行标签分组</p>
-<p>📋  你可以自定义菜单，甚至可以创建外部链接菜单</p>
-<p>💻  你可以在 <strong>Windows</strong>，<strong>MacOS</strong> 或 <strong>Linux</strong> 设备上使用此客户端</p>
-<p>🌎  你可以使用 <strong>𝖦𝗂𝗍𝗁𝗎𝖻 𝖯𝖺𝗀𝖾𝗌</strong> 或 <strong>Coding Pages</strong> 向世界展示，未来将支持更多平台</p>
-<p>💬  你可以进行简单的配置，接入 <a href="https://github.com/gitalk/gitalk">Gitalk</a> 或 <a href="https://github.com/SukkaW/DisqusJS">DisqusJS</a> 评论系统</p>
-<p>🇬🇧  你可以使用<strong>中文简体</strong>或<strong>英语</strong></p>
-<p>🌁  你可以任意使用应用内默认主题或任意第三方主题，强大的主题自定义能力</p>
-<p>🖥  你可以自定义源文件夹，利用 OneDrive、百度网盘、iCloud、Dropbox 等进行多设备同步</p>
-<p>🌱 当然 <strong>Gridea</strong> 还很年轻，有很多不足，但请相信，它会不停向前 🏃</p>
-<p>未来，它一定会成为你离不开的伙伴</p>
-<p>尽情发挥你的才华吧！</p>
-<p>😘 Enjoy~</p>
-]]></content>
-    </entry>
-</feed>
+      });
+    });
+
+    lazyImages.forEach(function(lazyImage) {
+      lazyImageObserver.observe(lazyImage)
+    })
+  } else {
+    // Possibly fall back to a more compatible method here
+  }
+});
+
+const menuContainer = document.querySelector('.menu-container')
+const menus = document.querySelectorAll('.menu-container .menu')
+const mask = document.querySelector('.mask')
+const contentWrapper = document.querySelector('.content-wrapper')
+const latestArticle = document.querySelector('.latest-article')
+const readMore = document.querySelector('.read-more')
+const indexPage = document.querySelector('.index-page')
+
+const isHome = location.pathname === '/'
+if (latestArticle) {
+  latestArticle.style.display = isHome ? 'block' : 'none'
+  readMore.style.display = isHome ? 'block' : 'none'
+  indexPage.style.display = isHome ? 'none' : 'block'
+}
+
+const openMenu = () => {
+  menuContainer.classList.add('open')
+  menus.forEach(menu => {
+    menu.classList.add('animated', 'fadeInLeft')
+  })
+  mask.classList.add('open')
+  contentWrapper.classList.add('is-second')
+}
+
+const closeMenu = () => {
+  menuContainer.classList.remove('open')
+  menus.forEach(menu => {
+    menu.classList.remove('animated', 'fadeInLeft')
+  })
+  mask.classList.remove('open')
+  contentWrapper.classList.remove('is-second')
+}
+</script>
+  
+  </body>
+</html>
