@@ -30,29 +30,9 @@
       
         <div class="animated fadeInLeft" style="animation-delay: 0.4s">
           <p class="my-4 text-gray-600 font-light hidden lg:block">
-            记录生活
+            文章目录
           </p>
-          <div class="animated fadeInLeft social-container hidden lg:block" style="animation-delay: 0.6s">
-            
-              
-            
-              
-            
-              
-            
-              
-            
-              
-            
-              
-            
-              
-            
-              
-            
-              
-            
-              
+          <div class="toc-container hidden lg:block">
             
           </div>
         </div>
@@ -97,51 +77,117 @@
 </div>
 <div class="mask" onclick="closeMenu()">
 </div>
-      <div class="content-wrapper py-32 lg:p-8 lg:w-3/4">
-        <h2 class="text-lg text-gray-700 mb-8">
-          <i class="ri-bookmark-line"></i> Mybatis
-        </h2>
-        
-  <section class="post-item md:flex pb-12 animated fadeIn" :style="{ 'animation-delay': `${0 * 0.2}s` }">
-    
-      <a href="https://totoroay.github.io/post/mybatis-huan-jing-da-jian/" class="feature-image-wrapper bg-gray-100 rounded-lg flex-shrink-0 mr-8 w-full h-56 h-32 md:w-56 md:h-40">
-        <div class="post-feature-image lazy w-full h-56 h-32 md:w-56 md:h-40" data-bg="'https://totoroay.github.io//post-images/mybatis-huan-jing-da-jian.png'">
+      <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
+        <h1 class="text-3xl font-bold lg:mt-16">原型模式</h1>
+        <div class="text-sm text-gray-700 lg:my-8">
+          2020-04-26 / 1 min read
         </div>
-      </a>
-    
-    <div class="content">
-      <a href="https://totoroay.github.io/post/mybatis-huan-jing-da-jian/">
-        <h2 class="post-title text-xl font-extrabold mt-5 md:mt-0">Mybatis环境搭建</h2>
-      </a>
-      <div class="post-abstract text-gray-700 font-light my-4">
         
-      </div>
-      <div class="text-gray-400 text-sm font-light">2020-04-12 / 8 min read</div>
-    </div>
-  </section>
+        <div class="post-content yue">
+          <p><img src="https://totoroay.github.io//post-images/1587872675351.png" alt="" loading="lazy"><br>
+<img src="https://totoroay.github.io//post-images/1587872743440.png" alt="" loading="lazy"></p>
+<pre><code class="language-java">// 潜克隆
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import java.util.Date;
 
-  <section class="post-item md:flex pb-12 animated fadeIn" :style="{ 'animation-delay': `${1 * 0.2}s` }">
-    
-      <a href="https://totoroay.github.io/post/mybatis-bi-ji/" class="feature-image-wrapper bg-gray-100 rounded-lg flex-shrink-0 mr-8 w-full h-56 h-32 md:w-56 md:h-40">
-        <div class="post-feature-image lazy w-full h-56 h-32 md:w-56 md:h-40" data-bg="'https://totoroay.github.io//post-images/mybatis-bi-ji.png'">
+public class Prototype {
+    public static void main(String[] args) throws CloneNotSupportedException {
+        Date date = new Date();
+        video v = new video(&quot;原型模式&quot;,date);
+        video v1 =(video) v.clone();
+        System.out.println(v);
+        System.out.println(v1);
+        System.out.println(&quot;===================================&quot;);
+        date.setTime(1232131312);
+        System.out.println(v);
+        System.out.println(v1);
+    }
+}
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+class video implements Cloneable{
+    private String name;
+    private Date date;
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+}
+</code></pre>
+<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1587872749669.png" alt="" loading="lazy"></figure>
+<pre><code class="language-java">// 深克隆：改造clone()方法
+@Override
+    protected Object clone() throws CloneNotSupportedException {
+        Object obj = super.clone();
+        video v = (video) obj;
+        // 将对象的属性进行克隆
+        v.date = (Date) this.date.clone();
+        return obj;
+    }
+</code></pre>
+<p><img src="https://totoroay.github.io//post-images/1587872756815.png" alt="" loading="lazy"><br>
+<img src="https://totoroay.github.io//post-images/1587872763023.png" alt="" loading="lazy"></p>
+
         </div>
-      </a>
-    
-    <div class="content">
-      <a href="https://totoroay.github.io/post/mybatis-bi-ji/">
-        <h2 class="post-title text-xl font-extrabold mt-5 md:mt-0">Mybatis笔记</h2>
-      </a>
-      <div class="post-abstract text-gray-700 font-light my-4">
-        
-      </div>
-      <div class="text-gray-400 text-sm font-light">2020-04-10 / 12 min read</div>
-    </div>
-  </section>
 
-        <div class="pagination-container animated fadeIn">
-  
-  
-</div>
+        
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://totoroay.github.io/tag/nCXsgME5p/">
+            <span class="flex-auto">创建型模式</span>
+          </a>
+        
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://totoroay.github.io/tag/9Wg-3gSCN/">
+            <span class="flex-auto">设计模式</span>
+          </a>
+        
+
+
+        <div class="flex justify-between py-8">
+          
+
+          
+            <div class="next-post">
+              <a href="https://totoroay.github.io/post/dan-li-mo-shi/">
+                <h3 class="post-title">
+                  单例模式
+                  <i class="ri-arrow-right-line"></i>
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '76af3abf5b345815d20f',
+    clientSecret: 'cd22dd44f3d5b861d2552cd4270bee0b3b1ad9cc',
+    repo: 'totoroay.github.io',
+    owner: 'totoroay',
+    admin: ['totoroay'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
 
       </div>
     </div>

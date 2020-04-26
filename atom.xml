@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://totoroay.github.io/</id>
     <title>totoroay</title>
-    <updated>2020-04-25T14:09:21.086Z</updated>
+    <updated>2020-04-26T03:48:43.055Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://totoroay.github.io/"/>
     <link rel="self" href="https://totoroay.github.io/atom.xml"/>
@@ -10,6 +10,127 @@
     <logo>https://totoroay.github.io/images/avatar.png</logo>
     <icon>https://totoroay.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, totoroay</rights>
+    <entry>
+        <title type="html"><![CDATA[原型模式]]></title>
+        <id>https://totoroay.github.io/post/yuan-xing-mo-shi/</id>
+        <link href="https://totoroay.github.io/post/yuan-xing-mo-shi/">
+        </link>
+        <updated>2020-04-26T03:44:12.000Z</updated>
+        <content type="html"><![CDATA[<p><img src="https://totoroay.github.io//post-images/1587872675351.png" alt="" loading="lazy"><br>
+<img src="https://totoroay.github.io//post-images/1587872743440.png" alt="" loading="lazy"></p>
+<pre><code class="language-java">// 潜克隆
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import java.util.Date;
+
+public class Prototype {
+    public static void main(String[] args) throws CloneNotSupportedException {
+        Date date = new Date();
+        video v = new video(&quot;原型模式&quot;,date);
+        video v1 =(video) v.clone();
+        System.out.println(v);
+        System.out.println(v1);
+        System.out.println(&quot;===================================&quot;);
+        date.setTime(1232131312);
+        System.out.println(v);
+        System.out.println(v1);
+    }
+}
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+class video implements Cloneable{
+    private String name;
+    private Date date;
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+}
+</code></pre>
+<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1587872749669.png" alt="" loading="lazy"></figure>
+<pre><code class="language-java">// 深克隆：改造clone()方法
+@Override
+    protected Object clone() throws CloneNotSupportedException {
+        Object obj = super.clone();
+        video v = (video) obj;
+        // 将对象的属性进行克隆
+        v.date = (Date) this.date.clone();
+        return obj;
+    }
+</code></pre>
+<p><img src="https://totoroay.github.io//post-images/1587872756815.png" alt="" loading="lazy"><br>
+<img src="https://totoroay.github.io//post-images/1587872763023.png" alt="" loading="lazy"></p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[单例模式]]></title>
+        <id>https://totoroay.github.io/post/dan-li-mo-shi/</id>
+        <link href="https://totoroay.github.io/post/dan-li-mo-shi/">
+        </link>
+        <updated>2020-04-26T03:38:29.000Z</updated>
+        <content type="html"><![CDATA[<p><img src="https://totoroay.github.io//post-images/1587872393341.png" alt="" loading="lazy"><br>
+<img src="https://totoroay.github.io//post-images/1587872419615.png" alt="" loading="lazy"></p>
+<ul>
+<li></li>
+</ul>
+<pre><code class="language-java">// 饿汉式 缺点：空间上造成浪费
+public class Hungry {
+    public static void main(String[] args) {
+        User user = User.getUser();
+        for (int i = 0; i &lt; 1000000; i++) {
+            User u =User.getUser();
+            if (user != u){
+                System.out.println(&quot;产生了新的对象！&quot;);
+            }
+        }
+        System.out.println(&quot;end&quot;);
+    }
+}
+
+class User {
+    // 1.私有化构造方法
+    private User(){
+        System.out.println();
+    }
+    // 2.定义一个静态类对象
+    private static User user = new User();// 空间浪费
+    // 3.提供一个方法，返回给调用方一个类对象
+    public static User getUser(){
+        return user;
+    }
+
+}
+</code></pre>
+<ul>
+<li>懒汉式 特点：类加载时没有生成单例，只有当第一次调用getStudent()方法时才创建单例</li>
+</ul>
+<pre><code class="language-java">// 懒汉式 缺点：造成性能上的损耗，多线程下可能不止一个对象
+//                              加锁解决（synchronized）
+public class Slacker {
+    public static void main(String[] args) {
+        Student student = Student.getStudent();
+        Student student1 = Student.getStudent();
+        System.out.println(student);
+        System.out.println(student1);
+    }
+}
+class Student{
+    private Student(){}
+    private static Student student;
+    public static synchronized Student getStudent(){
+        if (student==null){
+            student = new Student();// 性能损耗
+        }
+        return student;
+    }
+}
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[SSM整合]]></title>
         <id>https://totoroay.github.io/post/ssm-zheng-he/</id>

@@ -30,29 +30,9 @@
       
         <div class="animated fadeInLeft" style="animation-delay: 0.4s">
           <p class="my-4 text-gray-600 font-light hidden lg:block">
-            记录生活
+            文章目录
           </p>
-          <div class="animated fadeInLeft social-container hidden lg:block" style="animation-delay: 0.6s">
-            
-              
-            
-              
-            
-              
-            
-              
-            
-              
-            
-              
-            
-              
-            
-              
-            
-              
-            
-              
+          <div class="toc-container hidden lg:block">
             
           </div>
         </div>
@@ -97,51 +77,135 @@
 </div>
 <div class="mask" onclick="closeMenu()">
 </div>
-      <div class="content-wrapper py-32 lg:p-8 lg:w-3/4">
-        <h2 class="text-lg text-gray-700 mb-8">
-          <i class="ri-bookmark-line"></i> Mybatis
-        </h2>
-        
-  <section class="post-item md:flex pb-12 animated fadeIn" :style="{ 'animation-delay': `${0 * 0.2}s` }">
-    
-      <a href="https://totoroay.github.io/post/mybatis-huan-jing-da-jian/" class="feature-image-wrapper bg-gray-100 rounded-lg flex-shrink-0 mr-8 w-full h-56 h-32 md:w-56 md:h-40">
-        <div class="post-feature-image lazy w-full h-56 h-32 md:w-56 md:h-40" data-bg="'https://totoroay.github.io//post-images/mybatis-huan-jing-da-jian.png'">
+      <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
+        <h1 class="text-3xl font-bold lg:mt-16">单例模式</h1>
+        <div class="text-sm text-gray-700 lg:my-8">
+          2020-04-26 / 2 min read
         </div>
-      </a>
-    
-    <div class="content">
-      <a href="https://totoroay.github.io/post/mybatis-huan-jing-da-jian/">
-        <h2 class="post-title text-xl font-extrabold mt-5 md:mt-0">Mybatis环境搭建</h2>
-      </a>
-      <div class="post-abstract text-gray-700 font-light my-4">
         
-      </div>
-      <div class="text-gray-400 text-sm font-light">2020-04-12 / 8 min read</div>
-    </div>
-  </section>
+        <div class="post-content yue">
+          <p><img src="https://totoroay.github.io//post-images/1587872393341.png" alt="" loading="lazy"><br>
+<img src="https://totoroay.github.io//post-images/1587872419615.png" alt="" loading="lazy"></p>
+<ul>
+<li></li>
+</ul>
+<pre><code class="language-java">// 饿汉式 缺点：空间上造成浪费
+public class Hungry {
+    public static void main(String[] args) {
+        User user = User.getUser();
+        for (int i = 0; i &lt; 1000000; i++) {
+            User u =User.getUser();
+            if (user != u){
+                System.out.println(&quot;产生了新的对象！&quot;);
+            }
+        }
+        System.out.println(&quot;end&quot;);
+    }
+}
 
-  <section class="post-item md:flex pb-12 animated fadeIn" :style="{ 'animation-delay': `${1 * 0.2}s` }">
-    
-      <a href="https://totoroay.github.io/post/mybatis-bi-ji/" class="feature-image-wrapper bg-gray-100 rounded-lg flex-shrink-0 mr-8 w-full h-56 h-32 md:w-56 md:h-40">
-        <div class="post-feature-image lazy w-full h-56 h-32 md:w-56 md:h-40" data-bg="'https://totoroay.github.io//post-images/mybatis-bi-ji.png'">
+class User {
+    // 1.私有化构造方法
+    private User(){
+        System.out.println();
+    }
+    // 2.定义一个静态类对象
+    private static User user = new User();// 空间浪费
+    // 3.提供一个方法，返回给调用方一个类对象
+    public static User getUser(){
+        return user;
+    }
+
+}
+</code></pre>
+<ul>
+<li>懒汉式 特点：类加载时没有生成单例，只有当第一次调用getStudent()方法时才创建单例</li>
+</ul>
+<pre><code class="language-java">// 懒汉式 缺点：造成性能上的损耗，多线程下可能不止一个对象
+//                              加锁解决（synchronized）
+public class Slacker {
+    public static void main(String[] args) {
+        Student student = Student.getStudent();
+        Student student1 = Student.getStudent();
+        System.out.println(student);
+        System.out.println(student1);
+    }
+}
+class Student{
+    private Student(){}
+    private static Student student;
+    public static synchronized Student getStudent(){
+        if (student==null){
+            student = new Student();// 性能损耗
+        }
+        return student;
+    }
+}
+</code></pre>
+
         </div>
-      </a>
-    
-    <div class="content">
-      <a href="https://totoroay.github.io/post/mybatis-bi-ji/">
-        <h2 class="post-title text-xl font-extrabold mt-5 md:mt-0">Mybatis笔记</h2>
-      </a>
-      <div class="post-abstract text-gray-700 font-light my-4">
-        
-      </div>
-      <div class="text-gray-400 text-sm font-light">2020-04-10 / 12 min read</div>
-    </div>
-  </section>
 
-        <div class="pagination-container animated fadeIn">
-  
-  
-</div>
+        
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://totoroay.github.io/tag/nCXsgME5p/">
+            <span class="flex-auto">创建型模式</span>
+          </a>
+        
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://totoroay.github.io/tag/9Wg-3gSCN/">
+            <span class="flex-auto">设计模式</span>
+          </a>
+        
+
+
+        <div class="flex justify-between py-8">
+          
+            <div class="prev-post">
+              <a href="https://totoroay.github.io/post/yuan-xing-mo-shi/">
+                <h3 class="post-title">
+                  <i class="ri-arrow-left-line"></i>
+                  原型模式
+                </h3>
+              </a>
+            </div>
+          
+
+          
+            <div class="next-post">
+              <a href="https://totoroay.github.io/post/ssm-zheng-he/">
+                <h3 class="post-title">
+                  SSM整合
+                  <i class="ri-arrow-right-line"></i>
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '76af3abf5b345815d20f',
+    clientSecret: 'cd22dd44f3d5b861d2552cd4270bee0b3b1ad9cc',
+    repo: 'totoroay.github.io',
+    owner: 'totoroay',
+    admin: ['totoroay'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
 
       </div>
     </div>
