@@ -36,10 +36,8 @@
             <ul class="markdownIt-TOC">
 <li>
 <ul>
-<li><a href="#%E5%85%B3%E4%BA%8E%E6%9C%AC%E7%AB%99">🏠 关于本站</a></li>
-<li><a href="#%E5%8D%9A%E4%B8%BB%E6%98%AF%E8%B0%81">👨‍💻 博主是谁</a></li>
-<li><a href="#%E5%85%B4%E8%B6%A3%E7%88%B1%E5%A5%BD">⛹ 兴趣爱好</a></li>
-<li><a href="#%E8%81%94%E7%B3%BB%E6%88%91%E5%91%80">📬 联系我呀</a></li>
+<li><a href="#%E7%AE%80%E5%8D%95%E5%B7%A5%E5%8E%82%E6%A8%A1%E5%BC%8F">简单工厂模式</a></li>
+<li><a href="#%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95%E6%A8%A1%E5%BC%8F">工厂方法模式</a></li>
 </ul>
 </li>
 </ul>
@@ -88,28 +86,186 @@
 <div class="mask" onclick="closeMenu()">
 </div>
       <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
-        <h1 class="text-3xl font-bold lg:mt-16">关于</h1>
+        <h1 class="text-3xl font-bold lg:mt-16">工厂模式</h1>
         <div class="text-sm text-gray-700 lg:my-8">
-          2019-01-25 / 1 min read
+          2020-04-27 / 3 min read
         </div>
         
         <div class="post-content yue">
-          <blockquote>
-<p>欢迎来到我的小站呀，很高兴遇见你！🤝</p>
-</blockquote>
-<h2 id="关于本站">🏠 关于本站</h2>
-<h2 id="博主是谁">👨‍💻 博主是谁</h2>
-<h2 id="兴趣爱好">⛹ 兴趣爱好</h2>
-<h2 id="联系我呀">📬 联系我呀</h2>
+          <p><mark>作用</mark>：</p>
+<ul>
+<li><strong>实现创建者和调用者的分离</strong></li>
+<li>详细分类：
+<ul>
+<li>简单工厂模式</li>
+<li>工厂方法模式</li>
+<li>抽象工厂模式</li>
+</ul>
+</li>
+</ul>
+<p><mark>核心本质</mark>：</p>
+<ul>
+<li>实例化对象不再使用new，用工厂方法代替</li>
+<li>将选择实现类，创建对象统一管理和控制，从而将调用者跟实现类解耦++</li>
+</ul>
+<p><mark>三种模式</mark>：</p>
+<ul>
+<li>
+<p>简单工厂模式</p>
+<ul>
+<li>用来生产同一等级结构中的任意产品（对增加新的产品，需要球盖已有代码）</li>
+</ul>
+</li>
+<li>
+<p>工厂方法模式</p>
+<ul>
+<li>用来生产同一等级结构中的固定产品（支持增加任意产品）</li>
+</ul>
+</li>
+<li>
+<p>抽象工厂模式</p>
+<ul>
+<li>围绕一个超级工厂创建其他工厂，该超级工厂又称为其他工厂的工厂</li>
+</ul>
+</li>
+</ul>
+<h2 id="简单工厂模式">简单工厂模式</h2>
+<pre><code class="language-java">//	车接口
+package totoroay.factory.simple;
+
+public interface Car {
+    void name();
+}
+</code></pre>
+<pre><code class="language-java">//	车工厂
+package totoroay.factory.simple;
+
+//  静态工厂模式即简单工厂模式
+//  增加新产品必须修改代码
+//  不满足开闭原则
+public class CarFactory {
+    public static Car getCar(String car) {
+        if (car.equals(&quot;五菱宏光&quot;)){
+            return new WuLing();
+        } else if (car.equals(&quot;特斯拉&quot;)) {
+            return new Tesla();
+        } else if (car.equals(&quot;大众&quot;)) {
+            return new Dazhong();
+        } else {
+            return null;
+        }
+    }
+}
+</code></pre>
+<pre><code class="language-java">//	具体的车
+package totoroay.factory.simple;
+
+public class WuLing implements Car {
+    @Override
+    public void name() {
+        System.out.println(&quot;五菱宏光&quot;);
+    }
+}
+</code></pre>
+<pre><code class="language-java">//	消费者
+package totoroay.factory.simple;
+
+public class Consumer {
+    public static void main(String[] args) {
+        // 原始方法
+        Car car = new WuLing();
+        Car car1 = new Tesla();
+        car.name();
+        car1.name();
+        
+        // 使用工厂创建
+        Car car2 = CarFactory.getCar(&quot;五菱宏光&quot;);
+        Car car3 = CarFactory.getCar(&quot;特斯拉&quot;);
+        car2.name();
+        car3.name();
+
+    }
+}
+</code></pre>
+<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1587997372616.png" alt="" loading="lazy"></figure>
+<h2 id="工厂方法模式">工厂方法模式</h2>
+<pre><code class="language-java">//	车接口
+package totoroay.factory.method;
+
+public interface Car {
+    void name();
+}
+</code></pre>
+<pre><code class="language-java">//	车工厂接口
+package totoroay.factory.method;
+
+//  工厂方法模式
+public interface CarFactory {
+    Car getCar();
+}
+
+</code></pre>
+<pre><code class="language-java">//	车工厂
+package totoroay.factory.method;
+
+public class MobikeFactory implements CarFactory {
+    @Override
+    public Car getCar() {
+        return new Mobike();
+    }
+}
+</code></pre>
+<pre><code class="language-java">//	具体的车
+package totoroay.factory.method;
+
+public class Mobike implements Car {
+    @Override
+    public void name() {
+        System.out.println(&quot;摩拜单车&quot;);
+    }
+}
+</code></pre>
+<pre><code class="language-java">//	消费者
+package totoroay.factory.method;
+
+public class Consumer {
+    public static void main(String[] args) {
+        Car car = new WuLingFactory().getCar();
+        Car car1 = new TeslaFactory().getCar();
+        Car car2 = new MobikeFactory().getCar();
+        car.name();
+        car1.name();
+        car2.name();
+    }
+}
+</code></pre>
+<figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1587997407988.png" alt="" loading="lazy"></figure>
 
         </div>
 
+        
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://totoroay.github.io/tag/nCXsgME5p/">
+            <span class="flex-auto">创建型模式</span>
+          </a>
+        
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://totoroay.github.io/tag/9Wg-3gSCN/">
+            <span class="flex-auto">设计模式</span>
+          </a>
         
 
 
         <div class="flex justify-between py-8">
           
 
+          
+            <div class="next-post">
+              <a href="https://totoroay.github.io/post/yuan-xing-mo-shi/">
+                <h3 class="post-title">
+                  原型模式
+                  <i class="ri-arrow-right-line"></i>
+                </h3>
+              </a>
+            </div>
           
         </div>
 
