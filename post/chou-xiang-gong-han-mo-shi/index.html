@@ -78,60 +78,157 @@
 <div class="mask" onclick="closeMenu()">
 </div>
       <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
-        <h1 class="text-3xl font-bold lg:mt-16">原型模式</h1>
+        <h1 class="text-3xl font-bold lg:mt-16">抽象工厂模式</h1>
         <div class="text-sm text-gray-700 lg:my-8">
-          2020-04-26 / 1 min read
+          2020-04-28 / 3 min read
         </div>
         
         <div class="post-content yue">
-          <p><img src="https://totoroay.github.io//post-images/1587872675351.png" alt="" loading="lazy"><br>
-<img src="https://totoroay.github.io//post-images/1587872743440.png" alt="" loading="lazy"></p>
-<pre><code class="language-java">// 潜克隆
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import java.util.Date;
-
-public class Prototype {
-    public static void main(String[] args) throws CloneNotSupportedException {
-        Date date = new Date();
-        video v = new video(&quot;原型模式&quot;,date);
-        video v1 =(video) v.clone();
-        System.out.println(v);
-        System.out.println(v1);
-        System.out.println(&quot;===================================&quot;);
-        date.setTime(1232131312);
-        System.out.println(v);
-        System.out.println(v1);
-    }
+          <figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1588053644854.png" alt="" loading="lazy"></figure>
+<p>====</p>
+<figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1588053652595.png" alt="" loading="lazy"></figure>
+<p>====</p>
+<pre><code class="language-java">package totoroay.factory.abstract1;
+//  手机产品接口
+public interface IphoneProduct {
+    void start();
+    void shutdown();
+    void callup();
+    void sendSMS();
 }
-
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-class video implements Cloneable{
-    private String name;
-    private Date date;
+</code></pre>
+<pre><code class="language-java">package totoroay.factory.abstract1;
+//  路由器产品接口
+public interface IRouterProduct {
+    void start();
+    void shutdown();
+    void openWiFi();
+    void setting();
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.factory.abstract1;
+//  小米手机
+public class XiaomiPhone implements IphoneProduct {
+    @Override
+    public void start() { System.out.println(&quot;小米手机开机&quot;); }
 
     @Override
-    protected Object clone() throws CloneNotSupportedException {
-        return super.clone();
+    public void shutdown() { System.out.println(&quot;小米手机关机&quot;); }
+
+    @Override
+    public void callup() { System.out.println(&quot;小米手机打电话&quot;); }
+
+    @Override
+    public void sendSMS() { System.out.println(&quot;小米手机发短信&quot;); }
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.factory.abstract1;
+//  小米路由器
+public class XiaomiRouter implements IRouterProduct {
+    @Override
+    public void start() { System.out.println(&quot;小米路由器开启&quot;); }
+
+    @Override
+    public void shutdown() { System.out.println(&quot;小米路由器关闭&quot;); }
+
+    @Override
+    public void openWiFi() { System.out.println(&quot;小米路由器开启WiFi&quot;); }
+
+    @Override
+    public void setting() { System.out.println(&quot;小米路由器开启设置&quot;); }
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.factory.abstract1;
+//  华为手机
+public class HuaweiPhone implements IphoneProduct {
+    @Override
+    public void start() { System.out.println(&quot;华为手机开机&quot;); }
+
+    @Override
+    public void shutdown() { System.out.println(&quot;华为手机关机&quot;); }
+
+    @Override
+    public void callup() { System.out.println(&quot;华为手机打电话&quot;); }
+
+    @Override
+    public void sendSMS() { System.out.println(&quot;华为手机发短信&quot;); }
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.factory.abstract1;
+//  华为路由器
+public class HuaweiRouter implements IRouterProduct {
+    @Override
+    public void start() {
+        System.out.println(&quot;华为路由器开启&quot;);
+    }
+
+    @Override
+    public void shutdown() {
+        System.out.println(&quot;华为路由器关闭&quot;);
+    }
+
+    @Override
+    public void openWiFi() {
+        System.out.println(&quot;华为路由器开启WiFi&quot;);
+    }
+
+    @Override
+    public void setting() { System.out.println(&quot;华为路由器开启设置&quot;); }
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.factory.abstract1;
+//  抽象产品工厂
+public interface IProductFactory {
+    //  生产手机
+    IphoneProduct iphoneproduct();
+    //  生产路由器
+    IRouterProduct irouterproduct();
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.factory.abstract1;
+//  小米工厂
+public class XiaomiFactory implements IProductFactory {
+    @Override
+    public IphoneProduct iphoneproduct() { return new XiaomiPhone(); }
+
+    @Override
+    public IRouterProduct irouterproduct() { return new XiaomiRouter(); }
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.factory.abstract1;
+//  华为工厂
+public class HuaweiFactory implements IProductFactory {
+    @Override
+    public IphoneProduct iphoneproduct() { return new HuaweiPhone(); }
+
+    @Override
+    public IRouterProduct irouterproduct() { return new HuaweiRouter(); }
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.factory.abstract1;
+//  客户
+public class Client {
+    public static void main(String[] args) {
+        System.out.println(&quot;====小米系列产品====&quot;);
+        IphoneProduct iphoneproduct = new XiaomiFactory().iphoneproduct();
+        iphoneproduct.start();
+        iphoneproduct.callup();
+        IRouterProduct irouterproduct = new XiaomiFactory().irouterproduct();
+        irouterproduct.start();
+        irouterproduct.openWiFi();
+
+        System.out.println(&quot;====华为系列产品====&quot;);
+        IphoneProduct iphoneproduct1 = new HuaweiFactory().iphoneproduct();
+        iphoneproduct1.start();
+        iphoneproduct1.sendSMS();
+        IRouterProduct irouterproduct1 = new HuaweiFactory().irouterproduct();
+        irouterproduct1.start();
+        irouterproduct1.setting();
     }
 }
 </code></pre>
-<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1587872749669.png" alt="" loading="lazy"></figure>
-<pre><code class="language-java">// 深克隆：改造clone()方法
-@Override
-    protected Object clone() throws CloneNotSupportedException {
-        Object obj = super.clone();
-        video v = (video) obj;
-        // 将对象的属性进行克隆
-        v.date = (Date) this.date.clone();
-        return obj;
-    }
-</code></pre>
-<p><img src="https://totoroay.github.io//post-images/1587872756815.png" alt="" loading="lazy"><br>
-<img src="https://totoroay.github.io//post-images/1587872763023.png" alt="" loading="lazy"></p>
+<p>====</p>
+<figure data-type="image" tabindex="3"><img src="https://totoroay.github.io//post-images/1588053661006.png" alt="" loading="lazy"></figure>
 
         </div>
 
@@ -148,21 +245,12 @@ class video implements Cloneable{
 
         <div class="flex justify-between py-8">
           
-            <div class="prev-post">
-              <a href="https://totoroay.github.io/post/gong-han-mo-shi/">
-                <h3 class="post-title">
-                  <i class="ri-arrow-left-line"></i>
-                  工厂模式
-                </h3>
-              </a>
-            </div>
-          
 
           
             <div class="next-post">
-              <a href="https://totoroay.github.io/post/dan-li-mo-shi/">
+              <a href="https://totoroay.github.io/post/gong-han-mo-shi/">
                 <h3 class="post-title">
-                  单例模式
+                  工厂模式
                   <i class="ri-arrow-right-line"></i>
                 </h3>
               </a>

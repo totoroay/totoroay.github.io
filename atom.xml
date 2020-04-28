@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://totoroay.github.io/</id>
     <title>totoroay</title>
-    <updated>2020-04-28T04:43:07.254Z</updated>
+    <updated>2020-04-28T06:01:21.597Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://totoroay.github.io/"/>
     <link rel="self" href="https://totoroay.github.io/atom.xml"/>
@@ -10,6 +10,159 @@
     <logo>https://totoroay.github.io/images/avatar.png</logo>
     <icon>https://totoroay.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, totoroay</rights>
+    <entry>
+        <title type="html"><![CDATA[抽象工厂模式]]></title>
+        <id>https://totoroay.github.io/post/chou-xiang-gong-han-mo-shi/</id>
+        <link href="https://totoroay.github.io/post/chou-xiang-gong-han-mo-shi/">
+        </link>
+        <updated>2020-04-28T05:59:31.000Z</updated>
+        <content type="html"><![CDATA[<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1588053644854.png" alt="" loading="lazy"></figure>
+<p>====</p>
+<figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1588053652595.png" alt="" loading="lazy"></figure>
+<p>====</p>
+<pre><code class="language-java">package totoroay.factory.abstract1;
+//  手机产品接口
+public interface IphoneProduct {
+    void start();
+    void shutdown();
+    void callup();
+    void sendSMS();
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.factory.abstract1;
+//  路由器产品接口
+public interface IRouterProduct {
+    void start();
+    void shutdown();
+    void openWiFi();
+    void setting();
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.factory.abstract1;
+//  小米手机
+public class XiaomiPhone implements IphoneProduct {
+    @Override
+    public void start() { System.out.println(&quot;小米手机开机&quot;); }
+
+    @Override
+    public void shutdown() { System.out.println(&quot;小米手机关机&quot;); }
+
+    @Override
+    public void callup() { System.out.println(&quot;小米手机打电话&quot;); }
+
+    @Override
+    public void sendSMS() { System.out.println(&quot;小米手机发短信&quot;); }
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.factory.abstract1;
+//  小米路由器
+public class XiaomiRouter implements IRouterProduct {
+    @Override
+    public void start() { System.out.println(&quot;小米路由器开启&quot;); }
+
+    @Override
+    public void shutdown() { System.out.println(&quot;小米路由器关闭&quot;); }
+
+    @Override
+    public void openWiFi() { System.out.println(&quot;小米路由器开启WiFi&quot;); }
+
+    @Override
+    public void setting() { System.out.println(&quot;小米路由器开启设置&quot;); }
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.factory.abstract1;
+//  华为手机
+public class HuaweiPhone implements IphoneProduct {
+    @Override
+    public void start() { System.out.println(&quot;华为手机开机&quot;); }
+
+    @Override
+    public void shutdown() { System.out.println(&quot;华为手机关机&quot;); }
+
+    @Override
+    public void callup() { System.out.println(&quot;华为手机打电话&quot;); }
+
+    @Override
+    public void sendSMS() { System.out.println(&quot;华为手机发短信&quot;); }
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.factory.abstract1;
+//  华为路由器
+public class HuaweiRouter implements IRouterProduct {
+    @Override
+    public void start() {
+        System.out.println(&quot;华为路由器开启&quot;);
+    }
+
+    @Override
+    public void shutdown() {
+        System.out.println(&quot;华为路由器关闭&quot;);
+    }
+
+    @Override
+    public void openWiFi() {
+        System.out.println(&quot;华为路由器开启WiFi&quot;);
+    }
+
+    @Override
+    public void setting() { System.out.println(&quot;华为路由器开启设置&quot;); }
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.factory.abstract1;
+//  抽象产品工厂
+public interface IProductFactory {
+    //  生产手机
+    IphoneProduct iphoneproduct();
+    //  生产路由器
+    IRouterProduct irouterproduct();
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.factory.abstract1;
+//  小米工厂
+public class XiaomiFactory implements IProductFactory {
+    @Override
+    public IphoneProduct iphoneproduct() { return new XiaomiPhone(); }
+
+    @Override
+    public IRouterProduct irouterproduct() { return new XiaomiRouter(); }
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.factory.abstract1;
+//  华为工厂
+public class HuaweiFactory implements IProductFactory {
+    @Override
+    public IphoneProduct iphoneproduct() { return new HuaweiPhone(); }
+
+    @Override
+    public IRouterProduct irouterproduct() { return new HuaweiRouter(); }
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.factory.abstract1;
+//  客户
+public class Client {
+    public static void main(String[] args) {
+        System.out.println(&quot;====小米系列产品====&quot;);
+        IphoneProduct iphoneproduct = new XiaomiFactory().iphoneproduct();
+        iphoneproduct.start();
+        iphoneproduct.callup();
+        IRouterProduct irouterproduct = new XiaomiFactory().irouterproduct();
+        irouterproduct.start();
+        irouterproduct.openWiFi();
+
+        System.out.println(&quot;====华为系列产品====&quot;);
+        IphoneProduct iphoneproduct1 = new HuaweiFactory().iphoneproduct();
+        iphoneproduct1.start();
+        iphoneproduct1.sendSMS();
+        IRouterProduct irouterproduct1 = new HuaweiFactory().irouterproduct();
+        irouterproduct1.start();
+        irouterproduct1.setting();
+    }
+}
+</code></pre>
+<p>====</p>
+<figure data-type="image" tabindex="3"><img src="https://totoroay.github.io//post-images/1588053661006.png" alt="" loading="lazy"></figure>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[工厂模式]]></title>
         <id>https://totoroay.github.io/post/gong-han-mo-shi/</id>
