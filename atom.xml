@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://totoroay.github.io/</id>
     <title>totoroay</title>
-    <updated>2020-05-04T06:37:29.269Z</updated>
+    <updated>2020-05-04T09:04:22.746Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://totoroay.github.io/"/>
     <link rel="self" href="https://totoroay.github.io/atom.xml"/>
@@ -10,6 +10,222 @@
     <logo>https://totoroay.github.io/images/avatar.png</logo>
     <icon>https://totoroay.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, totoroay</rights>
+    <entry>
+        <title type="html"><![CDATA[SpringBoot02：运行原理初探]]></title>
+        <id>https://totoroay.github.io/post/springboot02yun-xing-yuan-li-chu-tan/</id>
+        <link href="https://totoroay.github.io/post/springboot02yun-xing-yuan-li-chu-tan/">
+        </link>
+        <updated>2020-05-04T08:59:16.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="springboot02运行原理初探">SpringBoot02：运行原理初探</h1>
+<p><mark>自动配置</mark></p>
+<h2 id="pomxml">pom.xml</h2>
+<p>我们之前写的HelloSpringBoot，到底是怎么运行的呢，Maven项目，我们一般从pom.xml文件探究起；</p>
+<h3 id="父依赖">父依赖</h3>
+<p>其中它主要是依赖一个父项目，主要是管理项目的资源过滤及插件！</p>
+<pre><code class="language-xml">&lt;parent&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
+    &lt;version&gt;2.2.5.RELEASE&lt;/version&gt;
+    &lt;relativePath/&gt; &lt;!-- lookup parent from repository --&gt;
+&lt;/parent&gt;
+</code></pre>
+<p>点进去，发现还有一个父依赖</p>
+<p>我们在写或者引入一些Springboot依赖的时候，不需要指定版本，就因为这些版本仓库</p>
+<pre><code class="language-xml">&lt;parent&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-dependencies&lt;/artifactId&gt;
+    &lt;version&gt;2.2.5.RELEASE&lt;/version&gt;
+    &lt;relativePath&gt;../../spring-boot-dependencies&lt;/relativePath&gt;
+&lt;/parent&gt;
+</code></pre>
+<p>这里才是真正管理SpringBoot应用里面所有依赖版本的地方，SpringBoot的版本控制中心；</p>
+<p><strong>以后我们导入依赖默认是不需要写版本；但是如果导入的包没有在依赖中管理着就需要手动配置版本了；</strong></p>
+<h3 id="启动器-spring-boot-starter">启动器 spring-boot-starter</h3>
+<pre><code class="language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p><strong>springboot-boot-starter-xxx</strong>：就是spring-boot的场景启动器</p>
+<p><strong>spring-boot-starter-web</strong>：帮我们导入了web模块正常运行所依赖的组件；</p>
+<p>SpringBoot将所有的功能场景都抽取出来，做成一个个的starter （启动器），只需要在项目中引入这些starter即可，所有相关的依赖都会导入进来 ， 我们要用什么功能就导入什么样的场景启动器即可 ；我们未来也可以自己自定义 starter；</p>
+<h2 id="主启动类">主启动类</h2>
+<p>分析完了 pom.xml 来看看这个启动类</p>
+<h3 id="默认的主启动类">默认的主启动类</h3>
+<pre><code class="language-java">//@SpringBootApplication 来标注一个主程序类
+//说明这是一个Spring Boot应用
+@SpringBootApplication
+public class SpringbootApplication {
+
+   public static void main(String[] args) {
+     //以为是启动了一个方法，没想到启动了一个服务
+      SpringApplication.run(SpringbootApplication.class, args);
+   }
+
+}
+</code></pre>
+<p>但是**一个简单的启动类并不简单！**我们来分析一下这些注解都干了什么</p>
+<h3 id="springbootapplication">@SpringBootApplication</h3>
+<p>作用：标注在某个类上说明这个类是SpringBoot的主配置类 ， SpringBoot就应该运行这个类的main方法来启动SpringBoot应用；</p>
+<p>进入这个注解：可以看到上面还有很多其他注解！</p>
+<pre><code class="language-java">@SpringBootConfiguration
+@EnableAutoConfiguration
+@ComponentScan(
+    excludeFilters = {@Filter(
+    type = FilterType.CUSTOM,
+    classes = {TypeExcludeFilter.class}
+), @Filter(
+    type = FilterType.CUSTOM,
+    classes = {AutoConfigurationExcludeFilter.class}
+)}
+)
+public @interface SpringBootApplication {
+    // ......
+}
+</code></pre>
+<h3 id="componentscan">@ComponentScan</h3>
+<p>这个注解在Spring中很重要 ,它对应XML配置中的元素。</p>
+<p>作用：自动扫描并加载符合条件的组件或者bean ， 将这个bean定义加载到IOC容器中</p>
+<h3 id="springbootconfiguration">@SpringBootConfiguration</h3>
+<p>作用：SpringBoot的配置类 ，标注在某个类上 ， 表示这是一个SpringBoot的配置类；</p>
+<p>我们继续进去这个注解查看</p>
+<pre><code class="language-java">// 点进去得到下面的 @Component
+@Configuration
+public @interface SpringBootConfiguration {}
+
+@Component
+public @interface Configuration {}
+</code></pre>
+<p>这里的 @Configuration，说明这是一个配置类 ，配置类就是对应Spring的xml 配置文件；</p>
+<p>里面的 @Component 这就说明，启动类本身也是Spring中的一个组件而已，负责启动应用！</p>
+<p>我们回到 SpringBootApplication 注解中继续看。</p>
+<h3 id="enableautoconfiguration">@EnableAutoConfiguration</h3>
+<p><strong>@EnableAutoConfiguration ：开启自动配置功能</strong></p>
+<p>以前我们需要自己配置的东西，而现在SpringBoot可以自动帮我们配置 ；@EnableAutoConfiguration告诉SpringBoot开启自动配置功能，这样自动配置才能生效；</p>
+<p>点进注解接续查看：</p>
+<p><strong>@AutoConfigurationPackage ：自动配置包</strong></p>
+<pre><code class="language-java">@Import(AutoConfigurationPackages.Registrar.class)
+public @interface AutoConfigurationPackage {
+
+}
+</code></pre>
+<p><strong>@import</strong> ：Spring底层注解@import ， 给容器中导入一个组件</p>
+<p>Registrar.class 作用：将主启动类的所在包及包下面所有子包里面的所有组件扫描到Spring容器 ；</p>
+<p>这个分析完了，退到上一步，继续看</p>
+<p><strong>@Import(AutoConfigurationImportSelector.class) ：给容器导入组件 ；</strong></p>
+<p>AutoConfigurationImportSelector ：自动配置导入选择器，那么它会导入哪些组件的选择器呢？我们点击去这个类看源码：</p>
+<p>1、这个类中有一个这样的方法</p>
+<pre><code class="language-java">// 获得候选的配置
+protected List&lt;String&gt; getCandidateConfigurations(AnnotationMetadata metadata, AnnotationAttributes attributes) {
+    //这里的getSpringFactoriesLoaderFactoryClass（）方法
+    //返回的就是我们最开始看的启动自动导入配置文件的注解类；EnableAutoConfiguration
+    List&lt;String&gt; configurations = SpringFactoriesLoader.loadFactoryNames(this.getSpringFactoriesLoaderFactoryClass(), this.getBeanClassLoader());
+    Assert.notEmpty(configurations, &quot;No auto configuration classes found in META-INF/spring.factories. If you are using a custom packaging, make sure that file is correct.&quot;);
+    return configurations;
+}
+</code></pre>
+<p>2、这个方法又调用了  SpringFactoriesLoader 类的静态方法！我们进入SpringFactoriesLoader类loadFactoryNames() 方法</p>
+<pre><code class="language-java">public static List&lt;String&gt; loadFactoryNames(Class&lt;?&gt; factoryClass, @Nullable ClassLoader classLoader) {
+    String factoryClassName = factoryClass.getName();
+    //这里它又调用了 loadSpringFactories 方法
+    return (List)loadSpringFactories(classLoader).getOrDefault(factoryClassName, Collections.emptyList());
+}
+</code></pre>
+<p>3、我们继续点击查看 loadSpringFactories 方法</p>
+<pre><code class="language-java">private static Map&lt;String, List&lt;String&gt;&gt; loadSpringFactories(@Nullable ClassLoader classLoader) {
+    //获得classLoader ， 我们返回可以看到这里得到的就是EnableAutoConfiguration标注的类本身
+    MultiValueMap&lt;String, String&gt; result = (MultiValueMap)cache.get(classLoader);
+    if (result != null) {
+        return result;
+    } else {
+        try {
+            //去获取一个资源 &quot;META-INF/spring.factories&quot;
+            Enumeration&lt;URL&gt; urls = classLoader != null ? classLoader.getResources(&quot;META-INF/spring.factories&quot;) : ClassLoader.getSystemResources(&quot;META-INF/spring.factories&quot;);
+            LinkedMultiValueMap result = new LinkedMultiValueMap();
+
+            //将读取到的资源遍历，封装成为一个Properties
+            while(urls.hasMoreElements()) {
+                URL url = (URL)urls.nextElement();
+                UrlResource resource = new UrlResource(url);
+                Properties properties = PropertiesLoaderUtils.loadProperties(resource);
+                Iterator var6 = properties.entrySet().iterator();
+
+                while(var6.hasNext()) {
+                    Entry&lt;?, ?&gt; entry = (Entry)var6.next();
+                    String factoryClassName = ((String)entry.getKey()).trim();
+                    String[] var9 = StringUtils.commaDelimitedListToStringArray((String)entry.getValue());
+                    int var10 = var9.length;
+
+                    for(int var11 = 0; var11 &lt; var10; ++var11) {
+                        String factoryName = var9[var11];
+                        result.add(factoryClassName, factoryName.trim());
+                    }
+                }
+            }
+
+            cache.put(classLoader, result);
+            return result;
+        } catch (IOException var13) {
+            throw new IllegalArgumentException(&quot;Unable to load factories from location [META-INF/spring.factories]&quot;, var13);
+        }
+    }
+}
+</code></pre>
+<p>4、发现一个多次出现的文件：spring.factories，全局搜索它</p>
+<h3 id="springfactories">spring.factories</h3>
+<p>我们根据源头打开spring.factories ， 看到了很多自动配置的文件；这就是自动配置根源所在！</p>
+<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1588583000379.png" alt="" loading="lazy"></figure>
+<p><strong>WebMvcAutoConfiguration</strong></p>
+<p>我们在上面的自动配置类随便找一个打开看看，比如 ：WebMvcAutoConfiguration</p>
+<figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1588582994094.png" alt="" loading="lazy"></figure>
+<p>可以看到这些一个个的都是JavaConfig配置类，而且都注入了一些Bean，可以找一些自己认识的类，看着熟悉一下！</p>
+<p>所以，自动配置真正实现是从classpath中搜寻所有的META-INF/spring.factories配置文件 ，并将其中对应的 org.springframework.boot.autoconfigure. 包下的配置项，通过反射实例化为对应标注了 @Configuration的JavaConfig形式的IOC容器配置类 ， 然后将这些都汇总成为一个实例并加载到IOC容器中。</p>
+<p><strong>结论：</strong></p>
+<ol>
+<li>SpringBoot在启动的时候从类路径下的META-INF/spring.factories中获取EnableAutoConfiguration指定的值</li>
+<li>将这些值作为自动配置类导入容器 ， 自动配置类就生效 ， 帮我们进行自动配置工作；</li>
+<li>整个J2EE的整体解决方案和自动配置都在springboot-autoconfigure的jar包中；</li>
+<li>它会给容器中导入非常多的自动配置类 （xxxAutoConfiguration）, 就是给容器中导入这个场景需要的所有组件 ， 并配置好这些组件 ；</li>
+<li>有了自动配置类 ， 免去了我们手动编写配置注入功能组件等的工作；</li>
+</ol>
+<p><strong>现在大家应该大概的了解了下，SpringBoot的运行原理，后面我们还会深化一次！</strong></p>
+<h2 id="springapplication">SpringApplication</h2>
+<blockquote>
+<p>不简单的方法</p>
+</blockquote>
+<p>我最初以为就是运行了一个main方法，没想到却开启了一个服务；</p>
+<pre><code class="language-java">@SpringBootApplication
+public class SpringbootApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(SpringbootApplication.class, args);
+    }
+}
+</code></pre>
+<p><strong>SpringApplication.run分析</strong></p>
+<p>分析该方法主要分两部分，一部分是SpringApplication的实例化，二是run方法的执行；</p>
+<blockquote>
+<p>SpringApplication</p>
+</blockquote>
+<p><strong>这个类主要做了以下四件事情：</strong></p>
+<p>1、推断应用的类型是普通的项目还是Web项目</p>
+<p>2、查找并加载所有可用初始化器 ， 设置到initializers属性中</p>
+<p>3、找出所有的应用程序监听器，设置到listeners属性中</p>
+<p>4、推断并设置main方法的定义类，找到运行的主类</p>
+<p>查看构造器：</p>
+<pre><code class="language-java">public SpringApplication(ResourceLoader resourceLoader, Class... primarySources) {
+    // ......
+    this.webApplicationType = WebApplicationType.deduceFromClasspath();
+    this.setInitializers(this.getSpringFactoriesInstances();
+    this.setListeners(this.getSpringFactoriesInstances(ApplicationListener.class));
+    this.mainApplicationClass = this.deduceMainApplicationClass();
+}
+</code></pre>
+<blockquote>
+<p>run方法流程分析</p>
+</blockquote>
+<figure data-type="image" tabindex="3"><img src="https://totoroay.github.io//post-images/1588582960125.jpg" alt="" loading="lazy"></figure>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Spring：IOC]]></title>
         <id>https://totoroay.github.io/post/springioc/</id>
@@ -408,7 +624,7 @@ class是bean的全限定名=包名+类名
 ]]></content>
     </entry>
     <entry>
-        <title type="html"><![CDATA[Hello World]]></title>
+        <title type="html"><![CDATA[SpringBoot01：Hello World]]></title>
         <id>https://totoroay.github.io/post/hello-world/</id>
         <link href="https://totoroay.github.io/post/hello-world/">
         </link>
@@ -2531,38 +2747,6 @@ public class Teacher {
 <li>索引</li>
 <li>索引优化！</li>
 </ul>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Hello Gridea]]></title>
-        <id>https://totoroay.github.io/post/hello-gridea/</id>
-        <link href="https://totoroay.github.io/post/hello-gridea/">
-        </link>
-        <updated>2018-12-11T16:00:00.000Z</updated>
-        <summary type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
-✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
-✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
-<!-- more -->
-<p><a href="https://github.com/getgridea/gridea">Github</a><br>
-<a href="https://gridea.dev/">Gridea 主页</a><br>
-<a href="http://fehey.com/">示例网站</a></p>
-<h2 id="特性">特性👇</h2>
-<p>📝  你可以使用最酷的 <strong>Markdown</strong> 语法，进行快速创作</p>
-<p>🌉  你可以给文章配上精美的封面图和在文章任意位置插入图片</p>
-<p>🏷️  你可以对文章进行标签分组</p>
-<p>📋  你可以自定义菜单，甚至可以创建外部链接菜单</p>
-<p>💻  你可以在 <strong>Windows</strong>，<strong>MacOS</strong> 或 <strong>Linux</strong> 设备上使用此客户端</p>
-<p>🌎  你可以使用 <strong>𝖦𝗂𝗍𝗁𝗎𝖻 𝖯𝖺𝗀𝖾𝗌</strong> 或 <strong>Coding Pages</strong> 向世界展示，未来将支持更多平台</p>
-<p>💬  你可以进行简单的配置，接入 <a href="https://github.com/gitalk/gitalk">Gitalk</a> 或 <a href="https://github.com/SukkaW/DisqusJS">DisqusJS</a> 评论系统</p>
-<p>🇬🇧  你可以使用<strong>中文简体</strong>或<strong>英语</strong></p>
-<p>🌁  你可以任意使用应用内默认主题或任意第三方主题，强大的主题自定义能力</p>
-<p>🖥  你可以自定义源文件夹，利用 OneDrive、百度网盘、iCloud、Dropbox 等进行多设备同步</p>
-<p>🌱 当然 <strong>Gridea</strong> 还很年轻，有很多不足，但请相信，它会不停向前 🏃</p>
-<p>未来，它一定会成为你离不开的伙伴</p>
-<p>尽情发挥你的才华吧！</p>
-<p>😘 Enjoy~</p>
 ]]></content>
     </entry>
 </feed>
