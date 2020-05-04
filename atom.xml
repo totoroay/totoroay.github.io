@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://totoroay.github.io/</id>
     <title>totoroay</title>
-    <updated>2020-05-04T09:04:22.746Z</updated>
+    <updated>2020-05-04T12:17:26.581Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://totoroay.github.io/"/>
     <link rel="self" href="https://totoroay.github.io/atom.xml"/>
@@ -10,6 +10,309 @@
     <logo>https://totoroay.github.io/images/avatar.png</logo>
     <icon>https://totoroay.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, totoroay</rights>
+    <entry>
+        <title type="html"><![CDATA[SpringBoot03：yaml配置注入]]></title>
+        <id>https://totoroay.github.io/post/springboot03yaml-pei-zhi-zhu-ru-1/</id>
+        <link href="https://totoroay.github.io/post/springboot03yaml-pei-zhi-zhu-ru-1/">
+        </link>
+        <updated>2020-05-04T12:12:40.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="配置文件">配置文件</h3>
+<p>SpringBoot使用一个全局的配置文件 ， 配置文件名称是固定的</p>
+<ul>
+<li>
+<p>application.properties</p>
+</li>
+<li>
+<ul>
+<li>语法结构 ：key=value</li>
+</ul>
+</li>
+<li>
+<p>application.yml</p>
+</li>
+<li>
+<ul>
+<li>语法结构 ：key：空格 value</li>
+</ul>
+</li>
+</ul>
+<p>**配置文件的作用 ：**修改SpringBoot自动配置的默认值，因为SpringBoot在底层都给我们自动配置好了；</p>
+<p>比如我们可以在配置文件中修改Tomcat 默认启动的端口号！测试一下！</p>
+<pre><code class="language-properties">server.port=8081
+</code></pre>
+<h3 id="yaml概述">yaml概述</h3>
+<p>YAML是 &quot;YAML Ain't a Markup Language&quot; （YAML不是一种标记语言）的递归缩写。在开发的这种语言时，YAML 的意思其实是：&quot;Yet Another Markup Language&quot;（仍是一种标记语言）</p>
+<p><strong>这种语言以数据<strong><strong>作</strong></strong>为中心，而不是以标记语言为重点！</strong></p>
+<p>以前的配置文件，大多数都是使用xml来配置；比如一个简单的端口配置，我们来对比下yaml和xml</p>
+<p>传统xml配置：</p>
+<pre><code class="language-xml">&lt;server&gt;    
+    &lt;port&gt;8081&lt;port&gt;
+&lt;/server&gt;
+</code></pre>
+<p>yaml配置：</p>
+<pre><code class="language-yaml">server：  prot: 8080
+</code></pre>
+<h3 id="yaml基础语法">yaml基础语法</h3>
+<p>说明：语法要求严格！</p>
+<p>1、空格不能省略</p>
+<p>2、以缩进来控制层级关系，只要是左边对齐的一列数据都是同一个层级的。</p>
+<p>3、属性和值的大小写都是十分敏感的。</p>
+<p><strong>字面量：普通的值  [ 数字，布尔值，字符串  ]</strong></p>
+<p>字面量直接写在后面就可以 ， 字符串默认不用加上双引号或者单引号；</p>
+<pre><code class="language-yaml">k: v
+</code></pre>
+<p>注意：</p>
+<ul>
+<li>
+<p>“ ” 双引号，不会转义字符串里面的特殊字符 ， 特殊字符会作为本身想表示的意思；</p>
+<p>比如 ：name: &quot;totoroay\n ayoung&quot;  输出 ：totoroay 换行  ayoung</p>
+</li>
+<li>
+<p>'' 单引号，会转义特殊字符 ， 特殊字符最终会变成和普通字符一样输出</p>
+<p>比如 ：name: ‘totoroay\n ayoung’  输出 ：totoroay  \n  ayoung</p>
+</li>
+</ul>
+<p><strong>对象、Map（键值对）</strong></p>
+<pre><code class="language-yaml">#对象、Map格式k:     v1:    v2:
+</code></pre>
+<p>在下一行来写对象的属性和值得关系，注意缩进；比如：</p>
+<pre><code class="language-yaml">student:
+	name: totoroay    age: 99
+</code></pre>
+<p>行内写法</p>
+<pre><code class="language-yaml">student: {name: totoroay,age: 99}
+</code></pre>
+<p><strong>数组（ List、set ）</strong></p>
+<p>用 - 值表示数组中的一个元素,比如：</p>
+<pre><code class="language-yaml">pets:
+ - cat
+ - dog
+ - pig
+</code></pre>
+<p>行内写法</p>
+<pre><code class="language-yaml">pets: [cat,dog,pig]
+</code></pre>
+<p><strong>修改SpringBoot的默认端口号</strong></p>
+<p>配置文件中添加，端口号的参数，就可以切换端口；</p>
+<pre><code class="language-yaml">server:  
+  port: 8081
+</code></pre>
+<h3 id="yaml注入配置文件">yaml注入配置文件</h3>
+<p>yaml文件更强大的地方在于，他可以给我们的实体类直接注入匹配值！</p>
+<blockquote>
+<p>yaml注入配置文件</p>
+</blockquote>
+<p>1、在springboot项目中的resources目录下新建一个文件 application.yml</p>
+<p>2、编写一个实体类 Dog；</p>
+<pre><code class="language-java">package com.totoroay.pojo;
+
+@Component  //注册bean到容器中
+public class Dog {
+    private String name;
+    private Integer age;
+    
+    //有参无参构造、get、set方法、toString()方法  
+}
+</code></pre>
+<p>3、思考，我们原来是如何给bean注入属性值的！@Value，给狗狗类测试一下：</p>
+<pre><code class="language-java">@Component //注册bean
+public class Dog {
+    @Value(&quot;阿黄&quot;)
+    private String name;
+    @Value(&quot;9&quot;)
+    private Integer age;
+}
+</code></pre>
+<p>4、在SpringBoot的测试类下注入狗狗输出一下；</p>
+<pre><code class="language-java">@SpringBootTest
+class Springboot02ConofigApplicationTests {
+
+    @Autowired //将狗狗自动注入进来
+    Dog dog;
+
+    @Test
+    void contextLoads() {
+        System.out.println(dog); //打印看下狗狗对象
+    }
+
+}
+</code></pre>
+<p>结果成功输出，@Value注入成功，这是我们原来的办法对吧。</p>
+<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1588594490094.png" alt="" loading="lazy"></figure>
+<p>5、我们在编写一个复杂一点的实体类：Person 类</p>
+<pre><code class="language-java">@Component //注册bean到容器中
+public class Person {
+    private String name;
+    private Integer age;
+    private Boolean happy;
+    private Date birth;
+    private Map&lt;String,Object&gt; maps;
+    private List&lt;Object&gt; lists;
+    private Dog dog;
+    
+    //有参无参构造、get、set方法、toString()方法  
+}
+</code></pre>
+<p>6、我们来使用yaml配置的方式进行注入，大家写的时候注意区别和优势，我们编写一个yaml配置！</p>
+<pre><code class="language-yaml">person:
+  name: totoroay
+  age: 19
+  happy: false
+  birth: 1999/09/09
+  maps: {k1: v1,k2: v2}
+  lists:
+    - code
+    - girl
+    - music
+    - game
+  dog:
+    name: 阿花
+    age: 9
+</code></pre>
+<p>7、我们刚才已经把person这个对象的所有值都写好了，我们现在来注入到我们的类中！</p>
+<pre><code class="language-java">/*
+@ConfigurationProperties作用：
+将配置文件中配置的每一个属性的值，映射到这个组件中；
+告诉SpringBoot将本类中的所有属性和配置文件中相关的配置进行绑定
+参数 prefix = “person” : 将配置文件中的person下面的所有属性一一对应
+*/
+@Component //注册bean
+@ConfigurationProperties(prefix = &quot;person&quot;)
+public class Person {
+    private String name;
+    private Integer age;
+    private Boolean happy;
+    private Date birth;
+    private Map&lt;String,Object&gt; maps;
+    private List&lt;Object&gt; lists;
+    private Dog dog;
+}
+</code></pre>
+<p>8、IDEA 提示，springboot配置注解处理器没有找到，让我们看文档，我们可以查看文档，找到一个依赖！</p>
+<figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1588594502287.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="3"><img src="https://totoroay.github.io//post-images/1588594507982.png" alt="" loading="lazy"></figure>
+<pre><code class="language-xml">&lt;!-- 导入配置文件处理器，配置文件进行绑定就会有提示，需要重启 --&gt;
+&lt;dependency&gt;
+  &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+  &lt;artifactId&gt;spring-boot-configuration-processor&lt;/artifactId&gt;
+  &lt;optional&gt;true&lt;/optional&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>9、确认以上配置都OK之后，我们去测试类中测试一下：</p>
+<pre><code class="language-java">@SpringBootTest
+class DemoApplicationTests {
+
+    @Autowired
+    Person person; //将person自动注入进来
+
+    @Test
+    public void contextLoads() {
+        System.out.println(person); //打印person信息
+    }
+
+}
+</code></pre>
+<p>结果：所有值全部注入成功！</p>
+<figure data-type="image" tabindex="4"><img src="https://totoroay.github.io//post-images/1588594519838.png" alt="" loading="lazy"></figure>
+<p><strong>yaml配置注入到实体类完全OK！</strong></p>
+<p>课堂测试：</p>
+<p>1、将配置文件的key 值 和 属性的值设置为不一样，则结果输出为null，注入失败</p>
+<p>2、在配置一个person2，然后将 @ConfigurationProperties(prefix = &quot;person2&quot;) 指向我们的person2；</p>
+<h3 id="加载指定的配置文件">加载指定的配置文件</h3>
+<p>**@PropertySource ：**加载指定的配置文件；</p>
+<p><strong>@configurationProperties</strong>：默认从全局配置文件中获取值；</p>
+<p>1、我们去在resources目录下新建一个<strong>person.properties</strong>文件</p>
+<pre><code class="language-properties">name=zy
+</code></pre>
+<p>2、然后在我们的代码中指定加载person.properties文件</p>
+<pre><code class="language-java">@PropertySource(value = &quot;classpath:person.properties&quot;)
+@Component //注册bean
+public class Person {
+
+    @Value(&quot;${name}&quot;)
+    private String name;
+
+    ......  
+}
+</code></pre>
+<p>3、再次输出测试一下：指定配置文件绑定成功！</p>
+<figure data-type="image" tabindex="5"><img src="https://totoroay.github.io//post-images/1588594529477.png" alt="" loading="lazy"></figure>
+<h3 id="配置文件占位符">配置文件占位符</h3>
+<p>配置文件还可以编写占位符生成随机数</p>
+<pre><code class="language-yaml">person:
+    name: totoroay${random.uuid} # 随机uuid
+    age: ${random.int}  # 随机int
+    happy: false
+    birth: 1999/09/09
+    maps: {k1: v1,k2: v2}
+    lists:
+      - code
+      - girl
+      - music
+      - game
+    dog:
+      name: ${person.hello:other}_旺财
+      age: 1
+</code></pre>
+<h3 id="回顾properties配置">回顾properties配置</h3>
+<p>我们上面采用的yaml方法都是最简单的方式，开发中最常用的；也是springboot所推荐的！那我们来唠唠其他的实现方式，道理都是相同的；写还是那样写；配置文件除了yml还有我们之前常用的properties ， 我们没有讲，我们来唠唠！</p>
+<p>【注意】properties配置文件在写中文的时候，会有乱码 ， 我们需要去IDEA中设置编码格式为UTF-8；</p>
+<p>settings--&gt;FileEncodings 中配置；</p>
+<p><img src="https://totoroay.github.io//post-images/1588594536690.png" alt="" loading="lazy"><br>
+<strong>测试步骤：</strong></p>
+<p>1、新建一个实体类User</p>
+<pre><code class="language-java">@Component //注册bean
+public class User {
+    private String name;
+    private int age;
+    private String sex;
+}
+</code></pre>
+<p>2、编辑配置文件 user.properties</p>
+<pre><code class="language-properties">user1.name=kuangshenuser1.age=18user1.sex=男
+</code></pre>
+<p>3、我们在User类上使用@Value来进行注入！</p>
+<pre><code class="language-java">@Component //注册bean
+@PropertySource(value = &quot;classpath:user.properties&quot;)
+public class User {
+    //直接使用@value
+    @Value(&quot;${user.name}&quot;) //从配置文件中取值
+    private String name;
+    @Value(&quot;#{9*2}&quot;)  // #{SPEL} Spring表达式
+    private int age;
+    @Value(&quot;男&quot;)  // 字面量
+    private String sex;
+}
+</code></pre>
+<p>4、Springboot测试</p>
+<pre><code class="language-java">@SpringBootTest
+class DemoApplicationTests {
+
+    @Autowired
+    User user;
+
+    @Test
+    public void contextLoads() {
+        System.out.println(user);
+    }
+
+}
+</code></pre>
+<p>结果正常输出：</p>
+<figure data-type="image" tabindex="6"><img src="https://totoroay.github.io//post-images/1588594546320.png" alt="" loading="lazy"></figure>
+<h3 id="对比小结">对比小结</h3>
+<p>@Value这个使用起来并不友好！我们需要为每个属性单独注解赋值，比较麻烦；我们来看个功能对比图</p>
+<figure data-type="image" tabindex="7"><img src="https://totoroay.github.io//post-images/1588594553170.png" alt="" loading="lazy"></figure>
+<p>1、@ConfigurationProperties只需要写一次即可 ， @Value则需要每个字段都添加</p>
+<p>2、松散绑定：这个什么意思呢? 比如我的yml中写的last-name，这个和lastName是一样的， - 后面跟着的字母默认是大写的。这就是松散绑定。可以测试一下</p>
+<p>3、JSR303数据校验 ， 这个就是我们可以在字段是增加一层过滤器验证 ， 可以保证数据的合法性</p>
+<p>4、复杂类型封装，yml中可以封装对象 ， 使用value就不支持</p>
+<p><strong>结论：</strong></p>
+<p>配置yml和配置properties都可以获取到值 ， 强烈推荐 yml；</p>
+<p>如果我们在某个业务中，只需要获取配置文件中的某个值，可以使用一下 @value；</p>
+<p>如果说，我们专门编写了一个JavaBean来和配置文件进行一一映射，就直接@configurationProperties，不要犹豫！</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[SpringBoot02：运行原理初探]]></title>
         <id>https://totoroay.github.io/post/springboot02yun-xing-yuan-li-chu-tan/</id>
@@ -2311,442 +2614,6 @@ public class User implements Serializable {
         sqlSession.close();
     }
 </code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Mybatis笔记]]></title>
-        <id>https://totoroay.github.io/post/mybatis-bi-ji/</id>
-        <link href="https://totoroay.github.io/post/mybatis-bi-ji/">
-        </link>
-        <updated>2020-04-10T11:36:12.000Z</updated>
-        <content type="html"><![CDATA[<h2 id="1-核心配置文件">1、核心配置文件</h2>
-<ul>
-<li>mybatis-config.xml</li>
-<li>配置顺序</li>
-</ul>
-<pre><code class="language-xml">configuration（配置）
-properties（属性）
-settings（设置）
-typeAliases（类型别名）
-typeHandlers（类型处理器）
-objectFactory（对象工厂）
-plugins（插件）
-environments（环境配置）
-environment（环境变量）
-transactionManager（事务管理器）
-dataSource（数据源）
-databaseIdProvider（数据库厂商标识）
-mappers（映射器）
-</code></pre>
-<h2 id="2-模糊查询">2、模糊查询</h2>
-<ul>
-<li>推荐在java代码中这样写（安全）</li>
-</ul>
-<pre><code class="language-java">List&lt;User&gt; userList = mapper.getUserLike(&quot;%李%&quot;);
-</code></pre>
-<ul>
-<li><mark>不推荐</mark>在mapper中使用通配符</li>
-</ul>
-<pre><code class="language-xml">&lt;select id=&quot;getUserListLike&quot; resultType=&quot;com.totoroay.pojo.User&quot;&gt;
-	select * from mybatis.user where name like &quot;%&quot;#{value}&quot;%&quot;
-&lt;/select&gt;
-</code></pre>
-<h2 id="3-mapper的三种注册方式">3、mapper的三种注册方式</h2>
-<p>方式一： 【推荐使用】</p>
-<pre><code class="language-xml">&lt;mappers&gt;
-    &lt;mapper resource=&quot;com/totoroay/mapper/UserMapper.xml&quot;/&gt;
-&lt;/mappers&gt;
-</code></pre>
-<p>方式二：使用class文件绑定注册</p>
-<pre><code class="language-xml">&lt;mappers&gt;
-    &lt;mapper class=&quot;com.totoroay.mapper.UserMapper&quot;/&gt;
-&lt;/mappers&gt;
-</code></pre>
-<p>注意点：</p>
-<ul>
-<li>接口和他的Mapper配置文件必须同名！</li>
-<li>接口和他的Mapper配置文件必须在同一个包下！</li>
-</ul>
-<p>方式三：使用扫描包进行注入绑定</p>
-<pre><code class="language-xml">&lt;mappers&gt;
-    &lt;package name=&quot;com.totoroay.mapper&quot;/&gt;
-&lt;/mappers&gt;
-</code></pre>
-<p>注意点：</p>
-<ul>
-<li>接口和他的Mapper配置文件必须同名！</li>
-<li>接口和他的Mapper配置文件必须在同一个包下！</li>
-</ul>
-<h2 id="4-使用注解开发">4、使用注解开发</h2>
-<p>会用即可，配合xml配置完成任务，适用于简单SQL</p>
-<p><mark>本质：反射机制实现</mark></p>
-<p><mark>底层：动态代理！</mark></p>
-<ol>
-<li>注解在接口上实现</li>
-</ol>
-<pre><code class="language-java">@Select(&quot;select * from user&quot;)
-List&lt;User&gt; getUsers();
-</code></pre>
-<ol start="2">
-<li>需要在核心配置文件中绑定接口！</li>
-</ol>
-<pre><code class="language-xml">&lt;!--绑定接口--&gt;
-&lt;mappers&gt;
-    &lt;mapper class=&quot;com.totoroay.mapper.UserMapper&quot;/&gt;
-&lt;/mappers&gt;
-</code></pre>
-<ol start="3">
-<li>CRUD	编写接口，增加注解</li>
-</ol>
-<pre><code class="language-java">public interface UserMapper {
-
-    @Select(&quot;select * from user&quot;)
-    List&lt;User&gt; getUsers();
-
-    // 方法存在多个参数，所有的参数前面必须加上 @Param(&quot;id&quot;)注解
-    @Select(&quot;select * from user where id = #{id}&quot;)
-    User getUserByID(@Param(&quot;id&quot;) int id);
-
-    @Insert(&quot;insert into user(id,name,pwd) values (#{id},#{name},#{password})&quot;)
-    int addUser(User user);
-
-    @Update(&quot;update user set name=#{name},pwd=#{password} where id = #{id}&quot;)
-    int updateUser(User user);
-    
-    @Delete(&quot;delete from user where id = #{uid}&quot;)
-    int deleteUser(@Param(&quot;uid&quot;) int id);
-}
-</code></pre>
-<h2 id="5-mybatis详细执行流程">5、Mybatis详细执行流程</h2>
-<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1587820878648.png" alt="" loading="lazy"></figure>
-<h2 id="6-动态sql">6、动态SQL</h2>
-<p><mark><strong>先在Mysql中写出完整的SQL,再对应的去修改成为我们的动态SQL实现通用即可！</strong></mark></p>
-<p><mark><strong>什么是动态SQL：动态SQL就是指根据不同的条件生成不同的SQL语句</strong></mark></p>
-<p>利用动态 SQL 这一特性可以彻底摆脱这种痛苦。</p>
-<pre><code class="language-xml">if
-choose (when, otherwise)
-trim (where, set)
-foreach
-</code></pre>
-<h3 id="搭建环境">搭建环境</h3>
-<pre><code class="language-sql">CREATE TABLE `blog` (
-  `id` varchar(50) NOT NULL COMMENT '博客id',
-  `title` varchar(100) NOT NULL COMMENT '博客标题',
-  `author` varchar(30) NOT NULL COMMENT '博客作者',
-  `create_time` datetime NOT NULL COMMENT '创建时间',
-  `views` int(30) NOT NULL COMMENT '浏览量'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8
-</code></pre>
-<ol>
-<li>
-<p>编写实体类</p>
-<pre><code class="language-java"></code></pre>
-</li>
-</ol>
-<p>@Data<br>
-public class Blog {<br>
-private int id;<br>
-private String title;<br>
-private String author;<br>
-private Date createTime;<br>
-private int views;<br>
-}</p>
-<pre><code>
-2. 编写实体类对应Mapper接口 和 Mapper.XML文件
-
-### IF
-
-```xml
-&lt;select id=&quot;queryBlogIF&quot; parameterType=&quot;map&quot; resultType=&quot;blog&quot;&gt;
- select * from mybatis.blog where 1=1
- &lt;if test=&quot;title != null&quot;&gt;
-     and title = #{title}
- &lt;/if&gt;
- &lt;if test=&quot;author != null&quot;&gt;
-     and author = #{author}
- &lt;/if&gt;
-&lt;/select&gt;
-</code></pre>
-<h3 id="choose-when-otherwise">choose (when, otherwise)</h3>
-<pre><code class="language-xml">&lt;select id=&quot;queryBlogChoose&quot; parameterType=&quot;map&quot; resultType=&quot;blog&quot;&gt;
-    select * from mybatis.blog
-    &lt;where&gt;
-        &lt;choose&gt;
-            &lt;when test=&quot;title != null&quot;&gt;
-                title = #{title}
-            &lt;/when&gt;
-            &lt;when test=&quot;author != null&quot;&gt;
-                and author = #{author}
-            &lt;/when&gt;
-            &lt;otherwise&gt;
-                and views = #{views}
-            &lt;/otherwise&gt;
-        &lt;/choose&gt;
-    &lt;/where&gt;
-&lt;/select&gt;
-</code></pre>
-<h3 id="trim-whereset">trim (where,set)</h3>
-<pre><code class="language-xml">select * from mybatis.blog
-&lt;where&gt;
-    &lt;if test=&quot;title != null&quot;&gt;
-        title = #{title}
-    &lt;/if&gt;
-    &lt;if test=&quot;author != null&quot;&gt;
-        and author = #{author}
-    &lt;/if&gt;
-&lt;/where&gt;
-</code></pre>
-<pre><code class="language-xml">&lt;update id=&quot;updateBlog&quot; parameterType=&quot;map&quot;&gt;
-    update mybatis.blog
-    &lt;set&gt;
-        &lt;if test=&quot;title != null&quot;&gt;
-            title = #{title},
-        &lt;/if&gt;
-        &lt;if test=&quot;author != null&quot;&gt;
-            author = #{author}
-        &lt;/if&gt;
-    &lt;/set&gt;
-    where id = #{id}
-&lt;/update&gt;
-
-</code></pre>
-<p><mark><strong>所谓的动态SQL，本质还是SQL语句 ， 只是我们可以在SQL层面，去执行一个逻辑代码</strong></mark></p>
-<h3 id="sql片段">SQL片段</h3>
-<p>有的时候，我们可能会将一些功能的部分抽取出来，方便复用！</p>
-<ol>
-<li>
-<p>使用SQL标签抽取公共的部分</p>
-<pre><code class="language-xml">&lt;sql id=&quot;if-title-author&quot;&gt;
-    &lt;if test=&quot;title != null&quot;&gt;
-        title = #{title}
-    &lt;/if&gt;
-    &lt;if test=&quot;author != null&quot;&gt;
-        and author = #{author}
-    &lt;/if&gt;
-&lt;/sql&gt;
-</code></pre>
-</li>
-<li>
-<p>在需要使用的地方使用Include标签引用即可</p>
-<pre><code class="language-xml">&lt;select id=&quot;queryBlogIF&quot; parameterType=&quot;map&quot; resultType=&quot;blog&quot;&gt;
-    select * from mybatis.blog
-    &lt;where&gt;
-        &lt;include refid=&quot;if-title-author&quot;&gt;&lt;/include&gt;
-    &lt;/where&gt;
-&lt;/select&gt;
-</code></pre>
-</li>
-</ol>
-<p>注意事项：</p>
-<ul>
-<li>最好基于单表来定义SQL片段！</li>
-<li>不要存在where标签</li>
-</ul>
-<h3 id="foreach">Foreach</h3>
-<pre><code class="language-sql">select * from user where 1=1 and 
-
-  &lt;foreach item=&quot;id&quot; collection=&quot;ids&quot;
-      open=&quot;(&quot; separator=&quot;or&quot; close=&quot;)&quot;&gt;
-        #{id}
-  &lt;/foreach&gt;
-
-(id=1 or id=2 or id=3)
-
-</code></pre>
-<figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1587820945965.png" alt="" loading="lazy"></figure>
-<figure data-type="image" tabindex="3"><img src="https://totoroay.github.io//post-images/1587820973478.png" alt="" loading="lazy"></figure>
-<pre><code class="language-xml">&lt;!--
-        select * from mybatis.blog where 1=1 and (id=1 or id = 2 or id=3)
-
-        我们现在传递一个万能的map ， 这map中可以存在一个集合！
---&gt;
-&lt;select id=&quot;queryBlogForeach&quot; parameterType=&quot;map&quot; resultType=&quot;blog&quot;&gt;
-    select * from mybatis.blog
-
-    &lt;where&gt;
-        &lt;foreach collection=&quot;ids&quot; item=&quot;id&quot; open=&quot;and (&quot; close=&quot;)&quot; separator=&quot;or&quot;&gt;
-            id = #{id}
-        &lt;/foreach&gt;
-    &lt;/where&gt;
-
-&lt;/select&gt;
-
-</code></pre>
-<p><mark>动态SQL就是在拼接SQL语句，我们只要保证SQL的正确性，按照SQL的格式，去排列组合就可以了</mark></p>
-<h2 id="7-多对一处理">7、多对一处理</h2>
-<p>多对一：</p>
-<figure data-type="image" tabindex="4"><img src="https://totoroay.github.io//post-images/1587823677622.png" alt="" loading="lazy"></figure>
-<ul>
-<li>多个学生，对应一个老师</li>
-<li>对于学生这边而言，  <strong>关联</strong> ..  多个学生，关联一个老师  【多对一】</li>
-<li>对于老师而言， <strong>集合</strong> ， 一个老师，有很多学生 【一对多】</li>
-</ul>
-<figure data-type="image" tabindex="5"><img src="https://totoroay.github.io//post-images/1587823695885.png" alt="" loading="lazy"></figure>
-<p>SQL：</p>
-<pre><code class="language-sql">CREATE TABLE `teacher` (
-  `id` INT(10) NOT NULL,
-  `name` VARCHAR(30) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=INNODB DEFAULT CHARSET=utf8
-
-INSERT INTO teacher(`id`, `name`) VALUES (1, '秦老师'); 
-
-CREATE TABLE `student` (
-  `id` INT(10) NOT NULL,
-  `name` VARCHAR(30) DEFAULT NULL,
-  `tid` INT(10) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fktid` (`tid`),
-  CONSTRAINT `fktid` FOREIGN KEY (`tid`) REFERENCES `teacher` (`id`)
-) ENGINE=INNODB DEFAULT CHARSET=utf8;
-
-INSERT INTO `student` (`id`, `name`, `tid`) VALUES ('1', '小明', '1'); 
-INSERT INTO `student` (`id`, `name`, `tid`) VALUES ('2', '小红', '1'); 
-INSERT INTO `student` (`id`, `name`, `tid`) VALUES ('3', '小张', '1'); 
-INSERT INTO `student` (`id`, `name`, `tid`) VALUES ('4', '小李', '1'); 
-INSERT INTO `student` (`id`, `name`, `tid`) VALUES ('5', '小王', '1');
-
-</code></pre>
-<h3 id="测试环境搭建">测试环境搭建</h3>
-<ol>
-<li>导入lombok</li>
-<li>新建实体类 Teacher，Student</li>
-<li>建立Mapper接口</li>
-<li>建立Mapper.XML文件</li>
-<li>在核心配置文件中绑定注册我们的Mapper接口或者文件！【方式很多，随心选】</li>
-<li>测试查询是否能够成功！</li>
-</ol>
-<h3 id="按照查询嵌套处理子查询">按照查询嵌套处理（子查询）</h3>
-<pre><code class="language-xml">&lt;!--
-    思路:
-        1. 查询所有的学生信息
-        2. 根据查询出来的学生的tid，寻找对应的老师！  子查询
-    --&gt;
-
-&lt;select id=&quot;getStudent&quot; resultMap=&quot;StudentTeacher&quot;&gt;
-    select * from student
-&lt;/select&gt;
-
-&lt;resultMap id=&quot;StudentTeacher&quot; type=&quot;Student&quot;&gt;
-    &lt;result property=&quot;id&quot; column=&quot;id&quot;/&gt;
-    &lt;result property=&quot;name&quot; column=&quot;name&quot;/&gt;
-    &lt;!--复杂的属性，我们需要单独处理 对象： association 集合： collection --&gt;
-    &lt;association property=&quot;teacher&quot; column=&quot;tid&quot; javaType=&quot;Teacher&quot; select=&quot;getTeacher&quot;/&gt;
-&lt;/resultMap&gt;
-
-&lt;select id=&quot;getTeacher&quot; resultType=&quot;Teacher&quot;&gt;
-    select * from teacher where id = #{id}
-&lt;/select&gt;
-
-</code></pre>
-<h3 id="按照结果嵌套处理联表查询-推荐使用">按照结果嵌套处理（联表查询 推荐使用）</h3>
-<pre><code class="language-xml">&lt;!--按照结果嵌套处理--&gt;
-&lt;select id=&quot;getStudent2&quot; resultMap=&quot;StudentTeacher2&quot;&gt;
-    select s.id sid,s.name sname,t.name tname
-    from student s,teacher t
-    where s.tid = t.id;
-&lt;/select&gt;
-
-&lt;resultMap id=&quot;StudentTeacher2&quot; type=&quot;Student&quot;&gt;
-    &lt;result property=&quot;id&quot; column=&quot;sid&quot;/&gt;
-    &lt;result property=&quot;name&quot; column=&quot;sname&quot;/&gt;
-    &lt;association property=&quot;teacher&quot; javaType=&quot;Teacher&quot;&gt;
-        &lt;result property=&quot;name&quot; column=&quot;tname&quot;/&gt;
-    &lt;/association&gt;
-&lt;/resultMap&gt;
-</code></pre>
-<p>回顾Mysql 多对一查询方式：</p>
-<ul>
-<li>子查询		按照查询嵌套处理</li>
-<li>联表查询    按照结果嵌套处理</li>
-</ul>
-<h2 id="8-一对多处理">8、一对多处理</h2>
-<p>比如：一个老师拥有多个学生！</p>
-<p>对于老师而言，就是一对多的关系!</p>
-<h3 id="环境搭建">环境搭建</h3>
-<ol>
-<li>环境搭建，和刚才一样</li>
-</ol>
-<p><strong>实体类</strong></p>
-<pre><code class="language-java">@Data
-public class Student {
-
-    private int id;
-    private String name;
-    private int tid;
-
-}
-
-</code></pre>
-<pre><code class="language-java">@Data
-public class Teacher {
-    private int id;
-    private String name;
-
-    //一个老师拥有多个学生
-    private List&lt;Student&gt; students;
-}
-</code></pre>
-<h3 id="按照结果嵌套处理">按照结果嵌套处理</h3>
-<pre><code class="language-xml">    &lt;!--按结果嵌套查询--&gt;
-    &lt;select id=&quot;getTeacher&quot; resultMap=&quot;TeacherStudent&quot;&gt;
-        select s.id sid, s.name sname, t.name tname,t.id tid
-        from student s,teacher t
-        where s.tid = t.id and t.id = #{tid}
-    &lt;/select&gt;
-
-    &lt;resultMap id=&quot;TeacherStudent&quot; type=&quot;Teacher&quot;&gt;
-        &lt;result property=&quot;id&quot; column=&quot;tid&quot;/&gt;
-        &lt;result property=&quot;name&quot; column=&quot;tname&quot;/&gt;
-        &lt;!--复杂的属性，我们需要单独处理 对象： association 集合： collection
-        javaType=&quot;&quot; 指定属性的类型！
-        集合中的泛型信息，我们使用ofType获取
-        --&gt;
-        &lt;collection property=&quot;students&quot; ofType=&quot;Student&quot;&gt;
-            &lt;result property=&quot;id&quot; column=&quot;sid&quot;/&gt;
-            &lt;result property=&quot;name&quot; column=&quot;sname&quot;/&gt;
-            &lt;result property=&quot;tid&quot; column=&quot;tid&quot;/&gt;
-        &lt;/collection&gt;
-    &lt;/resultMap&gt;
-</code></pre>
-<h3 id="按照查询嵌套处理">按照查询嵌套处理</h3>
-<pre><code class="language-xml">&lt;select id=&quot;getTeacher2&quot; resultMap=&quot;TeacherStudent2&quot;&gt;
-    select * from mybatis.teacher where id = #{tid}
-&lt;/select&gt;
-
-&lt;resultMap id=&quot;TeacherStudent2&quot; type=&quot;Teacher&quot;&gt;
-    &lt;collection property=&quot;students&quot; javaType=&quot;ArrayList&quot; ofType=&quot;Student&quot; select=&quot;getStudentByTeacherId&quot; column=&quot;id&quot;/&gt;
-&lt;/resultMap&gt;
-
-&lt;select id=&quot;getStudentByTeacherId&quot; resultType=&quot;Student&quot;&gt;
-    select * from mybatis.student where tid = #{tid}
-&lt;/select&gt;
-</code></pre>
-<h3 id="小结">小结</h3>
-<ol>
-<li>关联 - association   【多对一】</li>
-<li>集合 - collection   【一对多】</li>
-<li>javaType    &amp;   ofType
-<ol>
-<li>JavaType  用来指定实体类中属性的类型</li>
-<li>ofType  用来指定映射到List或者集合中的 pojo类型，泛型中的约束类型！</li>
-</ol>
-</li>
-</ol>
-<p>注意点：</p>
-<ul>
-<li>保证SQL的可读性，尽量保证通俗易懂</li>
-<li>注意一对多和多对一中，属性名和字段的问题！</li>
-<li>如果问题不好排查错误，可以使用日志 ， 建议使用 Log4j</li>
-</ul>
-<p><strong>慢SQL       1s        1000s</strong></p>
-<p>面试高频</p>
-<ul>
-<li>Mysql引擎</li>
-<li>InnoDB底层原理</li>
-<li>索引</li>
-<li>索引优化！</li>
-</ul>
 ]]></content>
     </entry>
 </feed>
