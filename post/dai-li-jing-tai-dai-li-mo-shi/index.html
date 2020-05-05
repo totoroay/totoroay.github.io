@@ -34,13 +34,13 @@
           </p>
           <div class="toc-container hidden lg:block">
             <ul class="markdownIt-TOC">
-<li><a href="#%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F">建造者模式</a><br>
-*<br>
-*<br>
-*<br>
-*<br>
-* <a href="#demo1">==demo1==</a><br>
-* <a href="#demo2">==demo2==</a></li>
+<li>
+<ul>
+<li><a href="#%E9%9D%99%E6%80%81%E4%BB%A3%E7%90%86">静态代理</a></li>
+<li><a href="#%E5%8A%A0%E6%B7%B1%E7%90%86%E8%A7%A3">加深理解</a></li>
+<li><a href="#%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86">动态代理</a></li>
+</ul>
+</li>
 </ul>
 
           </div>
@@ -87,198 +87,222 @@
 <div class="mask" onclick="closeMenu()">
 </div>
       <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
-        <h1 class="text-3xl font-bold lg:mt-16">建造者模式</h1>
+        <h1 class="text-3xl font-bold lg:mt-16">代理/静态代理-模式</h1>
         <div class="text-sm text-gray-700 lg:my-8">
-          2020-05-05 / 3 min read
+          2020-05-05 / 4 min read
         </div>
         
-          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://totoroay.github.io//post-images/jian-zao-zhe-mo-shi.png" alt="">
+          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://totoroay.github.io//post-images/dai-li-jing-tai-dai-li-mo-shi.png" alt="">
         
         <div class="post-content yue">
-          <h1 id="建造者模式">建造者模式</h1>
-<p><img src="https://totoroay.github.io//post-images/1588672365938.png" alt="" loading="lazy"><br>
-<img src="https://totoroay.github.io//post-images/1588672372510.png" alt="" loading="lazy"></p>
-<h6 id="demo1"><mark>demo1</mark></h6>
-<pre><code class="language-java">package totoroay.builder.demo1;
-// 抽象的建造者：方法
-public abstract class Builder {
-    abstract void buildA();// 地基
-    abstract void buildB();// 钢筋工程
-    abstract void buildC();// 铺电线
-    abstract void buildD();// 粉刷
-
-    // 完工：得到产品
-    abstract Product getProduct();
+          <h2 id="静态代理">静态代理</h2>
+<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1588685234201.png" alt="" loading="lazy"></figure>
+<p>角色分析</p>
+<ul>
+<li>抽象角色：一般会使用接口或者抽象类来解决</li>
+<li>真实角色：被代理的角色</li>
+<li>代理角色：代理真实角色，代理真实角色后，一般会做一些附属操作</li>
+<li>客户：访问代理对象的人</li>
+</ul>
+<pre><code class="language-java">package totoroay.proxy.demo1;
+// 抽象角色
+public interface Rent {
+    void rent();
 }
 </code></pre>
-<pre><code class="language-java">package totoroay.builder.demo1;
-// 产品：房子
-public class Product {
-    private String buildA;// 地基
-    private String buildB;// 钢筋工程
-    private String buildC;// 铺电线
-    private String buildD;// 粉刷
-    
-    //get,set,toString方法自己补全
-}
-</code></pre>
-<pre><code class="language-java">package totoroay.builder.demo1;
-// 具体的建造者：工人
-public class Worker extends Builder {
-    private Product product;
-
-    // 工人生产产品
-    public Worker() {
-        product = new Product();
-    }
-
-    @Override
-    void buildA() {
-        product.setBuildA(&quot;地基&quot;);
-        System.out.println(&quot;地基&quot;);
-    }
-
-    @Override
-    void buildB() {
-        product.setBuildB(&quot;钢筋工程&quot;);
-        System.out.println(&quot;钢筋工程&quot;);
-    }
-
-    @Override
-    void buildC() {
-        product.setBuildC(&quot;铺电线&quot;);
-        System.out.println(&quot;铺电线&quot;);
-    }
-
-    @Override
-    void buildD() {
-        product.setBuildD(&quot;粉刷&quot;);
-        System.out.println(&quot;粉刷&quot;);
-    }
-
-    @Override
-    Product getProduct() {
-        return product;
+<pre><code class="language-java">package totoroay.proxy.demo1;
+// 真实角色
+public class Host implements Rent{
+    public void rent() {
+        System.out.println(&quot;房东要出租房子&quot;);
     }
 }
 </code></pre>
-<pre><code class="language-java">package totoroay.builder.demo1;
-// 指挥：核心。负责指挥构建一个工程，有它决定
-public class Director {
-    // 指挥具体的工人建房子
-    public Product builder(Builder builder){
-        builder.buildA();
-        builder.buildB();
-        builder.buildC();
-        builder.buildD();
-        return builder.getProduct();
+<pre><code class="language-java">package totoroay.proxy.demo1;
+// 代理角色
+public class Proxy {
+    private Host host;
+
+    public Proxy() {}
+
+    public Proxy(Host host) {
+        this.host = host;
+    }
+
+    public void rent(){
+        host.rent();
+        seehouse();
+    }
+
+    public void seehouse(){
+        System.out.println(&quot;看房&quot;);
     }
 }
 </code></pre>
-<pre><code class="language-java">package totoroay.builder.demo1;
-
-public class Test {
+<pre><code class="language-java">package totoroay.proxy.demo1;
+// 客户
+public class Client {
     public static void main(String[] args) {
-        // 指挥
-        Director director = new Director();
-        // 指挥具体的工人完成产品
-        Product builder = director.builder(new Worker());
-        System.out.println(builder.toString());
+        Host host = new Host();
+        Proxy proxy = new Proxy(host);
+        proxy.rent();
     }
 }
 </code></pre>
-<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1588672354974.png" alt="" loading="lazy"></figure>
-<h6 id="demo2"><mark>demo2</mark></h6>
-<pre><code class="language-java">package totoroay.builder.demo2;
-// 抽象的建造者：方法
-public abstract class Builder {
-    // 静态内部类方式
-    abstract Builder buildA(String msg);// 汉堡
-    abstract Builder buildB(String msg);// 可乐
-    abstract Builder buildC(String msg);// 薯条
-    abstract Builder buildD(String msg);// 甜品
-
-    // 完工：得到产品
-    abstract Product getProduct();
+<figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1588685225293.png" alt="" loading="lazy"></figure>
+<p>代理模式的好处：</p>
+<ul>
+<li>可以使真实角色的操作更加纯粹！不用去关注一些公共的业务</li>
+<li>公共也就交给代理角色！实现了业务的分工</li>
+<li>公共业务发生扩展的时候，方便集中管理！</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>一个真实角色就会产生一个代理角色，代码量翻倍，开发效率会变低</li>
+</ul>
+<h2 id="加深理解">加深理解</h2>
+<figure data-type="image" tabindex="3"><img src="https://totoroay.github.io//post-images/1588685218011.png" alt="" loading="lazy"></figure>
+<pre><code class="language-java">package totoroay.proxy.demo2;
+// 抽象角色
+public interface UserService {
+    void add();
+    void delate();
+    void update();
+    void query();
 }
 </code></pre>
-<pre><code class="language-java">package totoroay.builder.demo2;
-// 产品：套餐
-public class Product {
-    private String buildA = &quot;汉堡&quot;;// 汉堡
-    private String buildB = &quot;可乐&quot;;// 可乐
-    private String buildC = &quot;薯条&quot;;// 薯条
-    private String buildD = &quot;甜品&quot;;// 甜品
-    
-    //get,set,toString方法自己补全
-}
-</code></pre>
-<pre><code class="language-java">package totoroay.builder.demo2;
-// 具体的建造者
-public class Worker extends Builder {
-    private Product product;
+<pre><code class="language-java">package totoroay.proxy.demo2;
+// 真实角色
+public class UserServiceImpl implements UserService{
 
-    public Worker(){
-        product = new Product();
+    public void add() {
+        System.out.println(&quot;增加用户&quot;);
     }
 
-    @Override
-    Builder buildA(String msg) {
-        product.setBuildA(msg);
-        return this;
+    public void delate() {
+        System.out.println(&quot;删除用户&quot;);
     }
 
-    @Override
-    Builder buildB(String msg) {
-        product.setBuildB(msg);
-        return this;
+    public void update() {
+        System.out.println(&quot;修改用户&quot;);
     }
 
-    @Override
-    Builder buildC(String msg) {
-        product.setBuildC(msg);
-        return this;
-    }
-
-    @Override
-    Builder buildD(String msg) {
-        product.setBuildD(msg);
-        return this;
-    }
-
-    @Override
-    Product getProduct() {
-        return product;
+    public void query() {
+        System.out.println(&quot;查询用户&quot;);
     }
 }
-
 </code></pre>
-<pre><code class="language-java">package totoroay.builder.demo2;
+<pre><code class="language-java">package totoroay.proxy.demo2;
+// 代理角色
+public class UserServiceImplProxy {
+    private UserServiceImpl userService;
 
-public class Test {
+    public UserServiceImpl getUserService() {
+        return userService;
+    }
+
+    public void setUserService(UserServiceImpl userService) {
+        this.userService = userService;
+    }
+
+    public void add(){
+        userService.add();
+        this.log(&quot;增加&quot;);
+    }
+    public void delate(){
+        userService.delate();
+    }
+    public void update(){
+        userService.update();
+    }
+    public void query(){
+        userService.query();
+    }
+
+    public void log(String msg){
+        System.out.println(&quot;[Debug] &quot;+msg+&quot;错误&quot;);
+    }
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.proxy.demo2;
+// 客户
+public class Client {
     public static void main(String[] args) {
-        // 服务员，默认套餐
-        Worker worker = new Worker();
-        Product product = worker.getProduct();
-        System.out.println(product.toString());
-
-        // 另一个服务员
-        Worker worker1 = new Worker();
-        // 链式编程
-        Product product1 = worker1.buildA(&quot;牛肉汉堡&quot;).buildB(&quot;大杯可乐&quot;)
-                .getProduct();
-        System.out.println(product1.toString());
+        UserServiceImpl userService = new UserServiceImpl();
+        UserServiceImplProxy proxy = new UserServiceImplProxy();
+        proxy.setUserService(userService);
+        proxy.add();
+        proxy.delate();
+        proxy.update();
+        proxy.query();
     }
 }
 </code></pre>
-<figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1588672343175.png" alt="" loading="lazy"></figure>
-<figure data-type="image" tabindex="3"><img src="https://totoroay.github.io//post-images/1588672337519.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="4"><img src="https://totoroay.github.io//post-images/1588685206797.png" alt="" loading="lazy"></figure>
+<h2 id="动态代理">动态代理</h2>
+<ul>
+<li>动态代理和静态代理角色一样</li>
+<li>动态代理的代理类是动态生成的，不是我们直接写好的！</li>
+<li>动态代理分为两大类：基于接口的动态代理，基于类的动态代理
+<ul>
+<li>基于接口---JDK 动态代理	【代码实现】</li>
+<li>基于类：cglib</li>
+<li>java字节码：javasist</li>
+</ul>
+</li>
+</ul>
+<p>需要了解两个类：Proxy：代理，InvocationHandler</p>
+<pre><code class="language-java">package totoroay.proxy.demo3;
+
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+
+public class ProxyInvocationHandler implements InvocationHandler {
+    //被代理的接口
+    private Object target;
+
+    public void setTarget(Object target) {
+        this.target = target;
+    }
+
+    // 生成，得到代理类
+    public Object getProxy(){
+        return Proxy.newProxyInstance(this.getClass().getClassLoader(),target.getClass().getInterfaces(),this);
+    }
+
+    // 处理代理实例并返回结果(实现代理类方法)
+    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        Object invoke = method.invoke(target,args);
+        return invoke;
+    }
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.proxy.demo3;
+
+import totoroay.proxy.demo2.UserService;
+import totoroay.proxy.demo2.UserServiceImpl;
+
+public class Client {
+    public static void main(String[] args) {
+        //真实对象
+        UserServiceImpl userService = new UserServiceImpl();
+        // 代理角色
+        ProxyInvocationHandler pih = new ProxyInvocationHandler();
+        // 设置要代理的对象
+        pih.setTarget(userService);
+        // 动态生成代理类
+        UserService proxy = (UserService) pih.getProxy();
+        proxy.add();
+    }
+}
+</code></pre>
 
         </div>
 
         
-          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://totoroay.github.io/tag/nCXsgME5p/">
-            <span class="flex-auto">创建型模式</span>
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://totoroay.github.io/tag/SzesMEwoO/">
+            <span class="flex-auto">结构型模式</span>
           </a>
         
           <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://totoroay.github.io/tag/9Wg-3gSCN/">
@@ -289,21 +313,12 @@ public class Test {
 
         <div class="flex justify-between py-8">
           
-            <div class="prev-post">
-              <a href="https://totoroay.github.io/post/dai-li-jing-tai-dai-li-mo-shi/">
-                <h3 class="post-title">
-                  <i class="ri-arrow-left-line"></i>
-                  代理/静态代理-模式
-                </h3>
-              </a>
-            </div>
-          
 
           
             <div class="next-post">
-              <a href="https://totoroay.github.io/post/springyi-lai-zhu-ru-di/">
+              <a href="https://totoroay.github.io/post/jian-zao-zhe-mo-shi/">
                 <h3 class="post-title">
-                  Spring：依赖注入（DI）
+                  建造者模式
                   <i class="ri-arrow-right-line"></i>
                 </h3>
               </a>

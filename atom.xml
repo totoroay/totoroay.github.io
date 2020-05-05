@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://totoroay.github.io/</id>
     <title>totoroay</title>
-    <updated>2020-05-05T09:53:13.532Z</updated>
+    <updated>2020-05-05T13:27:36.632Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://totoroay.github.io/"/>
     <link rel="self" href="https://totoroay.github.io/atom.xml"/>
@@ -10,6 +10,216 @@
     <logo>https://totoroay.github.io/images/avatar.png</logo>
     <icon>https://totoroay.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, totoroay</rights>
+    <entry>
+        <title type="html"><![CDATA[代理/静态代理-模式]]></title>
+        <id>https://totoroay.github.io/post/dai-li-jing-tai-dai-li-mo-shi/</id>
+        <link href="https://totoroay.github.io/post/dai-li-jing-tai-dai-li-mo-shi/">
+        </link>
+        <updated>2020-05-05T10:12:32.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="静态代理">静态代理</h2>
+<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1588685234201.png" alt="" loading="lazy"></figure>
+<p>角色分析</p>
+<ul>
+<li>抽象角色：一般会使用接口或者抽象类来解决</li>
+<li>真实角色：被代理的角色</li>
+<li>代理角色：代理真实角色，代理真实角色后，一般会做一些附属操作</li>
+<li>客户：访问代理对象的人</li>
+</ul>
+<pre><code class="language-java">package totoroay.proxy.demo1;
+// 抽象角色
+public interface Rent {
+    void rent();
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.proxy.demo1;
+// 真实角色
+public class Host implements Rent{
+    public void rent() {
+        System.out.println(&quot;房东要出租房子&quot;);
+    }
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.proxy.demo1;
+// 代理角色
+public class Proxy {
+    private Host host;
+
+    public Proxy() {}
+
+    public Proxy(Host host) {
+        this.host = host;
+    }
+
+    public void rent(){
+        host.rent();
+        seehouse();
+    }
+
+    public void seehouse(){
+        System.out.println(&quot;看房&quot;);
+    }
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.proxy.demo1;
+// 客户
+public class Client {
+    public static void main(String[] args) {
+        Host host = new Host();
+        Proxy proxy = new Proxy(host);
+        proxy.rent();
+    }
+}
+</code></pre>
+<figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1588685225293.png" alt="" loading="lazy"></figure>
+<p>代理模式的好处：</p>
+<ul>
+<li>可以使真实角色的操作更加纯粹！不用去关注一些公共的业务</li>
+<li>公共也就交给代理角色！实现了业务的分工</li>
+<li>公共业务发生扩展的时候，方便集中管理！</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>一个真实角色就会产生一个代理角色，代码量翻倍，开发效率会变低</li>
+</ul>
+<h2 id="加深理解">加深理解</h2>
+<figure data-type="image" tabindex="3"><img src="https://totoroay.github.io//post-images/1588685218011.png" alt="" loading="lazy"></figure>
+<pre><code class="language-java">package totoroay.proxy.demo2;
+// 抽象角色
+public interface UserService {
+    void add();
+    void delate();
+    void update();
+    void query();
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.proxy.demo2;
+// 真实角色
+public class UserServiceImpl implements UserService{
+
+    public void add() {
+        System.out.println(&quot;增加用户&quot;);
+    }
+
+    public void delate() {
+        System.out.println(&quot;删除用户&quot;);
+    }
+
+    public void update() {
+        System.out.println(&quot;修改用户&quot;);
+    }
+
+    public void query() {
+        System.out.println(&quot;查询用户&quot;);
+    }
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.proxy.demo2;
+// 代理角色
+public class UserServiceImplProxy {
+    private UserServiceImpl userService;
+
+    public UserServiceImpl getUserService() {
+        return userService;
+    }
+
+    public void setUserService(UserServiceImpl userService) {
+        this.userService = userService;
+    }
+
+    public void add(){
+        userService.add();
+        this.log(&quot;增加&quot;);
+    }
+    public void delate(){
+        userService.delate();
+    }
+    public void update(){
+        userService.update();
+    }
+    public void query(){
+        userService.query();
+    }
+
+    public void log(String msg){
+        System.out.println(&quot;[Debug] &quot;+msg+&quot;错误&quot;);
+    }
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.proxy.demo2;
+// 客户
+public class Client {
+    public static void main(String[] args) {
+        UserServiceImpl userService = new UserServiceImpl();
+        UserServiceImplProxy proxy = new UserServiceImplProxy();
+        proxy.setUserService(userService);
+        proxy.add();
+        proxy.delate();
+        proxy.update();
+        proxy.query();
+    }
+}
+</code></pre>
+<figure data-type="image" tabindex="4"><img src="https://totoroay.github.io//post-images/1588685206797.png" alt="" loading="lazy"></figure>
+<h2 id="动态代理">动态代理</h2>
+<ul>
+<li>动态代理和静态代理角色一样</li>
+<li>动态代理的代理类是动态生成的，不是我们直接写好的！</li>
+<li>动态代理分为两大类：基于接口的动态代理，基于类的动态代理
+<ul>
+<li>基于接口---JDK 动态代理	【代码实现】</li>
+<li>基于类：cglib</li>
+<li>java字节码：javasist</li>
+</ul>
+</li>
+</ul>
+<p>需要了解两个类：Proxy：代理，InvocationHandler</p>
+<pre><code class="language-java">package totoroay.proxy.demo3;
+
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+
+public class ProxyInvocationHandler implements InvocationHandler {
+    //被代理的接口
+    private Object target;
+
+    public void setTarget(Object target) {
+        this.target = target;
+    }
+
+    // 生成，得到代理类
+    public Object getProxy(){
+        return Proxy.newProxyInstance(this.getClass().getClassLoader(),target.getClass().getInterfaces(),this);
+    }
+
+    // 处理代理实例并返回结果(实现代理类方法)
+    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        Object invoke = method.invoke(target,args);
+        return invoke;
+    }
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.proxy.demo3;
+
+import totoroay.proxy.demo2.UserService;
+import totoroay.proxy.demo2.UserServiceImpl;
+
+public class Client {
+    public static void main(String[] args) {
+        //真实对象
+        UserServiceImpl userService = new UserServiceImpl();
+        // 代理角色
+        ProxyInvocationHandler pih = new ProxyInvocationHandler();
+        // 设置要代理的对象
+        pih.setTarget(userService);
+        // 动态生成代理类
+        UserService proxy = (UserService) pih.getProxy();
+        proxy.add();
+    }
+}
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[建造者模式]]></title>
         <id>https://totoroay.github.io/post/jian-zao-zhe-mo-shi/</id>
@@ -1792,71 +2002,6 @@ class video implements Cloneable{
 </code></pre>
 <p><img src="https://totoroay.github.io//post-images/1587872756815.png" alt="" loading="lazy"><br>
 <img src="https://totoroay.github.io//post-images/1587872763023.png" alt="" loading="lazy"></p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[单例模式]]></title>
-        <id>https://totoroay.github.io/post/dan-li-mo-shi/</id>
-        <link href="https://totoroay.github.io/post/dan-li-mo-shi/">
-        </link>
-        <updated>2020-04-26T03:38:29.000Z</updated>
-        <content type="html"><![CDATA[<p><img src="https://totoroay.github.io//post-images/1587872393341.png" alt="" loading="lazy"><br>
-<img src="https://totoroay.github.io//post-images/1587872419615.png" alt="" loading="lazy"></p>
-<ul>
-<li></li>
-</ul>
-<pre><code class="language-java">// 饿汉式 缺点：空间上造成浪费
-public class Hungry {
-    public static void main(String[] args) {
-        User user = User.getUser();
-        for (int i = 0; i &lt; 1000000; i++) {
-            User u =User.getUser();
-            if (user != u){
-                System.out.println(&quot;产生了新的对象！&quot;);
-            }
-        }
-        System.out.println(&quot;end&quot;);
-    }
-}
-
-class User {
-    // 1.私有化构造方法
-    private User(){
-        System.out.println();
-    }
-    // 2.定义一个静态类对象
-    private static User user = new User();// 空间浪费
-    // 3.提供一个方法，返回给调用方一个类对象
-    public static User getUser(){
-        return user;
-    }
-
-}
-</code></pre>
-<ul>
-<li>懒汉式 特点：类加载时没有生成单例，只有当第一次调用getStudent()方法时才创建单例</li>
-</ul>
-<pre><code class="language-java">// 懒汉式 缺点：造成性能上的损耗，多线程下可能不止一个对象
-//                              加锁解决（synchronized）
-public class Slacker {
-    public static void main(String[] args) {
-        Student student = Student.getStudent();
-        Student student1 = Student.getStudent();
-        System.out.println(student);
-        System.out.println(student1);
-    }
-}
-class Student{
-    private Student(){}
-    private static Student student;
-    public static synchronized Student getStudent(){
-        if (student==null){
-            student = new Student();// 性能损耗
-        }
-        return student;
-    }
-}
-</code></pre>
 ]]></content>
     </entry>
 </feed>
