@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://totoroay.github.io/</id>
     <title>totoroay</title>
-    <updated>2020-05-05T07:11:44.167Z</updated>
+    <updated>2020-05-05T09:53:13.532Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://totoroay.github.io/"/>
     <link rel="self" href="https://totoroay.github.io/atom.xml"/>
@@ -10,6 +10,192 @@
     <logo>https://totoroay.github.io/images/avatar.png</logo>
     <icon>https://totoroay.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, totoroay</rights>
+    <entry>
+        <title type="html"><![CDATA[建造者模式]]></title>
+        <id>https://totoroay.github.io/post/jian-zao-zhe-mo-shi/</id>
+        <link href="https://totoroay.github.io/post/jian-zao-zhe-mo-shi/">
+        </link>
+        <updated>2020-05-05T09:50:51.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="建造者模式">建造者模式</h1>
+<p><img src="https://totoroay.github.io//post-images/1588672365938.png" alt="" loading="lazy"><br>
+<img src="https://totoroay.github.io//post-images/1588672372510.png" alt="" loading="lazy"></p>
+<h6 id="demo1"><mark>demo1</mark></h6>
+<pre><code class="language-java">package totoroay.builder.demo1;
+// 抽象的建造者：方法
+public abstract class Builder {
+    abstract void buildA();// 地基
+    abstract void buildB();// 钢筋工程
+    abstract void buildC();// 铺电线
+    abstract void buildD();// 粉刷
+
+    // 完工：得到产品
+    abstract Product getProduct();
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.builder.demo1;
+// 产品：房子
+public class Product {
+    private String buildA;// 地基
+    private String buildB;// 钢筋工程
+    private String buildC;// 铺电线
+    private String buildD;// 粉刷
+    
+    //get,set,toString方法自己补全
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.builder.demo1;
+// 具体的建造者：工人
+public class Worker extends Builder {
+    private Product product;
+
+    // 工人生产产品
+    public Worker() {
+        product = new Product();
+    }
+
+    @Override
+    void buildA() {
+        product.setBuildA(&quot;地基&quot;);
+        System.out.println(&quot;地基&quot;);
+    }
+
+    @Override
+    void buildB() {
+        product.setBuildB(&quot;钢筋工程&quot;);
+        System.out.println(&quot;钢筋工程&quot;);
+    }
+
+    @Override
+    void buildC() {
+        product.setBuildC(&quot;铺电线&quot;);
+        System.out.println(&quot;铺电线&quot;);
+    }
+
+    @Override
+    void buildD() {
+        product.setBuildD(&quot;粉刷&quot;);
+        System.out.println(&quot;粉刷&quot;);
+    }
+
+    @Override
+    Product getProduct() {
+        return product;
+    }
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.builder.demo1;
+// 指挥：核心。负责指挥构建一个工程，有它决定
+public class Director {
+    // 指挥具体的工人建房子
+    public Product builder(Builder builder){
+        builder.buildA();
+        builder.buildB();
+        builder.buildC();
+        builder.buildD();
+        return builder.getProduct();
+    }
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.builder.demo1;
+
+public class Test {
+    public static void main(String[] args) {
+        // 指挥
+        Director director = new Director();
+        // 指挥具体的工人完成产品
+        Product builder = director.builder(new Worker());
+        System.out.println(builder.toString());
+    }
+}
+</code></pre>
+<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1588672354974.png" alt="" loading="lazy"></figure>
+<h6 id="demo2"><mark>demo2</mark></h6>
+<pre><code class="language-java">package totoroay.builder.demo2;
+// 抽象的建造者：方法
+public abstract class Builder {
+    // 静态内部类方式
+    abstract Builder buildA(String msg);// 汉堡
+    abstract Builder buildB(String msg);// 可乐
+    abstract Builder buildC(String msg);// 薯条
+    abstract Builder buildD(String msg);// 甜品
+
+    // 完工：得到产品
+    abstract Product getProduct();
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.builder.demo2;
+// 产品：套餐
+public class Product {
+    private String buildA = &quot;汉堡&quot;;// 汉堡
+    private String buildB = &quot;可乐&quot;;// 可乐
+    private String buildC = &quot;薯条&quot;;// 薯条
+    private String buildD = &quot;甜品&quot;;// 甜品
+    
+    //get,set,toString方法自己补全
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.builder.demo2;
+// 具体的建造者
+public class Worker extends Builder {
+    private Product product;
+
+    public Worker(){
+        product = new Product();
+    }
+
+    @Override
+    Builder buildA(String msg) {
+        product.setBuildA(msg);
+        return this;
+    }
+
+    @Override
+    Builder buildB(String msg) {
+        product.setBuildB(msg);
+        return this;
+    }
+
+    @Override
+    Builder buildC(String msg) {
+        product.setBuildC(msg);
+        return this;
+    }
+
+    @Override
+    Builder buildD(String msg) {
+        product.setBuildD(msg);
+        return this;
+    }
+
+    @Override
+    Product getProduct() {
+        return product;
+    }
+}
+
+</code></pre>
+<pre><code class="language-java">package totoroay.builder.demo2;
+
+public class Test {
+    public static void main(String[] args) {
+        // 服务员，默认套餐
+        Worker worker = new Worker();
+        Product product = worker.getProduct();
+        System.out.println(product.toString());
+
+        // 另一个服务员
+        Worker worker1 = new Worker();
+        // 链式编程
+        Product product1 = worker1.buildA(&quot;牛肉汉堡&quot;).buildB(&quot;大杯可乐&quot;)
+                .getProduct();
+        System.out.println(product1.toString());
+    }
+}
+</code></pre>
+<figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1588672343175.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="3"><img src="https://totoroay.github.io//post-images/1588672337519.png" alt="" loading="lazy"></figure>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Spring：依赖注入（DI）]]></title>
         <id>https://totoroay.github.io/post/springyi-lai-zhu-ru-di/</id>
@@ -1670,840 +1856,6 @@ class Student{
         return student;
     }
 }
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[SSM整合]]></title>
-        <id>https://totoroay.github.io/post/ssm-zheng-he/</id>
-        <link href="https://totoroay.github.io/post/ssm-zheng-he/">
-        </link>
-        <updated>2020-04-25T09:23:41.000Z</updated>
-        <content type="html"><![CDATA[<h2 id="整体架构">整体架构</h2>
-<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1587807061832.png" alt="" loading="lazy"></figure>
-<h2 id="数据库及建表">数据库及建表</h2>
-<pre><code class="language-sql">CREATE DATABASE `ssmbuild`;
-
-USE `ssmbuild`;
-
-DROP TABLE IF EXISTS `books`;
-
-CREATE TABLE `books` (
-`bookID` INT(10) NOT NULL AUTO_INCREMENT COMMENT '书id',
-`bookName` VARCHAR(100) NOT NULL COMMENT '书名',
-`bookCounts` INT(11) NOT NULL COMMENT '数量',
-`detail` VARCHAR(200) NOT NULL COMMENT '描述',
-KEY `bookID` (`bookID`)
-) ENGINE=INNODB DEFAULT CHARSET=utf8;
-
-INSERT  INTO `books`(`bookID`,`bookName`,`bookCounts`,`detail`)VALUES 
-(1,'Java',1,'从入门到放弃'),
-(2,'MySQL',10,'从删库到跑路'),
-(3,'Linux',5,'从进门到进牢');
-</code></pre>
-<h2 id="基本环境搭建">基本环境搭建</h2>
-<h5 id="1-新建一个空的maven项目">1、新建一个空的Maven项目</h5>
-<h5 id="2-添加web支持">2、添加web支持</h5>
-<p><img src="https://totoroay.github.io//post-images/1587807215470.png" alt="" loading="lazy"><br>
-<img src="https://totoroay.github.io//post-images/1587807239144.png" alt="" loading="lazy"></p>
-<h5 id="3-导入相关依赖">3、导入相关依赖</h5>
-<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot;
-         xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-         xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&gt;
-    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
-
-    &lt;groupId&gt;org.example&lt;/groupId&gt;
-    &lt;artifactId&gt;ssmbuild&lt;/artifactId&gt;
-    &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
-
-    &lt;dependencies&gt;
-        &lt;!--Junit--&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;junit&lt;/groupId&gt;
-            &lt;artifactId&gt;junit&lt;/artifactId&gt;
-            &lt;version&gt;4.12&lt;/version&gt;
-        &lt;/dependency&gt;
-        &lt;!--数据库驱动--&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;mysql&lt;/groupId&gt;
-            &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
-            &lt;version&gt;5.1.47&lt;/version&gt;
-        &lt;/dependency&gt;
-        &lt;!-- 数据库连接池 --&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;com.mchange&lt;/groupId&gt;
-            &lt;artifactId&gt;c3p0&lt;/artifactId&gt;
-            &lt;version&gt;0.9.5.2&lt;/version&gt;
-        &lt;/dependency&gt;
-
-        &lt;!--Servlet - JSP --&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;javax.servlet&lt;/groupId&gt;
-            &lt;artifactId&gt;javax.servlet-api&lt;/artifactId&gt;
-            &lt;version&gt;4.0.1&lt;/version&gt;
-            &lt;scope&gt;provided&lt;/scope&gt;
-        &lt;/dependency&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;javax.servlet.jsp&lt;/groupId&gt;
-            &lt;artifactId&gt;jsp-api&lt;/artifactId&gt;
-            &lt;version&gt;2.2&lt;/version&gt;
-        &lt;/dependency&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;javax.servlet&lt;/groupId&gt;
-            &lt;artifactId&gt;jstl&lt;/artifactId&gt;
-            &lt;version&gt;1.2&lt;/version&gt;
-        &lt;/dependency&gt;
-
-        &lt;!--Mybatis--&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.mybatis&lt;/groupId&gt;
-            &lt;artifactId&gt;mybatis&lt;/artifactId&gt;
-            &lt;version&gt;3.5.2&lt;/version&gt;
-        &lt;/dependency&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.mybatis&lt;/groupId&gt;
-            &lt;artifactId&gt;mybatis-spring&lt;/artifactId&gt;
-            &lt;version&gt;2.0.2&lt;/version&gt;
-        &lt;/dependency&gt;
-
-        &lt;!--Spring--&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
-            &lt;artifactId&gt;spring-webmvc&lt;/artifactId&gt;
-            &lt;version&gt;5.1.9.RELEASE&lt;/version&gt;
-        &lt;/dependency&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
-            &lt;artifactId&gt;spring-jdbc&lt;/artifactId&gt;
-            &lt;version&gt;5.1.9.RELEASE&lt;/version&gt;
-        &lt;/dependency&gt;
-        &lt;!--AOP--&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.aspectj&lt;/groupId&gt;
-            &lt;artifactId&gt;aspectjweaver&lt;/artifactId&gt;
-            &lt;version&gt;1.9.4&lt;/version&gt;
-        &lt;/dependency&gt;
-
-        &lt;!--lombok--&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
-            &lt;artifactId&gt;lombok&lt;/artifactId&gt;
-            &lt;version&gt;1.18.12&lt;/version&gt;
-        &lt;/dependency&gt;
-    &lt;/dependencies&gt;
-
-    &lt;build&gt;
-        &lt;resources&gt;
-            &lt;resource&gt;
-                &lt;directory&gt;src/main/java&lt;/directory&gt;
-                &lt;includes&gt;
-                    &lt;include&gt;**/*.properties&lt;/include&gt;
-                    &lt;include&gt;**/*.xml&lt;/include&gt;
-                &lt;/includes&gt;
-                &lt;filtering&gt;false&lt;/filtering&gt;
-            &lt;/resource&gt;
-            &lt;resource&gt;
-                &lt;directory&gt;src/main/resources&lt;/directory&gt;
-                &lt;includes&gt;
-                    &lt;include&gt;**/*.properties&lt;/include&gt;
-                    &lt;include&gt;**/*.xml&lt;/include&gt;
-                &lt;/includes&gt;
-                &lt;filtering&gt;false&lt;/filtering&gt;
-            &lt;/resource&gt;
-        &lt;/resources&gt;
-    &lt;/build&gt;
-
-&lt;/project&gt;
-</code></pre>
-<h5 id="4-打war包">4、打war包</h5>
-<p><img src="https://totoroay.github.io//post-images/1587807356487.png" alt="" loading="lazy"><br>
-<img src="https://totoroay.github.io//post-images/1587807371220.png" alt="" loading="lazy"><br>
-<img src="https://totoroay.github.io//post-images/1587807395323.png" alt="" loading="lazy"></p>
-<p>全选点击ok</p>
-<h5 id="5-建立基本结构">5、建立基本结构</h5>
-<pre><code class="language-java">com.totoroay.pojo
-com.totoroay.mapper
-com.totoroay.service
-com.totoroay.service.serviceimpl
-com.totoroay.controller
-</code></pre>
-<h2 id="resources目录下各个配置文件">resources目录下各个配置文件</h2>
-<h6 id="1-mybatis-configxml">1、mybatis-config.xml</h6>
-<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
-&lt;!DOCTYPE configuration
-        PUBLIC &quot;-//mybatis.org//DTD Config 3.0//EN&quot;
-        &quot;http://mybatis.org/dtd/mybatis-3-config.dtd&quot;&gt;
-&lt;configuration&gt;
-
-    &lt;settings&gt;
-        &lt;setting name=&quot;logImpl&quot; value=&quot;STDOUT_LOGGING&quot;/&gt;
-    &lt;/settings&gt;
-
-    &lt;typeAliases&gt;
-        &lt;package name=&quot;com.totoroay.pojo&quot;/&gt;
-    &lt;/typeAliases&gt;
-    &lt;!-- 注册mapper --&gt;
-    &lt;mappers&gt;
-        &lt;mapper resource=&quot;mapper/BookMapper.xml&quot;/&gt;
-    &lt;/mappers&gt;
-
-&lt;/configuration&gt;
-</code></pre>
-<h6 id="2-databaseproperties">2、database.properties</h6>
-<pre><code class="language-properties">jdbc.driver=com.mysql.jdbc.Driver
-jdbc.url=jdbc:mysql://localhost:3306/ssmbuild?useSSL=true&amp;useUnicode=true&amp;characterEncoding=utf8
-jdbc.username=root
-jdbc.password=root
-</code></pre>
-<h6 id="3-spring-daoxml">3、spring-dao.xml</h6>
-<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
-       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-       xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
-       xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans
-       http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://www.springframework.org/schema/context
-       https://www.springframework.org/schema/context/spring-context.xsd&quot;&gt;
-
-    &lt;!-- 配置整合mybatis --&gt;
-    &lt;!-- 1.关联数据库文件 --&gt;
-    &lt;context:property-placeholder location=&quot;classpath:database.properties&quot;/&gt;
-
-    &lt;!-- 2.数据库连接池 --&gt;
-    &lt;!--数据库连接池
-        dbcp 半自动化操作 不能自动连接
-        c3p0 自动化操作（自动的加载配置文件 并且设置到对象里面）
-    --&gt;
-    &lt;bean id=&quot;dataSource&quot; class=&quot;com.mchange.v2.c3p0.ComboPooledDataSource&quot;&gt;
-        &lt;!-- 配置连接池属性 --&gt;
-        &lt;property name=&quot;driverClass&quot; value=&quot;${jdbc.driver}&quot;/&gt;
-        &lt;property name=&quot;jdbcUrl&quot; value=&quot;${jdbc.url}&quot;/&gt;
-        &lt;property name=&quot;user&quot; value=&quot;${jdbc.username}&quot;/&gt;
-        &lt;property name=&quot;password&quot; value=&quot;${jdbc.password}&quot;/&gt;
-
-        &lt;!-- c3p0连接池的私有属性 --&gt;
-        &lt;property name=&quot;maxPoolSize&quot; value=&quot;30&quot;/&gt;
-        &lt;property name=&quot;minPoolSize&quot; value=&quot;10&quot;/&gt;
-        &lt;!-- 关闭连接后不自动commit --&gt;
-        &lt;property name=&quot;autoCommitOnClose&quot; value=&quot;false&quot;/&gt;
-        &lt;!-- 获取连接超时时间 --&gt;
-        &lt;property name=&quot;checkoutTimeout&quot; value=&quot;10000&quot;/&gt;
-        &lt;!-- 当获取连接失败重试次数 --&gt;
-        &lt;property name=&quot;acquireRetryAttempts&quot; value=&quot;2&quot;/&gt;
-    &lt;/bean&gt;
-
-    &lt;!-- 3.配置SqlSessionFactory对象 --&gt;
-    &lt;bean id=&quot;sqlSessionFactory&quot; class=&quot;org.mybatis.spring.SqlSessionFactoryBean&quot;&gt;
-        &lt;!-- 注入数据库连接池 --&gt;
-        &lt;property name=&quot;dataSource&quot; ref=&quot;dataSource&quot;/&gt;
-        &lt;!-- 配置MyBaties全局配置文件:mybatis-config.xml --&gt;
-        &lt;property name=&quot;configLocation&quot; value=&quot;classpath:mybatis-config.xml&quot;/&gt;
-    &lt;/bean&gt;
-
-    &lt;!-- 4.配置扫描Dao接口包，动态实现Dao接口注入到spring容器中 --&gt;
-    &lt;!--解释 ：https://www.cnblogs.com/jpfss/p/7799806.html--&gt;
-    &lt;bean class=&quot;org.mybatis.spring.mapper.MapperScannerConfigurer&quot;&gt;
-        &lt;!-- 注入sqlSessionFactory --&gt;
-        &lt;property name=&quot;sqlSessionFactoryBeanName&quot; value=&quot;sqlSessionFactory&quot;/&gt;
-        &lt;!-- 给出需要扫描Dao接口包 --&gt;
-        &lt;property name=&quot;basePackage&quot; value=&quot;com.totoroay.mapper&quot;/&gt;
-    &lt;/bean&gt;
-
-&lt;/beans&gt;
-</code></pre>
-<h6 id="4-spring-servicexml">4、spring-service.xml</h6>
-<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
-       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-       xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
-       xmlns:aop=&quot;http://www.springframework.org/schema/aop&quot; 
-       xmlns:tx=&quot;http://www.springframework.org/schema/tx&quot;
-       xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans
-   http://www.springframework.org/schema/beans/spring-beans.xsd
-   http://www.springframework.org/schema/context
-   http://www.springframework.org/schema/context/spring-context.xsd
-   http://www.springframework.org/schema/aop
-   https://www.springframework.org/schema/aop/spring-aop.xsd 
-   http://www.springframework.org/schema/tx 
-   http://www.springframework.org/schema/tx/spring-tx.xsd&quot;&gt;
-
-    &lt;!-- 1.扫描service相关的bean --&gt;
-    &lt;context:component-scan base-package=&quot;com.totoroay.service&quot; /&gt;
-
-    &lt;!-- 2.BookServiceImpl注入到IOC容器中--&gt;
-    &lt;bean id=&quot;BookServiceImpl&quot; class=&quot;com.totoroay.service.serviceimpl.BookServiceImpl&quot;&gt;
-        &lt;property name=&quot;bookMapper&quot; ref=&quot;bookMapper&quot;/&gt;
-    &lt;/bean&gt;
-
-    &lt;!-- 3.配置事务管理器 --&gt;
-    &lt;bean id=&quot;transactionManager&quot; class=&quot;org.springframework.jdbc.datasource.DataSourceTransactionManager&quot;&gt;
-        &lt;!-- 注入数据库连接池 --&gt;
-        &lt;property name=&quot;dataSource&quot; ref=&quot;dataSource&quot; /&gt;
-    &lt;/bean&gt;
-
-    &lt;!--4.事务支持--&gt;
-    &lt;!--结合aop实现事务的织入--&gt;
-    &lt;!--配置事务通知--&gt;
-    &lt;!--&lt;tx:advice id=&quot;txAdvice&quot; transaction-manager=&quot;transactionManager&quot;&gt;
-        &lt;tx:attributes&gt;
-            &lt;tx:method name=&quot;add&quot; propagation=&quot;REQUIRED&quot;/&gt;
-            &lt;tx:method name=&quot;delete&quot; propagation=&quot;REQUIRED&quot;/&gt;
-            &lt;tx:method name=&quot;update&quot; propagation=&quot;REQUIRED&quot;/&gt;
-            &lt;tx:method name=&quot;query&quot; read-only=&quot;true&quot;/&gt;
-            &lt;tx:method name=&quot;*&quot; propagation=&quot;REQUIRED&quot;/&gt;
-        &lt;/tx:attributes&gt;
-    &lt;/tx:advice&gt;--&gt;
-
-    &lt;!--配置事务切入--&gt;
-    &lt;!--&lt;aop:config&gt;
-        &lt;aop:pointcut id=&quot;txPointCut&quot; expression=&quot;execution(* com.totoroay.mapper.*.*(..))&quot;/&gt;
-        &lt;aop:advisor advice-ref=&quot;txAdvice&quot; pointcut-ref=&quot;txPointCut&quot;/&gt;
-    &lt;/aop:config&gt;--&gt;
-&lt;/beans&gt;
-</code></pre>
-<h6 id="5-spring-mvcxml">5、spring-mvc.xml</h6>
-<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
-       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-       xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
-       xmlns:mvc=&quot;http://www.springframework.org/schema/mvc&quot;
-       xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans.xsd
-        http://www.springframework.org/schema/context
-        http://www.springframework.org/schema/context/spring-context.xsd
-        http://www.springframework.org/schema/mvc
-        https://www.springframework.org/schema/mvc/spring-mvc.xsd&quot;&gt;
-
-    &lt;!-- 配置SpringMVC --&gt;
-    &lt;!-- 1.开启SpringMVC注解驱动 --&gt;
-    &lt;mvc:annotation-driven /&gt;
-    &lt;!-- 2.静态资源默认servlet配置--&gt;
-    &lt;mvc:default-servlet-handler/&gt;
-
-    &lt;!-- 3.配置jsp 显示ViewResolver视图解析器 --&gt;
-    &lt;bean class=&quot;org.springframework.web.servlet.view.InternalResourceViewResolver&quot;&gt;
-        &lt;property name=&quot;viewClass&quot; value=&quot;org.springframework.web.servlet.view.JstlView&quot; /&gt;
-        &lt;property name=&quot;prefix&quot; value=&quot;/WEB-INF/jsp/&quot; /&gt;
-        &lt;property name=&quot;suffix&quot; value=&quot;.jsp&quot; /&gt;
-    &lt;/bean&gt;
-
-    &lt;!-- 4.扫描web相关的bean --&gt;
-    &lt;context:component-scan base-package=&quot;com.totoroay.controller&quot; /&gt;
-
-&lt;/beans&gt;
-</code></pre>
-<h6 id="6-applicationcontextxml">6、applicationContext.xml</h6>
-<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
-       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-       xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans
-       http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&gt;
-
-    &lt;import resource=&quot;spring-dao.xml&quot;/&gt;
-    &lt;import resource=&quot;spring-service.xml&quot;/&gt;
-    &lt;import resource=&quot;spring-mvc.xml&quot;/&gt;
-&lt;/beans&gt;
-</code></pre>
-<h6 id="7-webxml">7、web.xml</h6>
-<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;web-app xmlns=&quot;http://xmlns.jcp.org/xml/ns/javaee&quot;
-         xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-         xsi:schemaLocation=&quot;http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd&quot;
-         version=&quot;4.0&quot;&gt;
-
-    &lt;!--DispatcherServlet--&gt;
-    &lt;servlet&gt;
-        &lt;servlet-name&gt;DispatcherServlet&lt;/servlet-name&gt;
-        &lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;
-        &lt;init-param&gt;
-            &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;
-            &lt;!--一定要注意:我们这里加载的是总的配置文件！--&gt;
-            &lt;param-value&gt;classpath:applicationContext.xml&lt;/param-value&gt;
-        &lt;/init-param&gt;
-        &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
-    &lt;/servlet&gt;
-    &lt;servlet-mapping&gt;
-        &lt;servlet-name&gt;DispatcherServlet&lt;/servlet-name&gt;
-        &lt;url-pattern&gt;/&lt;/url-pattern&gt;
-    &lt;/servlet-mapping&gt;
-
-    &lt;!--encodingFilter--&gt;
-    &lt;filter&gt;
-        &lt;filter-name&gt;encodingFilter&lt;/filter-name&gt;
-        &lt;filter-class&gt;
-            org.springframework.web.filter.CharacterEncodingFilter
-        &lt;/filter-class&gt;
-        &lt;init-param&gt;
-            &lt;param-name&gt;encoding&lt;/param-name&gt;
-            &lt;param-value&gt;utf-8&lt;/param-value&gt;
-        &lt;/init-param&gt;
-    &lt;/filter&gt;
-    &lt;filter-mapping&gt;
-        &lt;filter-name&gt;encodingFilter&lt;/filter-name&gt;
-        &lt;url-pattern&gt;/*&lt;/url-pattern&gt;
-    &lt;/filter-mapping&gt;
-
-    &lt;!--Session过期时间--&gt;
-    &lt;session-config&gt;
-        &lt;session-timeout&gt;15&lt;/session-timeout&gt;
-    &lt;/session-config&gt;
-&lt;/web-app&gt;
-</code></pre>
-<h2 id="后端代码">后端代码</h2>
-<h6 id="1-实体类books">1、实体类：Books</h6>
-<pre><code class="language-java">package com.totoroay.pojo;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class Books {
-    private int bookID;
-    private String bookName;
-    private int bookCounts;
-    private String detail;
-}
-</code></pre>
-<h6 id="2-mapper接口bookmapper">2、mapper接口：BookMapper</h6>
-<pre><code class="language-java">package com.totoroay.mapper;
-
-import com.totoroay.pojo.Books;
-import org.apache.ibatis.annotations.Param;
-
-import java.util.List;
-
-public interface BookMapper {
-    //增加一个Book
-    int addBook(Books book);
-
-    //根据id删除一个Book
-    int deleteBookById(@Param(&quot;bookID&quot;) int id);
-
-    //更新Book
-    int updateBook(Books books);
-
-    //根据id查询,返回一个Book
-    Books queryBookById(@Param(&quot;bookID&quot;) int id);
-
-    //查询全部Book,返回list集合
-    List&lt;Books&gt; queryAllBook();
-
-    //根据书名查询书籍
-    Books queryBookByName(@Param(&quot;bookName&quot;) String bookName);
-}
-
-</code></pre>
-<h6 id="3-注册bookmapper">3、注册BookMapper</h6>
-<ul>
-<li>在mybatis-config.xml中注册</li>
-</ul>
-<h6 id="4-bookservice接口">4、BookService接口</h6>
-<pre><code class="language-java">package com.totoroay.service;
-
-import com.totoroay.pojo.Books;
-import org.apache.ibatis.annotations.Param;
-
-import java.util.List;
-
-public interface BookService {
-    // 增加一个Book
-    int addBook(Books book);
-    // 根据id删除一个Book
-    int deleteBookById(int id);
-    // 更新Book
-    int updateBook(Books books);
-    // 根据id查询,返回一个Book
-    Books queryBookById(int id);
-    // 查询全部Book,返回list集合
-    List&lt;Books&gt; queryAllBook();
-    // 根据书名查询一本书
-    Books queryBookByName(String bookName);
-}
-</code></pre>
-<h6 id="5-bookservice实现类">5、BookService实现类</h6>
-<pre><code class="language-java">package com.totoroay.service.serviceimpl;
-
-import com.totoroay.mapper.BookMapper;
-import com.totoroay.pojo.Books;
-import com.totoroay.service.BookService;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-@Service
-public class BookServiceImpl implements BookService {
-
-    //调用dao层的操作，设置一个set接口，方便Spring管理
-    private BookMapper bookMapper;
-
-    public void setBookMapper(BookMapper bookMapper) {
-        this.bookMapper = bookMapper;
-    }
-
-    public int addBook(Books book) {
-        return bookMapper.addBook(book);
-    }
-
-    public int deleteBookById(int id) {
-        return bookMapper.deleteBookById(id);
-    }
-
-    public int updateBook(Books books) {
-        return bookMapper.updateBook(books);
-    }
-
-    public Books queryBookById(int id) {
-        return bookMapper.queryBookById(id);
-    }
-
-    public List&lt;Books&gt; queryAllBook() {
-        return bookMapper.queryAllBook();
-    }
-
-    public Books queryBookByName(String bookName) {
-        return bookMapper.queryBookByName(bookName);
-    }
-}
-
-</code></pre>
-<h6 id="6-bookcontroller">6、BookController</h6>
-<pre><code class="language-java">package com.totoroay.controller;
-
-import com.totoroay.pojo.Books;
-import com.totoroay.service.BookService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.ArrayList;
-import java.util.List;
-
-@Controller
-@RequestMapping(&quot;/book&quot;)
-public class BookController {
-    // controller调service
-    @Autowired
-    @Qualifier(&quot;BookServiceImpl&quot;)
-    private BookService bookService;
-
-    // 查询全部书籍
-    @RequestMapping(&quot;/allBook&quot;)
-    public String list(Model model) {
-        List&lt;Books&gt; list = bookService.queryAllBook();
-        model.addAttribute(&quot;list&quot;, list);
-        return &quot;allBook&quot;;
-    }
-
-    // 跳转到增加书籍页面
-    @RequestMapping(&quot;/toAddBook&quot;)
-    public String toAddBook(){
-        return &quot;addBook&quot;;
-    }
-
-    // 添加书籍的请求
-    @RequestMapping(&quot;/addBook&quot;)
-    public String addBook(Books books){
-        bookService.addBook(books);
-        return &quot;redirect:/book/allBook&quot;;
-    }
-
-    // 跳转到修改书籍页面
-    @RequestMapping(&quot;/toUpdateBook&quot;)
-    public String toUpdateBook(int id, Model model){
-        Books books = bookService.queryBookById(id);
-        model.addAttribute(&quot;book&quot;, books);
-        return &quot;updateBook&quot;;
-    }
-
-    // 修改书籍的请求
-    @RequestMapping(&quot;/updateBook&quot;)
-    public String updateBook(Books books, Model model){
-        int i = bookService.updateBook(books);
-        if (i &gt; 0) {
-            System.out.println(&quot;修改成功&quot;+books);
-        }
-        return &quot;redirect:/book/allBook&quot;;
-    }
-
-    // 删除书籍
-    @RequestMapping(&quot;/deleteBook/{bookID}&quot;)
-    public String deleteBook(@PathVariable(&quot;bookID&quot;) int id){
-        bookService.deleteBookById(id);
-        return &quot;redirect:/book/allBook&quot;;
-    }
-
-    // 查询书籍
-    @RequestMapping(&quot;/queryBookName&quot;)
-    public String queryBookName(String queryBookName, Model model){
-        Books books = bookService.queryBookByName(queryBookName);
-        List&lt;Books&gt; list = new ArrayList&lt;Books&gt;();
-        list.add(books);
-        if (books==null){
-            list = bookService.queryAllBook();
-            model.addAttribute(&quot;msg&quot;, &quot;未查到&quot;);
-        }
-        model.addAttribute(&quot;list&quot;, list);
-        return &quot;allBook&quot;;
-    }
-}
-</code></pre>
-<h2 id="前端代码">前端代码</h2>
-<h6 id="1-indexjsp">1、index.jsp</h6>
-<pre><code>&lt;%--
-  Created by IntelliJ IDEA.
-  User: totoroay
-  Date: 2020/4/25
-  Time: 11:13
-  To change this template use File | Settings | File Templates.
---%&gt;
-&lt;%@ page language=&quot;java&quot; contentType=&quot;text/html; charset=UTF-8&quot; pageEncoding=&quot;UTF-8&quot; %&gt;
-&lt;!DOCTYPE HTML&gt;
-&lt;html&gt;
-&lt;head&gt;
-  &lt;title&gt;首页&lt;/title&gt;
-  &lt;style type=&quot;text/css&quot;&gt;
-    a {
-      text-decoration: none;
-      color: black;
-      font-size: 18px;
-    }
-    h3 {
-      width: 180px;
-      height: 38px;
-      margin: 100px auto;
-      text-align: center;
-      line-height: 38px;
-      background: deepskyblue;
-      border-radius: 4px;
-    }
-  &lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-
-&lt;h3&gt;
-  &lt;a href=&quot;${pageContext.request.contextPath}/book/allBook&quot;&gt;点击进入列表页&lt;/a&gt;
-&lt;/h3&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<h6 id="2-allbookjsp">2、allBook.jsp</h6>
-<pre><code class="language-java">&lt;%@ taglib prefix=&quot;c&quot; uri=&quot;http://java.sun.com/jsp/jstl/core&quot; %&gt;
-&lt;%@ page contentType=&quot;text/html;charset=UTF-8&quot; language=&quot;java&quot; %&gt;
-&lt;html&gt;
-&lt;head&gt;
-    &lt;title&gt;书籍列表&lt;/title&gt;
-    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
-    &lt;!-- 引入 Bootstrap --&gt;
-    &lt;link href=&quot;https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css&quot; rel=&quot;stylesheet&quot;&gt;
-&lt;/head&gt;
-&lt;body&gt;
-
-&lt;div class=&quot;container&quot;&gt;
-
-    &lt;div class=&quot;row clearfix&quot;&gt;
-        &lt;div class=&quot;col-md-12 column&quot;&gt;
-            &lt;div class=&quot;page-header&quot;&gt;
-                &lt;h1&gt;
-                    &lt;small&gt;书籍列表 —— 显示所有书籍&lt;/small&gt;
-                &lt;/h1&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-
-    &lt;div class=&quot;row&quot;&gt;
-        &lt;div class=&quot;col-md-4 column&quot;&gt;
-            &lt;a class=&quot;btn btn-primary&quot; href=&quot;${pageContext.request.contextPath}/book/toAddBook&quot;&gt;新增&lt;/a&gt;
-            &lt;a class=&quot;btn btn-primary&quot; href=&quot;${pageContext.request.contextPath}/book/allBook&quot;&gt;显示所有书籍&lt;/a&gt;
-        &lt;/div&gt;
-        &lt;div class=&quot;col-md-4 column&quot;&gt;
-            &lt;span style=&quot;color: red&quot;&gt;${msg}&lt;/span&gt;
-            &lt;%--查询书籍--%&gt;
-            &lt;form class=&quot;form-inline&quot; action=&quot;${pageContext.request.contextPath}/book/queryBookName&quot; method=&quot;post&quot; style=&quot;float: right&quot;&gt;
-                &lt;input type=&quot;text&quot; name=&quot;queryBookName&quot; class=&quot;form-control&quot; placeholder=&quot;请输入要查询的书籍名称&quot;&gt;
-                &lt;input type=&quot;submit&quot; value=&quot;查询&quot; class=&quot;btn btn-primary&quot;&gt;
-            &lt;/form&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-
-    &lt;div class=&quot;row clearfix&quot;&gt;
-        &lt;div class=&quot;col-md-12 column&quot;&gt;
-            &lt;table class=&quot;table table-hover table-striped&quot;&gt;
-                &lt;thead&gt;
-                &lt;tr&gt;
-                    &lt;th&gt;书籍编号&lt;/th&gt;
-                    &lt;th&gt;书籍名字&lt;/th&gt;
-                    &lt;th&gt;书籍数量&lt;/th&gt;
-                    &lt;th&gt;书籍详情&lt;/th&gt;
-                    &lt;th&gt;操作&lt;/th&gt;
-                &lt;/tr&gt;
-                &lt;/thead&gt;
-
-                &lt;tbody&gt;
-                &lt;c:forEach var=&quot;book&quot; items=&quot;${requestScope.get('list')}&quot;&gt;
-                    &lt;tr&gt;
-                        &lt;td&gt;${book.getBookID()}&lt;/td&gt;
-                        &lt;td&gt;${book.getBookName()}&lt;/td&gt;
-                        &lt;td&gt;${book.getBookCounts()}&lt;/td&gt;
-                        &lt;td&gt;${book.getDetail()}&lt;/td&gt;
-                        &lt;td&gt;
-                            &lt;a href=&quot;${pageContext.request.contextPath}/book/toUpdateBook?id=${book.bookID}&quot;&gt;修改&lt;/a&gt; |
-                            &lt;a href=&quot;${pageContext.request.contextPath}/book/deleteBook/${book.bookID}&quot;&gt;删除&lt;/a&gt;
-                        &lt;/td&gt;
-                    &lt;/tr&gt;
-                &lt;/c:forEach&gt;
-                &lt;/tbody&gt;
-            &lt;/table&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
-</code></pre>
-<h6 id="3-addbookjsp">3、addBook.jsp</h6>
-<pre><code class="language-java">&lt;%@ taglib prefix=&quot;c&quot; uri=&quot;http://java.sun.com/jsp/jstl/core&quot; %&gt;
-&lt;%@ page contentType=&quot;text/html;charset=UTF-8&quot; language=&quot;java&quot; %&gt;
-&lt;html&gt;
-&lt;head&gt;
-    &lt;title&gt;书籍列表&lt;/title&gt;
-    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
-    &lt;!-- 引入 Bootstrap --&gt;
-    &lt;link href=&quot;https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css&quot; rel=&quot;stylesheet&quot;&gt;
-&lt;/head&gt;
-&lt;body&gt;
-
-&lt;div class=&quot;container&quot;&gt;
-
-    &lt;div class=&quot;row clearfix&quot;&gt;
-        &lt;div class=&quot;col-md-12 column&quot;&gt;
-            &lt;div class=&quot;page-header&quot;&gt;
-                &lt;h1&gt;
-                    &lt;small&gt;书籍列表 —— 显示所有书籍&lt;/small&gt;
-                &lt;/h1&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-
-    &lt;div class=&quot;row&quot;&gt;
-        &lt;div class=&quot;col-md-4 column&quot;&gt;
-            &lt;a class=&quot;btn btn-primary&quot; href=&quot;${pageContext.request.contextPath}/book/toAddBook&quot;&gt;新增&lt;/a&gt;
-            &lt;a class=&quot;btn btn-primary&quot; href=&quot;${pageContext.request.contextPath}/book/allBook&quot;&gt;显示所有书籍&lt;/a&gt;
-        &lt;/div&gt;
-        &lt;div class=&quot;col-md-4 column&quot;&gt;
-            &lt;span style=&quot;color: red&quot;&gt;${msg}&lt;/span&gt;
-            &lt;%--查询书籍--%&gt;
-            &lt;form class=&quot;form-inline&quot; action=&quot;${pageContext.request.contextPath}/book/queryBookName&quot; method=&quot;post&quot; style=&quot;float: right&quot;&gt;
-                &lt;input type=&quot;text&quot; name=&quot;queryBookName&quot; class=&quot;form-control&quot; placeholder=&quot;请输入要查询的书籍名称&quot;&gt;
-                &lt;input type=&quot;submit&quot; value=&quot;查询&quot; class=&quot;btn btn-primary&quot;&gt;
-            &lt;/form&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-
-    &lt;div class=&quot;row clearfix&quot;&gt;
-        &lt;div class=&quot;col-md-12 column&quot;&gt;
-            &lt;table class=&quot;table table-hover table-striped&quot;&gt;
-                &lt;thead&gt;
-                &lt;tr&gt;
-                    &lt;th&gt;书籍编号&lt;/th&gt;
-                    &lt;th&gt;书籍名字&lt;/th&gt;
-                    &lt;th&gt;书籍数量&lt;/th&gt;
-                    &lt;th&gt;书籍详情&lt;/th&gt;
-                    &lt;th&gt;操作&lt;/th&gt;
-                &lt;/tr&gt;
-                &lt;/thead&gt;
-
-                &lt;tbody&gt;
-                &lt;c:forEach var=&quot;book&quot; items=&quot;${requestScope.get('list')}&quot;&gt;
-                    &lt;tr&gt;
-                        &lt;td&gt;${book.getBookID()}&lt;/td&gt;
-                        &lt;td&gt;${book.getBookName()}&lt;/td&gt;
-                        &lt;td&gt;${book.getBookCounts()}&lt;/td&gt;
-                        &lt;td&gt;${book.getDetail()}&lt;/td&gt;
-                        &lt;td&gt;
-                            &lt;a href=&quot;${pageContext.request.contextPath}/book/toUpdateBook?id=${book.bookID}&quot;&gt;修改&lt;/a&gt; |
-                            &lt;a href=&quot;${pageContext.request.contextPath}/book/deleteBook/${book.bookID}&quot;&gt;删除&lt;/a&gt;
-                        &lt;/td&gt;
-                    &lt;/tr&gt;
-                &lt;/c:forEach&gt;
-                &lt;/tbody&gt;
-            &lt;/table&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
-</code></pre>
-<h6 id="4-updatebookjsp">4、updateBook.jsp</h6>
-<pre><code class="language-java">&lt;%@ taglib prefix=&quot;c&quot; uri=&quot;http://java.sun.com/jsp/jstl/core&quot; %&gt;
-&lt;%@ page contentType=&quot;text/html;charset=UTF-8&quot; language=&quot;java&quot; %&gt;
-&lt;html&gt;
-&lt;head&gt;
-    &lt;title&gt;书籍列表&lt;/title&gt;
-    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
-    &lt;!-- 引入 Bootstrap --&gt;
-    &lt;link href=&quot;https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css&quot; rel=&quot;stylesheet&quot;&gt;
-&lt;/head&gt;
-&lt;body&gt;
-
-&lt;div class=&quot;container&quot;&gt;
-
-    &lt;div class=&quot;row clearfix&quot;&gt;
-        &lt;div class=&quot;col-md-12 column&quot;&gt;
-            &lt;div class=&quot;page-header&quot;&gt;
-                &lt;h1&gt;
-                    &lt;small&gt;书籍列表 —— 显示所有书籍&lt;/small&gt;
-                &lt;/h1&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-
-    &lt;div class=&quot;row&quot;&gt;
-        &lt;div class=&quot;col-md-4 column&quot;&gt;
-            &lt;a class=&quot;btn btn-primary&quot; href=&quot;${pageContext.request.contextPath}/book/toAddBook&quot;&gt;新增&lt;/a&gt;
-            &lt;a class=&quot;btn btn-primary&quot; href=&quot;${pageContext.request.contextPath}/book/allBook&quot;&gt;显示所有书籍&lt;/a&gt;
-        &lt;/div&gt;
-        &lt;div class=&quot;col-md-4 column&quot;&gt;
-            &lt;span style=&quot;color: red&quot;&gt;${msg}&lt;/span&gt;
-            &lt;%--查询书籍--%&gt;
-            &lt;form class=&quot;form-inline&quot; action=&quot;${pageContext.request.contextPath}/book/queryBookName&quot; method=&quot;post&quot; style=&quot;float: right&quot;&gt;
-                &lt;input type=&quot;text&quot; name=&quot;queryBookName&quot; class=&quot;form-control&quot; placeholder=&quot;请输入要查询的书籍名称&quot;&gt;
-                &lt;input type=&quot;submit&quot; value=&quot;查询&quot; class=&quot;btn btn-primary&quot;&gt;
-            &lt;/form&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-
-    &lt;div class=&quot;row clearfix&quot;&gt;
-        &lt;div class=&quot;col-md-12 column&quot;&gt;
-            &lt;table class=&quot;table table-hover table-striped&quot;&gt;
-                &lt;thead&gt;
-                &lt;tr&gt;
-                    &lt;th&gt;书籍编号&lt;/th&gt;
-                    &lt;th&gt;书籍名字&lt;/th&gt;
-                    &lt;th&gt;书籍数量&lt;/th&gt;
-                    &lt;th&gt;书籍详情&lt;/th&gt;
-                    &lt;th&gt;操作&lt;/th&gt;
-                &lt;/tr&gt;
-                &lt;/thead&gt;
-
-                &lt;tbody&gt;
-                &lt;c:forEach var=&quot;book&quot; items=&quot;${requestScope.get('list')}&quot;&gt;
-                    &lt;tr&gt;
-                        &lt;td&gt;${book.getBookID()}&lt;/td&gt;
-                        &lt;td&gt;${book.getBookName()}&lt;/td&gt;
-                        &lt;td&gt;${book.getBookCounts()}&lt;/td&gt;
-                        &lt;td&gt;${book.getDetail()}&lt;/td&gt;
-                        &lt;td&gt;
-                            &lt;a href=&quot;${pageContext.request.contextPath}/book/toUpdateBook?id=${book.bookID}&quot;&gt;修改&lt;/a&gt; |
-                            &lt;a href=&quot;${pageContext.request.contextPath}/book/deleteBook/${book.bookID}&quot;&gt;删除&lt;/a&gt;
-                        &lt;/td&gt;
-                    &lt;/tr&gt;
-                &lt;/c:forEach&gt;
-                &lt;/tbody&gt;
-            &lt;/table&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
 </code></pre>
 ]]></content>
     </entry>

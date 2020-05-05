@@ -33,7 +33,16 @@
             文章目录
           </p>
           <div class="toc-container hidden lg:block">
-            
+            <ul class="markdownIt-TOC">
+<li><a href="#%E5%BB%BA%E9%80%A0%E8%80%85%E6%A8%A1%E5%BC%8F">建造者模式</a><br>
+*<br>
+*<br>
+*<br>
+*<br>
+* <a href="#demo1">==demo1==</a><br>
+* <a href="#demo2">==demo2==</a></li>
+</ul>
+
           </div>
         </div>
       
@@ -78,71 +87,192 @@
 <div class="mask" onclick="closeMenu()">
 </div>
       <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
-        <h1 class="text-3xl font-bold lg:mt-16">单例模式</h1>
+        <h1 class="text-3xl font-bold lg:mt-16">建造者模式</h1>
         <div class="text-sm text-gray-700 lg:my-8">
-          2020-04-26 / 2 min read
+          2020-05-05 / 3 min read
         </div>
         
-          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://totoroay.github.io//post-images/dan-li-mo-shi.png" alt="">
+          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://totoroay.github.io//post-images/jian-zao-zhe-mo-shi.png" alt="">
         
         <div class="post-content yue">
-          <p><img src="https://totoroay.github.io//post-images/1587872393341.png" alt="" loading="lazy"><br>
-<img src="https://totoroay.github.io//post-images/1587872419615.png" alt="" loading="lazy"></p>
-<ul>
-<li></li>
-</ul>
-<pre><code class="language-java">// 饿汉式 缺点：空间上造成浪费
-public class Hungry {
+          <h1 id="建造者模式">建造者模式</h1>
+<p><img src="https://totoroay.github.io//post-images/1588672365938.png" alt="" loading="lazy"><br>
+<img src="https://totoroay.github.io//post-images/1588672372510.png" alt="" loading="lazy"></p>
+<h6 id="demo1"><mark>demo1</mark></h6>
+<pre><code class="language-java">package totoroay.builder.demo1;
+// 抽象的建造者：方法
+public abstract class Builder {
+    abstract void buildA();// 地基
+    abstract void buildB();// 钢筋工程
+    abstract void buildC();// 铺电线
+    abstract void buildD();// 粉刷
+
+    // 完工：得到产品
+    abstract Product getProduct();
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.builder.demo1;
+// 产品：房子
+public class Product {
+    private String buildA;// 地基
+    private String buildB;// 钢筋工程
+    private String buildC;// 铺电线
+    private String buildD;// 粉刷
+    
+    //get,set,toString方法自己补全
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.builder.demo1;
+// 具体的建造者：工人
+public class Worker extends Builder {
+    private Product product;
+
+    // 工人生产产品
+    public Worker() {
+        product = new Product();
+    }
+
+    @Override
+    void buildA() {
+        product.setBuildA(&quot;地基&quot;);
+        System.out.println(&quot;地基&quot;);
+    }
+
+    @Override
+    void buildB() {
+        product.setBuildB(&quot;钢筋工程&quot;);
+        System.out.println(&quot;钢筋工程&quot;);
+    }
+
+    @Override
+    void buildC() {
+        product.setBuildC(&quot;铺电线&quot;);
+        System.out.println(&quot;铺电线&quot;);
+    }
+
+    @Override
+    void buildD() {
+        product.setBuildD(&quot;粉刷&quot;);
+        System.out.println(&quot;粉刷&quot;);
+    }
+
+    @Override
+    Product getProduct() {
+        return product;
+    }
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.builder.demo1;
+// 指挥：核心。负责指挥构建一个工程，有它决定
+public class Director {
+    // 指挥具体的工人建房子
+    public Product builder(Builder builder){
+        builder.buildA();
+        builder.buildB();
+        builder.buildC();
+        builder.buildD();
+        return builder.getProduct();
+    }
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.builder.demo1;
+
+public class Test {
     public static void main(String[] args) {
-        User user = User.getUser();
-        for (int i = 0; i &lt; 1000000; i++) {
-            User u =User.getUser();
-            if (user != u){
-                System.out.println(&quot;产生了新的对象！&quot;);
-            }
-        }
-        System.out.println(&quot;end&quot;);
+        // 指挥
+        Director director = new Director();
+        // 指挥具体的工人完成产品
+        Product builder = director.builder(new Worker());
+        System.out.println(builder.toString());
+    }
+}
+</code></pre>
+<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1588672354974.png" alt="" loading="lazy"></figure>
+<h6 id="demo2"><mark>demo2</mark></h6>
+<pre><code class="language-java">package totoroay.builder.demo2;
+// 抽象的建造者：方法
+public abstract class Builder {
+    // 静态内部类方式
+    abstract Builder buildA(String msg);// 汉堡
+    abstract Builder buildB(String msg);// 可乐
+    abstract Builder buildC(String msg);// 薯条
+    abstract Builder buildD(String msg);// 甜品
+
+    // 完工：得到产品
+    abstract Product getProduct();
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.builder.demo2;
+// 产品：套餐
+public class Product {
+    private String buildA = &quot;汉堡&quot;;// 汉堡
+    private String buildB = &quot;可乐&quot;;// 可乐
+    private String buildC = &quot;薯条&quot;;// 薯条
+    private String buildD = &quot;甜品&quot;;// 甜品
+    
+    //get,set,toString方法自己补全
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.builder.demo2;
+// 具体的建造者
+public class Worker extends Builder {
+    private Product product;
+
+    public Worker(){
+        product = new Product();
+    }
+
+    @Override
+    Builder buildA(String msg) {
+        product.setBuildA(msg);
+        return this;
+    }
+
+    @Override
+    Builder buildB(String msg) {
+        product.setBuildB(msg);
+        return this;
+    }
+
+    @Override
+    Builder buildC(String msg) {
+        product.setBuildC(msg);
+        return this;
+    }
+
+    @Override
+    Builder buildD(String msg) {
+        product.setBuildD(msg);
+        return this;
+    }
+
+    @Override
+    Product getProduct() {
+        return product;
     }
 }
 
-class User {
-    // 1.私有化构造方法
-    private User(){
-        System.out.println();
-    }
-    // 2.定义一个静态类对象
-    private static User user = new User();// 空间浪费
-    // 3.提供一个方法，返回给调用方一个类对象
-    public static User getUser(){
-        return user;
-    }
+</code></pre>
+<pre><code class="language-java">package totoroay.builder.demo2;
 
-}
-</code></pre>
-<ul>
-<li>懒汉式 特点：类加载时没有生成单例，只有当第一次调用getStudent()方法时才创建单例</li>
-</ul>
-<pre><code class="language-java">// 懒汉式 缺点：造成性能上的损耗，多线程下可能不止一个对象
-//                              加锁解决（synchronized）
-public class Slacker {
+public class Test {
     public static void main(String[] args) {
-        Student student = Student.getStudent();
-        Student student1 = Student.getStudent();
-        System.out.println(student);
-        System.out.println(student1);
-    }
-}
-class Student{
-    private Student(){}
-    private static Student student;
-    public static synchronized Student getStudent(){
-        if (student==null){
-            student = new Student();// 性能损耗
-        }
-        return student;
+        // 服务员，默认套餐
+        Worker worker = new Worker();
+        Product product = worker.getProduct();
+        System.out.println(product.toString());
+
+        // 另一个服务员
+        Worker worker1 = new Worker();
+        // 链式编程
+        Product product1 = worker1.buildA(&quot;牛肉汉堡&quot;).buildB(&quot;大杯可乐&quot;)
+                .getProduct();
+        System.out.println(product1.toString());
     }
 }
 </code></pre>
+<figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1588672343175.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="3"><img src="https://totoroay.github.io//post-images/1588672337519.png" alt="" loading="lazy"></figure>
 
         </div>
 
@@ -159,21 +289,12 @@ class Student{
 
         <div class="flex justify-between py-8">
           
-            <div class="prev-post">
-              <a href="https://totoroay.github.io/post/yuan-xing-mo-shi/">
-                <h3 class="post-title">
-                  <i class="ri-arrow-left-line"></i>
-                  原型模式
-                </h3>
-              </a>
-            </div>
-          
 
           
             <div class="next-post">
-              <a href="https://totoroay.github.io/post/ssm-zheng-he/">
+              <a href="https://totoroay.github.io/post/springyi-lai-zhu-ru-di/">
                 <h3 class="post-title">
-                  SSM整合
+                  Spring：依赖注入（DI）
                   <i class="ri-arrow-right-line"></i>
                 </h3>
               </a>
