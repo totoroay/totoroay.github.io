@@ -1,0 +1,413 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>totoroay</title>
+<meta name="description" content="记录生活" />
+<link rel="shortcut icon" href="https://totoroay.github.io//favicon.ico?v=1588651930052">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+
+<link rel="stylesheet" href="https://totoroay.github.io//styles/main.css">
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main px-4 flex flex-col lg:flex-row">
+      <div id="sidebar" class="sidebar-wrapper lg:static lg:w-1/4">
+  <div class="lg:sticky top-0">
+    <div class="sidebar-content">
+      <div class="flex lg:block p-4 lg:px-0 items-center fixed lg:static lg:block top-0 right-0 left-0 bg-white z-50">
+        <i class="ri-menu-2-line lg:mt-4 text-2xl cursor-pointer animated fadeIn" onclick="openMenu()"></i>
+        <a href="https://totoroay.github.io/">
+          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://totoroay.github.io//images/avatar.png?v=1588651930052" alt="">
+        </a>
+        <h1 class="animated fadeInLeft lg:text-4xl font-extrabold lg:mt-8 mt-0 text-xl" style="animation-delay: 0.2s">totoroay</h1>
+      </div>
+      
+        <div class="animated fadeInLeft" style="animation-delay: 0.4s">
+          <p class="my-4 text-gray-600 font-light hidden lg:block">
+            文章目录
+          </p>
+          <div class="toc-container hidden lg:block">
+            <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#dependency-injection">Dependency Injection</a><br>
+*
+<ul>
+<li><a href="#singleton">Singleton</a></li>
+<li><a href="#prototype">Prototype</a></li>
+<li><a href="#request">Request</a></li>
+<li><a href="#session">Session</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      
+    </div>
+  </div>
+</div>
+
+<div class="menu-container">
+  <i class="ri-arrow-left-line text-2xl cursor-pointer animated fadeIn close-menu-btn" onclick="closeMenu()"></i>
+  <div>
+    
+      
+        <a href="/" class="menu" style="animation-delay: 0s">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu" style="animation-delay: 0.2s">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu" style="animation-delay: 0.4s">
+          标签（分类）
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu" style="animation-delay: 0.6000000000000001s">
+          关于博主
+        </a>
+      
+    
+  </div>
+  <div class="site-footer">
+    <div class="py-4 text-gray-700"></div>
+    <a class="rss" href="https://totoroay.github.io//atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+<div class="mask" onclick="closeMenu()">
+</div>
+      <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
+        <h1 class="text-3xl font-bold lg:mt-16">Spring：依赖注入（DI）</h1>
+        <div class="text-sm text-gray-700 lg:my-8">
+          2020-05-05 / 8 min read
+        </div>
+        
+          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://totoroay.github.io//post-images/springyi-lai-zhu-ru-di.jpg" alt="">
+        
+        <div class="post-content yue">
+          <h2 id="dependency-injection">Dependency Injection</h2>
+<blockquote>
+<p>概念</p>
+</blockquote>
+<ul>
+<li>依赖注入（Dependency Injection,DI）。</li>
+<li>依赖 : 指Bean对象的创建依赖于容器 . Bean对象的依赖资源 .</li>
+<li>注入 : 指Bean对象所依赖的资源 , 由容器来设置和装配</li>
+</ul>
+<blockquote>
+<p>构造器注入</p>
+</blockquote>
+<p>我们在之前的案例已经讲过了</p>
+<blockquote>
+<p>Set 注入 （重点）</p>
+</blockquote>
+<p>要求被注入的属性 , 必须有set方法 , set方法的方法名由set + 属性首字母大写 , 如果属性是boolean类型 , 没有set方法 , 是 is .</p>
+<p>测试pojo类 :</p>
+<p>Address.java</p>
+<pre><code class="language-java">package com.totoroay.pojo;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class Address {
+    private String address;
+}
+
+</code></pre>
+<p>Student.java</p>
+<pre><code class="language-java">package com.totoroay.pojo;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.*;
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class Student {
+    private String name;
+    private Address address;
+    private String[] books;
+    private List&lt;String&gt; hobbies;
+    private Map&lt;String,String&gt; card;
+    private Set&lt;String&gt; games;
+    private String wife;
+    private Properties info;
+}
+</code></pre>
+<p>beans.xml：<mark><strong>各种注入方式</strong></mark></p>
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+       xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&gt;
+    &lt;!--pojo，bean注入，注意点：这里的值是一个引用，ref--&gt;
+    &lt;bean id=&quot;address&quot; class=&quot;com.totoroay.pojo.Address&quot;&gt;
+        &lt;property name=&quot;address&quot; value=&quot;武汉&quot;/&gt;
+    &lt;/bean&gt;
+
+    &lt;bean id=&quot;student&quot; class=&quot;com.totoroay.pojo.Student&quot;&gt;
+        &lt;!--string，常量注入--&gt;
+        &lt;property name=&quot;name&quot; value=&quot;totoroay&quot;/&gt;
+        &lt;!--pojo，bean注入，注意点：这里的值是一个引用，ref--&gt;
+        &lt;property name=&quot;address&quot; ref=&quot;address&quot;/&gt;
+        &lt;!--array，数组注入--&gt;
+        &lt;property name=&quot;books&quot;&gt;
+            &lt;array&gt;
+                &lt;value&gt;java&lt;/value&gt;
+                &lt;value&gt;paython&lt;/value&gt;
+                &lt;value&gt;php&lt;/value&gt;
+            &lt;/array&gt;
+        &lt;/property&gt;
+        &lt;!--list，List注入--&gt;
+        &lt;property name=&quot;hobbies&quot;&gt;
+            &lt;list&gt;
+                &lt;value&gt;打游戏&lt;/value&gt;
+                &lt;value&gt;打篮球&lt;/value&gt;
+                &lt;value&gt;编程&lt;/value&gt;
+            &lt;/list&gt;
+        &lt;/property&gt;
+        &lt;!--map，Map注入--&gt;
+        &lt;property name=&quot;card&quot;&gt;
+            &lt;map&gt;
+                &lt;entry key=&quot;身份证&quot; value=&quot;14381983491084&quot;/&gt;
+                &lt;entry key=&quot;银行卡&quot; value=&quot;1231238798798798&quot;/&gt;
+            &lt;/map&gt;
+        &lt;/property&gt;
+        &lt;!--set--&gt;
+        &lt;property name=&quot;games&quot;&gt;
+            &lt;set&gt;
+                &lt;value&gt;lol&lt;/value&gt;
+                &lt;value&gt;coc&lt;/value&gt;
+                &lt;value&gt;coc&lt;/value&gt;
+            &lt;/set&gt;
+        &lt;/property&gt;
+        &lt;!--null，Null注入--&gt;
+        &lt;property name=&quot;wife&quot;&gt;
+            &lt;null/&gt;
+        &lt;/property&gt;
+        &lt;!--Properties注入--&gt;
+        &lt;property name=&quot;info&quot;&gt;
+            &lt;props&gt;
+                &lt;prop key=&quot;学号&quot;&gt;20178213718&lt;/prop&gt;
+                &lt;prop key=&quot;性别&quot;&gt;男&lt;/prop&gt;
+            &lt;/props&gt;
+        &lt;/property&gt;
+    &lt;/bean&gt;
+
+&lt;/beans&gt;
+</code></pre>
+<p>测试结果：</p>
+<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1588651878727.png" alt="" loading="lazy"></figure>
+<blockquote>
+<p>Bean的作用域</p>
+</blockquote>
+<p>在Spring中，那些组成应用程序的主体及由Spring IoC容器所管理的对象，被称之为bean。简单地讲，bean就是由IoC容器初始化、装配及管理的对象 .</p>
+<figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1588651855715.png" alt="" loading="lazy"></figure>
+<p>几种作用域中，request、session作用域仅在基于web的应用中使用（不必关心你所采用的是什么web应用框架），只能用在基于web的Spring ApplicationContext环境。</p>
+<h4 id="singleton">Singleton</h4>
+<p>当一个bean的作用域为Singleton，那么Spring IoC容器中只会存在一个共享的bean实例，并且所有对bean的请求，只要id与该bean定义相匹配，则只会返回bean的同一实例。Singleton是单例类型，就是在创建起容器时就同时自动创建了一个bean的对象，不管你是否使用，他都存在了，<mark>默认</mark>，每次获取到的对象都是同一个对象。注意，Singleton作用域是Spring中的缺省作用域。要在XML中将bean定义成singleton，可以这样配置：</p>
+<pre><code class="language-xml">&lt;bean id=&quot;user&quot; class=&quot;com.totoroay.pojo.User&quot; scope=&quot;singleton&quot;&gt;
+    &lt;property name=&quot;name&quot; value=&quot;张三&quot;/&gt;
+    &lt;property name=&quot;age&quot; value=&quot;33&quot;/&gt;
+&lt;/bean&gt;
+</code></pre>
+<p>测试：</p>
+<pre><code class="language-java">@Test
+public void test03(){
+    ApplicationContext context = new ClassPathXmlApplicationContext(&quot;userbeans.xml&quot;);
+    User user = context.getBean(&quot;user&quot;, User.class);
+    User user2 = context.getBean(&quot;user&quot;, User.class);
+    System.out.println(user==user2);
+}
+</code></pre>
+<h4 id="prototype">Prototype</h4>
+<p>当一个bean的作用域为Prototype，表示一个bean定义对应多个对象实例。Prototype作用域的bean会导致在每次对该bean请求（将其注入到另一个bean中，或者以程序的方式调用容器的getBean()方法）时都会创建一个新的bean实例。Prototype是原型类型，它在我们创建容器的时候并没有实例化，而是当我们获取bean的时候才会去创建一个对象，而且我们每次获取到的对象都不是同一个对象。根据经验，对有状态的bean应该使用prototype作用域，而对无状态的bean则应该使用singleton作用域。在XML中将bean定义成prototype，可以这样配置：</p>
+<pre><code class="language-xml"> &lt;bean id=&quot;user&quot; class=&quot;com.totoroay.pojo.User&quot; scope=&quot;prototype&quot;/&gt;
+</code></pre>
+<h4 id="request">Request</h4>
+<p>当一个bean的作用域为Request，表示在一次HTTP请求中，一个bean定义对应一个实例；即每个HTTP请求都会有各自的bean实例，它们依据某个bean定义创建而成。该作用域仅在基于web的Spring ApplicationContext情形下有效。考虑下面bean定义：</p>
+<pre><code class="language-xml"> &lt;bean id=&quot;loginAction&quot; class=cn.csdn.LoginAction&quot; scope=&quot;request&quot;/&gt;
+</code></pre>
+<p>针对每次HTTP请求，Spring容器会根据loginAction bean的定义创建一个全新的LoginAction bean实例，且该loginAction bean实例仅在当前HTTP request内有效，因此可以根据需要放心的更改所建实例的内部状态，而其他请求中根据loginAction bean定义创建的实例，将不会看到这些特定于某个请求的状态变化。当处理请求结束，request作用域的bean实例将被销毁。</p>
+<h4 id="session">Session</h4>
+<p>当一个bean的作用域为Session，表示在一个HTTP Session中，一个bean定义对应一个实例。该作用域仅在基于web的Spring ApplicationContext情形下有效。考虑下面bean定义：</p>
+<pre><code class="language-xml"> &lt;bean id=&quot;userPreferences&quot; class=&quot;com.foo.UserPreferences&quot; scope=&quot;session&quot;/&gt;
+</code></pre>
+<p>针对某个HTTP Session，Spring容器会根据userPreferences bean定义创建一个全新的userPreferences bean实例，且该userPreferences bean仅在当前HTTP Session内有效。与request作用域一样，可以根据需要放心的更改所创建实例的内部状态，而别的HTTP Session中根据userPreferences创建的实例，将不会看到这些特定于某个HTTP Session的状态变化。当HTTP Session最终被废弃的时候，在该HTTP Session作用域内的bean也会被废弃掉。</p>
+
+        </div>
+
+        
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://totoroay.github.io/tag/kKVRbcS80/">
+            <span class="flex-auto">Spring</span>
+          </a>
+        
+
+
+        <div class="flex justify-between py-8">
+          
+
+          
+            <div class="next-post">
+              <a href="https://totoroay.github.io/post/springboot03yaml-pei-zhi-zhu-ru/">
+                <h3 class="post-title">
+                  SpringBoot03：yaml配置注入
+                  <i class="ri-arrow-right-line"></i>
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '76af3abf5b345815d20f',
+    clientSecret: 'cd22dd44f3d5b861d2552cd4270bee0b3b1ad9cc',
+    repo: 'totoroay.github.io',
+    owner: 'totoroay',
+    admin: ['totoroay'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+      </div>
+    </div>
+
+    <script src="https://totoroay.github.io//media/prism.js"></script>  
+<script>
+
+Prism.highlightAll()
+let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+// This should probably be throttled.
+// Especially because it triggers during smooth scrolling.
+// https://lodash.com/docs/4.17.10#throttle
+// You could do like...
+// window.addEventListener("scroll", () => {
+//    _.throttle(doThatStuff, 100);
+// });
+// Only not doing it here to keep this Pen dependency-free.
+
+window.addEventListener("scroll", event => {
+  let fromTop = window.scrollY;
+
+  mainNavLinks.forEach((link, index) => {
+    let section = document.getElementById(decodeURI(link.hash).substring(1));
+    let nextSection = null
+    if (mainNavLinks[index + 1]) {
+      nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+    }
+    if (section.offsetTop <= fromTop) {
+      if (nextSection) {
+        if (nextSection.offsetTop > fromTop) {
+          link.classList.add("current");
+        } else {
+          link.classList.remove("current");    
+        }
+      } else {
+        link.classList.add("current");
+      }
+    } else {
+      link.classList.remove("current");
+    }
+  });
+});
+
+
+document.addEventListener("DOMContentLoaded", function() {
+  var lazyImages = [].slice.call(document.querySelectorAll(".post-feature-image.lazy"));
+
+  if ("IntersectionObserver" in window) {
+    let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          let lazyImage = entry.target
+          lazyImage.style.backgroundImage = `url(${lazyImage.dataset.bg})`
+          lazyImage.classList.remove("lazy")
+          lazyImageObserver.unobserve(lazyImage)
+        }
+      });
+    });
+
+    lazyImages.forEach(function(lazyImage) {
+      lazyImageObserver.observe(lazyImage)
+    })
+  } else {
+    // Possibly fall back to a more compatible method here
+  }
+});
+
+const menuContainer = document.querySelector('.menu-container')
+const menus = document.querySelectorAll('.menu-container .menu')
+const mask = document.querySelector('.mask')
+const contentWrapper = document.querySelector('.content-wrapper')
+const latestArticle = document.querySelector('.latest-article')
+const readMore = document.querySelector('.read-more')
+const indexPage = document.querySelector('.index-page')
+
+const isHome = location.pathname === '/'
+if (latestArticle) {
+  latestArticle.style.display = isHome ? 'block' : 'none'
+  readMore.style.display = isHome ? 'block' : 'none'
+  indexPage.style.display = isHome ? 'none' : 'block'
+}
+
+const openMenu = () => {
+  menuContainer.classList.add('open')
+  menus.forEach(menu => {
+    menu.classList.add('animated', 'fadeInLeft')
+  })
+  mask.classList.add('open')
+  contentWrapper.classList.add('is-second')
+}
+
+const closeMenu = () => {
+  menuContainer.classList.remove('open')
+  menus.forEach(menu => {
+    menu.classList.remove('animated', 'fadeInLeft')
+  })
+  mask.classList.remove('open')
+  contentWrapper.classList.remove('is-second')
+}
+</script>
+  
+  </body>
+</html>
