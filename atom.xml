@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://totoroay.github.io/</id>
     <title>totoroay</title>
-    <updated>2020-05-05T13:34:36.846Z</updated>
+    <updated>2020-05-06T09:39:15.245Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://totoroay.github.io/"/>
     <link rel="self" href="https://totoroay.github.io/atom.xml"/>
@@ -10,6 +10,104 @@
     <logo>https://totoroay.github.io/images/avatar.png</logo>
     <icon>https://totoroay.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, totoroay</rights>
+    <entry>
+        <title type="html"><![CDATA[适配器模式]]></title>
+        <id>https://totoroay.github.io/post/gua-pei-qi-mo-shi/</id>
+        <link href="https://totoroay.github.io/post/gua-pei-qi-mo-shi/">
+        </link>
+        <updated>2020-05-06T09:37:10.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="适配器模式">适配器模式</h1>
+<p><strong>结构型模式</strong></p>
+<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1588757927882.png" alt="" loading="lazy"></figure>
+<p><mark><strong>适配器模式</strong></mark></p>
+<figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1588757921508.png" alt="" loading="lazy"></figure>
+<p>主要角色：</p>
+<ul>
+<li>目标接口</li>
+<li>适配器类</li>
+<li>适配者类</li>
+</ul>
+<h2 id="继承实现">继承实现</h2>
+<pre><code class="language-java">package totoroay.adapter;
+// 被适配的类：网线
+public class Adapted {
+    public void request(){
+        System.out.println(&quot;连接网线上网&quot;);
+    }
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.adapter;
+// 客户端：电脑，想上网
+public class Computer {
+    public void net(){
+        // 上网的具体实现，找一个转接器
+    }
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.adapter;
+// 接口：转换器的抽象实现
+public interface NetToUsb {
+    // 处理请求，把网线插到转接器上
+    void handleRequest();
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.adapter;
+// 适配器类：转换器的具体实现
+// 类适配器：继承实现（不推荐使用）
+public class Adapter extends Adapted implements NetToUsb{
+    @Override
+    public void handleRequest() {
+        super.request();// 可以上网了
+    }
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.adapter;
+// 客户端：电脑，想上网
+public class Computer {
+    // 电脑需要连接转接器
+    public void net(NetToUsb adapter){
+        // 上网的具体实现，找一个转接器
+        adapter.handleRequest();
+    }
+
+    public static void main(String[] args) {
+        Computer computer = new Computer();
+        Adapted adapted = new Adapted();
+        Adapter adapter = new Adapter();
+        computer.net(adapter);
+    }
+}
+</code></pre>
+<h2 id="组合实现推荐使用">组合实现（推荐使用）</h2>
+<pre><code class="language-java">package totoroay.adapter;
+// 适配器类：转换器的具体实现
+// 对象适配器：组合实现（推荐使用）
+public class AdapterPlus implements NetToUsb{
+    private Adapted adapted;
+
+    public AdapterPlus(Adapted adapted){
+        this.adapted = adapted;
+    }
+    @Override
+    public void handleRequest() {
+        adapted.request();
+    }
+}
+</code></pre>
+<pre><code class="language-java">public static void main(String[] args) {
+        Computer computer = new Computer();
+        Adapted adapted = new Adapted();
+        Adapter adapter = new Adapter();
+        computer.net(adapter);
+		System.out.println(&quot;=================&quot;);
+    
+        AdapterPlus adapterPlus = new AdapterPlus(adapted);
+        computer.net(adapterPlus);
+}
+</code></pre>
+<figure data-type="image" tabindex="3"><img src="https://totoroay.github.io//post-images/1588757906285.png" alt="" loading="lazy"></figure>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[代理/静态代理-模式]]></title>
         <id>https://totoroay.github.io/post/dai-li-jing-tai-dai-li-mo-shi/</id>
@@ -1946,62 +2044,6 @@ public class Consumer {
 }
 </code></pre>
 <figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1587997407988.png" alt="" loading="lazy"></figure>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[原型模式]]></title>
-        <id>https://totoroay.github.io/post/yuan-xing-mo-shi/</id>
-        <link href="https://totoroay.github.io/post/yuan-xing-mo-shi/">
-        </link>
-        <updated>2020-04-26T03:44:12.000Z</updated>
-        <content type="html"><![CDATA[<p><img src="https://totoroay.github.io//post-images/1587872675351.png" alt="" loading="lazy"><br>
-<img src="https://totoroay.github.io//post-images/1587872743440.png" alt="" loading="lazy"></p>
-<pre><code class="language-java">// 潜克隆
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import java.util.Date;
-
-public class Prototype {
-    public static void main(String[] args) throws CloneNotSupportedException {
-        Date date = new Date();
-        video v = new video(&quot;原型模式&quot;,date);
-        video v1 =(video) v.clone();
-        System.out.println(v);
-        System.out.println(v1);
-        System.out.println(&quot;===================================&quot;);
-        date.setTime(1232131312);
-        System.out.println(v);
-        System.out.println(v1);
-    }
-}
-
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-class video implements Cloneable{
-    private String name;
-    private Date date;
-
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        return super.clone();
-    }
-}
-</code></pre>
-<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1587872749669.png" alt="" loading="lazy"></figure>
-<pre><code class="language-java">// 深克隆：改造clone()方法
-@Override
-    protected Object clone() throws CloneNotSupportedException {
-        Object obj = super.clone();
-        video v = (video) obj;
-        // 将对象的属性进行克隆
-        v.date = (Date) this.date.clone();
-        return obj;
-    }
-</code></pre>
-<p><img src="https://totoroay.github.io//post-images/1587872756815.png" alt="" loading="lazy"><br>
-<img src="https://totoroay.github.io//post-images/1587872763023.png" alt="" loading="lazy"></p>
 ]]></content>
     </entry>
 </feed>
