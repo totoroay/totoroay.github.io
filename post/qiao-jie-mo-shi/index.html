@@ -33,15 +33,7 @@
             文章目录
           </p>
           <div class="toc-container hidden lg:block">
-            <ul class="markdownIt-TOC">
-<li><a href="#%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F">适配器模式</a>
-<ul>
-<li><a href="#%E7%BB%A7%E6%89%BF%E5%AE%9E%E7%8E%B0">继承实现</a></li>
-<li><a href="#%E7%BB%84%E5%90%88%E5%AE%9E%E7%8E%B0%E6%8E%A8%E8%8D%90%E4%BD%BF%E7%94%A8">组合实现（推荐使用）</a></li>
-</ul>
-</li>
-</ul>
-
+            
           </div>
         </div>
       
@@ -86,104 +78,100 @@
 <div class="mask" onclick="closeMenu()">
 </div>
       <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
-        <h1 class="text-3xl font-bold lg:mt-16">适配器模式</h1>
+        <h1 class="text-3xl font-bold lg:mt-16">桥接模式</h1>
         <div class="text-sm text-gray-700 lg:my-8">
           2020-05-06 / 2 min read
         </div>
         
-          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://totoroay.github.io//post-images/gua-pei-qi-mo-shi.png" alt="">
+          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://totoroay.github.io//post-images/qiao-jie-mo-shi.png" alt="">
         
         <div class="post-content yue">
-          <h1 id="适配器模式">适配器模式</h1>
-<p><strong>结构型模式</strong></p>
-<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1588757927882.png" alt="" loading="lazy"></figure>
-<p><mark><strong>适配器模式</strong></mark></p>
-<figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1588757921508.png" alt="" loading="lazy"></figure>
-<p>主要角色：</p>
-<ul>
-<li>目标接口</li>
-<li>适配器类</li>
-<li>适配者类</li>
-</ul>
-<h2 id="继承实现">继承实现</h2>
-<pre><code class="language-java">package totoroay.adapter;
-// 被适配的类：网线
-public class Adapted {
-    public void request(){
-        System.out.println(&quot;连接网线上网&quot;);
-    }
+          <p><img src="https://totoroay.github.io//post-images/1588767488196.png" alt="" loading="lazy"><br>
+<strong><mark>实例分析</mark></strong></p>
+<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1588767482381.png" alt="" loading="lazy"></figure>
+<pre><code class="language-java">package totoroay.bridge;
+// 品牌
+public interface Brand {
+    void info();
 }
 </code></pre>
-<pre><code class="language-java">package totoroay.adapter;
-// 客户端：电脑，想上网
-public class Computer {
-    public void net(){
-        // 上网的具体实现，找一个转接器
-    }
-}
-</code></pre>
-<pre><code class="language-java">package totoroay.adapter;
-// 接口：转换器的抽象实现
-public interface NetToUsb {
-    // 处理请求，把网线插到转接器上
-    void handleRequest();
-}
-</code></pre>
-<pre><code class="language-java">package totoroay.adapter;
-// 适配器类：转换器的具体实现
-// 类适配器：继承实现（不推荐使用）
-public class Adapter extends Adapted implements NetToUsb{
+<pre><code class="language-java">package totoroay.bridge;
+// 苹果品牌
+public class Apple implements Brand {
     @Override
-    public void handleRequest() {
-        super.request();// 可以上网了
+    public void info() {
+        System.out.print(&quot;苹果&quot;);
     }
 }
 </code></pre>
-<pre><code class="language-java">package totoroay.adapter;
-// 客户端：电脑，想上网
-public class Computer {
-    // 电脑需要连接转接器
-    public void net(NetToUsb adapter){
-        // 上网的具体实现，找一个转接器
-        adapter.handleRequest();
+<pre><code class="language-java">package totoroay.bridge;
+// 联想品牌
+public class Lenovo implements Brand {
+    @Override
+    public void info() {
+        System.out.print(&quot;联想&quot;);
+    }
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.bridge;
+// 抽象的电脑类型类
+public abstract class Computer {
+    // 组合品牌
+    protected Brand brand;
+
+    public Computer(Brand brand) {
+        this.brand = brand;
     }
 
+    public void info(){
+        brand.info();
+    }
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.bridge;
+// 笔记本电脑
+public class Notebook extends Computer {
+    public Notebook(Brand brand) {
+        super(brand);
+    }
+
+    public void info(){
+        brand.info();
+        System.out.print(&quot;笔记本&quot;);
+    }
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.bridge;
+// 台式机
+public class Desktop extends Computer {
+    public Desktop(Brand brand) {
+        super(brand);
+    }
+
+    public void info(){
+        brand.info();
+        System.out.print(&quot;台式机&quot;);
+    }
+}
+
+</code></pre>
+<pre><code class="language-java">package totoroay.bridge;
+
+public class test {
     public static void main(String[] args) {
-        Computer computer = new Computer();
-        Adapted adapted = new Adapted();
-        Adapter adapter = new Adapter();
-        computer.net(adapter);
+        // 苹果笔记本
+        Notebook notebook = new Notebook(new Apple());
+        notebook.info();
+        System.out.println(&quot;\n&quot;);
+        // 联想台式机
+        Desktop desktop = new Desktop(new Lenovo());
+        desktop.info();
     }
 }
 </code></pre>
-<h2 id="组合实现推荐使用">组合实现（推荐使用）</h2>
-<pre><code class="language-java">package totoroay.adapter;
-// 适配器类：转换器的具体实现
-// 对象适配器：组合实现（推荐使用）
-public class AdapterPlus implements NetToUsb{
-    private Adapted adapted;
-
-    public AdapterPlus(Adapted adapted){
-        this.adapted = adapted;
-    }
-    @Override
-    public void handleRequest() {
-        adapted.request();
-    }
-}
-</code></pre>
-<pre><code class="language-java">public static void main(String[] args) {
-        Computer computer = new Computer();
-        Adapted adapted = new Adapted();
-        Adapter adapter = new Adapter();
-        computer.net(adapter);
-		System.out.println(&quot;=================&quot;);
-    
-        AdapterPlus adapterPlus = new AdapterPlus(adapted);
-        computer.net(adapterPlus);
-}
-</code></pre>
-<figure data-type="image" tabindex="3"><img src="https://totoroay.github.io//post-images/1588757906285.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1588767473029.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="3"><img src="https://totoroay.github.io//post-images/1588767468462.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="4"><img src="https://totoroay.github.io//post-images/1588767463245.png" alt="" loading="lazy"></figure>
 
         </div>
 
@@ -200,21 +188,12 @@ public class AdapterPlus implements NetToUsb{
 
         <div class="flex justify-between py-8">
           
-            <div class="prev-post">
-              <a href="https://totoroay.github.io/post/qiao-jie-mo-shi/">
-                <h3 class="post-title">
-                  <i class="ri-arrow-left-line"></i>
-                  桥接模式
-                </h3>
-              </a>
-            </div>
-          
 
           
             <div class="next-post">
-              <a href="https://totoroay.github.io/post/dai-li-jing-tai-dai-li-mo-shi/">
+              <a href="https://totoroay.github.io/post/gua-pei-qi-mo-shi/">
                 <h3 class="post-title">
-                  代理/静态代理-模式
+                  适配器模式
                   <i class="ri-arrow-right-line"></i>
                 </h3>
               </a>
