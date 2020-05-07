@@ -36,7 +36,8 @@
             <ul class="markdownIt-TOC">
 <li>
 <ul>
-<li><a href="#%E7%89%B9%E6%80%A7">特性👇</a></li>
+<li><a href="#jsr303%E6%95%B0%E6%8D%AE%E6%A0%A1%E9%AA%8C">JSR303数据校验</a></li>
+<li><a href="#%E5%A4%9A%E7%8E%AF%E5%A2%83%E5%88%87%E6%8D%A2">多环境切换</a></li>
 </ul>
 </li>
 </ul>
@@ -85,57 +86,150 @@
 <div class="mask" onclick="closeMenu()">
 </div>
       <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
-        <h1 class="text-3xl font-bold lg:mt-16">Hello Gridea</h1>
+        <h1 class="text-3xl font-bold lg:mt-16">SpringBoot04：JSR303数据校验及多环境切换</h1>
         <div class="text-sm text-gray-700 lg:my-8">
-          2018-12-12 / 2 min read
+          2020-05-07 / 5 min read
         </div>
         
-          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://totoroay.github.io//post-images/hello-gridea.png" alt="">
+          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://totoroay.github.io//post-images/springboot04jsr303-shu-ju-xiao-yan-ji-duo-huan-jing-qie-huan.jpg" alt="">
         
         <div class="post-content yue">
-          <p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
-✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
-<!-- more -->
-<p><a href="https://github.com/getgridea/gridea">Github</a><br>
-<a href="https://gridea.dev/">Gridea 主页</a><br>
-<a href="http://fehey.com/">示例网站</a></p>
-<h2 id="特性">特性👇</h2>
-<p>📝  你可以使用最酷的 <strong>Markdown</strong> 语法，进行快速创作</p>
-<p>🌉  你可以给文章配上精美的封面图和在文章任意位置插入图片</p>
-<p>🏷️  你可以对文章进行标签分组</p>
-<p>📋  你可以自定义菜单，甚至可以创建外部链接菜单</p>
-<p>💻  你可以在 <strong>Windows</strong>，<strong>MacOS</strong> 或 <strong>Linux</strong> 设备上使用此客户端</p>
-<p>🌎  你可以使用 <strong>𝖦𝗂𝗍𝗁𝗎𝖻 𝖯𝖺𝗀𝖾𝗌</strong> 或 <strong>Coding Pages</strong> 向世界展示，未来将支持更多平台</p>
-<p>💬  你可以进行简单的配置，接入 <a href="https://github.com/gitalk/gitalk">Gitalk</a> 或 <a href="https://github.com/SukkaW/DisqusJS">DisqusJS</a> 评论系统</p>
-<p>🇬🇧  你可以使用<strong>中文简体</strong>或<strong>英语</strong></p>
-<p>🌁  你可以任意使用应用内默认主题或任意第三方主题，强大的主题自定义能力</p>
-<p>🖥  你可以自定义源文件夹，利用 OneDrive、百度网盘、iCloud、Dropbox 等进行多设备同步</p>
-<p>🌱 当然 <strong>Gridea</strong> 还很年轻，有很多不足，但请相信，它会不停向前 🏃</p>
-<p>未来，它一定会成为你离不开的伙伴</p>
-<p>尽情发挥你的才华吧！</p>
-<p>😘 Enjoy~</p>
+          <h2 id="jsr303数据校验">JSR303数据校验</h2>
+<p>Springboot中可以用@validated来校验数据，如果数据异常则会统一抛出异常，方便异常中心统一处理。我们这里来写个注解让我们的name只能支持Email格式；</p>
+<pre><code class="language-java">@Component // 注册bean
+@ConfigurationProperties(prefix = &quot;person&quot;)
+@Validated  // 数据校验
+public class Person {
+
+    @Email(message=&quot;邮箱格式错误&quot;) // name必须是邮箱格式
+    private String name;
+    // 后面自行补全
+}
+</code></pre>
+<p>运行结果 ：default message [不是一个合法的电子邮件地址];</p>
+<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1588830441091.png" alt="" loading="lazy"></figure>
+<p><strong>使用数据校验，可以保证数据的正确性；</strong></p>
+<blockquote>
+<p>常见参数</p>
+</blockquote>
+<pre><code class="language-yaml">@NotNull(message=&quot;名字不能为空&quot;)
+private String userName;
+@Max(value=120,message=&quot;年龄最大不能查过120&quot;)
+private int age;
+@Email(message=&quot;邮箱格式错误&quot;)
+private String email;
+
+空检查
+@Null       验证对象是否为null
+@NotNull    验证对象是否不为null, 无法查检长度为0的字符串
+@NotBlank   检查约束字符串是不是Null还有被Trim的长度是否大于0,只对字符串,且会去掉前后空格.
+@NotEmpty   检查约束元素是否为NULL或者是EMPTY.
+    
+Booelan检查
+@AssertTrue     验证 Boolean 对象是否为 true  
+@AssertFalse    验证 Boolean 对象是否为 false  
+    
+长度检查
+@Size(min=, max=) 验证对象（Array,Collection,Map,String）长度是否在给定的范围之内  
+@Length(min=, max=) string is between min and max included.
+
+日期检查
+@Past       验证 Date 和 Calendar 对象是否在当前时间之前  
+@Future     验证 Date 和 Calendar 对象是否在当前时间之后  
+@Pattern    验证 String 对象是否符合正则表达式的规则
+    
+.......等等
+除此以外，我们还可以自定义一些数据校验规则
+</code></pre>
+<h2 id="多环境切换">多环境切换</h2>
+<p>profile是Spring对不同环境提供不同配置功能的支持，可以通过激活不同的环境版本，实现快速切换环境；</p>
+<blockquote>
+<p>多配置文件</p>
+</blockquote>
+<p>我们在主配置文件编写的时候，文件名可以是 application-{profile}.properties/yml , 用来指定多个环境版本；</p>
+<p><strong>例如：</strong></p>
+<p>application-test.properties 代表测试环境配置</p>
+<p>application-dev.properties 代表开发环境配置</p>
+<p>但是Springboot并不会直接启动这些配置文件，它<strong>默认使用application.properties主配置文件</strong>；</p>
+<p>我们需要通过一个配置来选择需要激活的环境：</p>
+<pre><code>#比如在配置文件中指定使用dev环境，我们可以通过设置不同的端口号进行测试；
+#我们启动SpringBoot，就可以看到已经切换到dev下的配置了；
+spring.profiles.active=dev
+</code></pre>
+<blockquote>
+<p>yaml的多文档块</p>
+</blockquote>
+<p>和properties配置文件中一样，但是使用yml去实现不需要创建多个配置文件，更加方便了 !</p>
+<pre><code class="language-yaml">server:
+  port: 8081
+#选择要激活那个环境块
+spring:
+  profiles:
+    active: dev
+
+---
+server:
+  port: 8083
+spring:
+  profiles: dev #配置环境的名称
+
+
+---
+
+server:
+  port: 8084
+spring:
+  profiles: test #配置环境的名称
+</code></pre>
+<p><strong>注意：如果yml和properties同时都配置了端口，并且没有激活其他环境 ， 默认会使用properties配置文件的！</strong></p>
+<blockquote>
+<p>配置文件加载位置</p>
+</blockquote>
+<p><strong>外部加载配置文件的方式十分多，我们选择最常用的即可，在开发的资源文件中进行配置！</strong></p>
+<p>官方外部配置文件说明参考文档</p>
+<figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1588830456817.png" alt="" loading="lazy"></figure>
+<p>springboot 启动会扫描以下位置的application.properties或者application.yml文件作为Spring boot的默认配置文件：</p>
+<pre><code>优先级1：项目路径下的config文件夹配置文件
+优先级2：项目路径下配置文件
+优先级3：资源路径下的config文件夹配置文件
+优先级4：资源路径下配置文件
+</code></pre>
+<p>优先级由高到底，高优先级的配置会覆盖低优先级的配置；</p>
+<p><strong>SpringBoot会从这四个位置全部加载主配置文件；互补配置；</strong></p>
+<p>我们在最低级的配置文件中设置一个项目访问路径的配置来测试互补问题；</p>
+<pre><code class="language-yaml">#配置项目的访问路径
+server.servlet.context-path=/totoroay
+</code></pre>
+<blockquote>
+<p>拓展，运维小技巧</p>
+</blockquote>
+<p>指定位置加载配置文件</p>
+<p>我们还可以通过spring.config.location来改变默认的配置文件位置</p>
+<p>项目打包好以后，我们可以使用命令行参数的形式，启动项目的时候来指定配置文件的新位置；这种情况，一般是后期运维做的多，相同配置，外部指定的配置文件优先级最高</p>
+<pre><code>java -jar spring-boot-config.jar --spring.config.location=F:/application.properties
+</code></pre>
 
         </div>
 
         
-          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://totoroay.github.io/tag/p6q8IfADR/">
-            <span class="flex-auto">Gridea</span>
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://totoroay.github.io/tag/LkiY-qT6m/">
+            <span class="flex-auto">SpringBoot</span>
           </a>
         
 
 
         <div class="flex justify-between py-8">
           
-            <div class="prev-post">
-              <a href="https://totoroay.github.io/post/mybatis-bi-ji/">
+
+          
+            <div class="next-post">
+              <a href="https://totoroay.github.io/post/qiao-jie-mo-shi/">
                 <h3 class="post-title">
-                  <i class="ri-arrow-left-line"></i>
-                  Mybatis笔记
+                  桥接模式
+                  <i class="ri-arrow-right-line"></i>
                 </h3>
               </a>
             </div>
-          
-
           
         </div>
 
