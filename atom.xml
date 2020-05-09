@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://totoroay.github.io/</id>
     <title>totoroay</title>
-    <updated>2020-05-08T09:37:41.600Z</updated>
+    <updated>2020-05-09T04:21:12.240Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://totoroay.github.io/"/>
     <link rel="self" href="https://totoroay.github.io/atom.xml"/>
@@ -10,6 +10,37 @@
     <logo>https://totoroay.github.io/images/avatar.png</logo>
     <icon>https://totoroay.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, totoroay</rights>
+    <entry>
+        <title type="html"><![CDATA[Ngork内网穿透]]></title>
+        <id>https://totoroay.github.io/post/ngork-nei-wang-chuan-tou/</id>
+        <link href="https://totoroay.github.io/post/ngork-nei-wang-chuan-tou/">
+        </link>
+        <updated>2020-05-09T02:33:15.000Z</updated>
+        <content type="html"><![CDATA[<p>1、到官网注册</p>
+<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1588997942816.png" alt="" loading="lazy"></figure>
+<p>2、注册成功后开通隧道</p>
+<figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1588997949246.png" alt="" loading="lazy"></figure>
+<p>3、填写相关信息</p>
+<figure data-type="image" tabindex="3"><img src="https://totoroay.github.io//post-images/1588997954532.png" alt="" loading="lazy"></figure>
+<p>4、选择对应的版本，下载解压启动工具</p>
+<figure data-type="image" tabindex="4"><img src="https://totoroay.github.io//post-images/1588997960465.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="5"><img src="https://totoroay.github.io//post-images/1588997967933.png" alt="" loading="lazy"></figure>
+<p>5、填写隧道id并回车</p>
+<figure data-type="image" tabindex="6"><img src="https://totoroay.github.io//post-images/1588997979308.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="7"><img src="https://totoroay.github.io//post-images/1588997988830.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="8"><img src="https://totoroay.github.io//post-images/1588997996995.png" alt="" loading="lazy"></figure>
+<p>6、访问</p>
+<ul>
+<li>PC端启动项目后</li>
+</ul>
+<figure data-type="image" tabindex="9"><img src="https://totoroay.github.io//post-images/1588998006236.png" alt="" loading="lazy"></figure>
+<ul>
+<li>手机访问</li>
+</ul>
+<figure data-type="image" tabindex="10"><img src="https://totoroay.github.io//post-images/1588998018034.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="11"><img src="https://totoroay.github.io//post-images/1588998024505.jpg" alt="" loading="lazy"></figure>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Spring：自动装配及使用注解开发]]></title>
         <id>https://totoroay.github.io/post/springzi-dong-zhuang-pei-ji-shi-yong-zhu-jie-kai-fa/</id>
@@ -1579,309 +1610,6 @@ public void test03(){
 <pre><code class="language-xml"> &lt;bean id=&quot;userPreferences&quot; class=&quot;com.foo.UserPreferences&quot; scope=&quot;session&quot;/&gt;
 </code></pre>
 <p>针对某个HTTP Session，Spring容器会根据userPreferences bean定义创建一个全新的userPreferences bean实例，且该userPreferences bean仅在当前HTTP Session内有效。与request作用域一样，可以根据需要放心的更改所创建实例的内部状态，而别的HTTP Session中根据userPreferences创建的实例，将不会看到这些特定于某个HTTP Session的状态变化。当HTTP Session最终被废弃的时候，在该HTTP Session作用域内的bean也会被废弃掉。</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[SpringBoot03：yaml配置注入]]></title>
-        <id>https://totoroay.github.io/post/springboot03yaml-pei-zhi-zhu-ru/</id>
-        <link href="https://totoroay.github.io/post/springboot03yaml-pei-zhi-zhu-ru/">
-        </link>
-        <updated>2020-05-04T12:12:40.000Z</updated>
-        <content type="html"><![CDATA[<h3 id="配置文件">配置文件</h3>
-<p>SpringBoot使用一个全局的配置文件 ， 配置文件名称是固定的</p>
-<ul>
-<li>
-<p>application.properties</p>
-</li>
-<li>
-<ul>
-<li>语法结构 ：key=value</li>
-</ul>
-</li>
-<li>
-<p>application.yml</p>
-</li>
-<li>
-<ul>
-<li>语法结构 ：key：空格 value</li>
-</ul>
-</li>
-</ul>
-<p>**配置文件的作用 ：**修改SpringBoot自动配置的默认值，因为SpringBoot在底层都给我们自动配置好了；</p>
-<p>比如我们可以在配置文件中修改Tomcat 默认启动的端口号！测试一下！</p>
-<pre><code class="language-properties">server.port=8081
-</code></pre>
-<h3 id="yaml概述">yaml概述</h3>
-<p>YAML是 &quot;YAML Ain't a Markup Language&quot; （YAML不是一种标记语言）的递归缩写。在开发的这种语言时，YAML 的意思其实是：&quot;Yet Another Markup Language&quot;（仍是一种标记语言）</p>
-<p><strong>这种语言以数据<strong><strong>作</strong></strong>为中心，而不是以标记语言为重点！</strong></p>
-<p>以前的配置文件，大多数都是使用xml来配置；比如一个简单的端口配置，我们来对比下yaml和xml</p>
-<p>传统xml配置：</p>
-<pre><code class="language-xml">&lt;server&gt;    
-    &lt;port&gt;8081&lt;port&gt;
-&lt;/server&gt;
-</code></pre>
-<p>yaml配置：</p>
-<pre><code class="language-yaml">server：  prot: 8080
-</code></pre>
-<h3 id="yaml基础语法">yaml基础语法</h3>
-<p>说明：语法要求严格！</p>
-<p>1、空格不能省略</p>
-<p>2、以缩进来控制层级关系，只要是左边对齐的一列数据都是同一个层级的。</p>
-<p>3、属性和值的大小写都是十分敏感的。</p>
-<p><strong>字面量：普通的值  [ 数字，布尔值，字符串  ]</strong></p>
-<p>字面量直接写在后面就可以 ， 字符串默认不用加上双引号或者单引号；</p>
-<pre><code class="language-yaml">k: v
-</code></pre>
-<p>注意：</p>
-<ul>
-<li>
-<p>“ ” 双引号，不会转义字符串里面的特殊字符 ， 特殊字符会作为本身想表示的意思；</p>
-<p>比如 ：name: &quot;totoroay\n ayoung&quot;  输出 ：totoroay 换行  ayoung</p>
-</li>
-<li>
-<p>'' 单引号，会转义特殊字符 ， 特殊字符最终会变成和普通字符一样输出</p>
-<p>比如 ：name: ‘totoroay\n ayoung’  输出 ：totoroay  \n  ayoung</p>
-</li>
-</ul>
-<p><strong>对象、Map（键值对）</strong></p>
-<pre><code class="language-yaml">#对象、Map格式k:     v1:    v2:
-</code></pre>
-<p>在下一行来写对象的属性和值得关系，注意缩进；比如：</p>
-<pre><code class="language-yaml">student:
-	name: totoroay    age: 99
-</code></pre>
-<p>行内写法</p>
-<pre><code class="language-yaml">student: {name: totoroay,age: 99}
-</code></pre>
-<p><strong>数组（ List、set ）</strong></p>
-<p>用 - 值表示数组中的一个元素,比如：</p>
-<pre><code class="language-yaml">pets:
- - cat
- - dog
- - pig
-</code></pre>
-<p>行内写法</p>
-<pre><code class="language-yaml">pets: [cat,dog,pig]
-</code></pre>
-<p><strong>修改SpringBoot的默认端口号</strong></p>
-<p>配置文件中添加，端口号的参数，就可以切换端口；</p>
-<pre><code class="language-yaml">server:  
-  port: 8081
-</code></pre>
-<h3 id="yaml注入配置文件">yaml注入配置文件</h3>
-<p>yaml文件更强大的地方在于，他可以给我们的实体类直接注入匹配值！</p>
-<blockquote>
-<p>yaml注入配置文件</p>
-</blockquote>
-<p>1、在springboot项目中的resources目录下新建一个文件 application.yml</p>
-<p>2、编写一个实体类 Dog；</p>
-<pre><code class="language-java">package com.totoroay.pojo;
-
-@Component  //注册bean到容器中
-public class Dog {
-    private String name;
-    private Integer age;
-    
-    //有参无参构造、get、set方法、toString()方法  
-}
-</code></pre>
-<p>3、思考，我们原来是如何给bean注入属性值的！@Value，给狗狗类测试一下：</p>
-<pre><code class="language-java">@Component //注册bean
-public class Dog {
-    @Value(&quot;阿黄&quot;)
-    private String name;
-    @Value(&quot;9&quot;)
-    private Integer age;
-}
-</code></pre>
-<p>4、在SpringBoot的测试类下注入狗狗输出一下；</p>
-<pre><code class="language-java">@SpringBootTest
-class Springboot02ConofigApplicationTests {
-
-    @Autowired //将狗狗自动注入进来
-    Dog dog;
-
-    @Test
-    void contextLoads() {
-        System.out.println(dog); //打印看下狗狗对象
-    }
-
-}
-</code></pre>
-<p>结果成功输出，@Value注入成功，这是我们原来的办法对吧。</p>
-<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1588594490094.png" alt="" loading="lazy"></figure>
-<p>5、我们在编写一个复杂一点的实体类：Person 类</p>
-<pre><code class="language-java">@Component //注册bean到容器中
-public class Person {
-    private String name;
-    private Integer age;
-    private Boolean happy;
-    private Date birth;
-    private Map&lt;String,Object&gt; maps;
-    private List&lt;Object&gt; lists;
-    private Dog dog;
-    
-    //有参无参构造、get、set方法、toString()方法  
-}
-</code></pre>
-<p>6、我们来使用yaml配置的方式进行注入，大家写的时候注意区别和优势，我们编写一个yaml配置！</p>
-<pre><code class="language-yaml">person:
-  name: totoroay
-  age: 19
-  happy: false
-  birth: 1999/09/09
-  maps: {k1: v1,k2: v2}
-  lists:
-    - code
-    - girl
-    - music
-    - game
-  dog:
-    name: 阿花
-    age: 9
-</code></pre>
-<p>7、我们刚才已经把person这个对象的所有值都写好了，我们现在来注入到我们的类中！</p>
-<pre><code class="language-java">/*
-@ConfigurationProperties作用：
-将配置文件中配置的每一个属性的值，映射到这个组件中；
-告诉SpringBoot将本类中的所有属性和配置文件中相关的配置进行绑定
-参数 prefix = “person” : 将配置文件中的person下面的所有属性一一对应
-*/
-@Component //注册bean
-@ConfigurationProperties(prefix = &quot;person&quot;)
-public class Person {
-    private String name;
-    private Integer age;
-    private Boolean happy;
-    private Date birth;
-    private Map&lt;String,Object&gt; maps;
-    private List&lt;Object&gt; lists;
-    private Dog dog;
-}
-</code></pre>
-<p>8、IDEA 提示，springboot配置注解处理器没有找到，让我们看文档，我们可以查看文档，找到一个依赖！</p>
-<figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1588594502287.png" alt="" loading="lazy"></figure>
-<figure data-type="image" tabindex="3"><img src="https://totoroay.github.io//post-images/1588594507982.png" alt="" loading="lazy"></figure>
-<pre><code class="language-xml">&lt;!-- 导入配置文件处理器，配置文件进行绑定就会有提示，需要重启 --&gt;
-&lt;dependency&gt;
-  &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-  &lt;artifactId&gt;spring-boot-configuration-processor&lt;/artifactId&gt;
-  &lt;optional&gt;true&lt;/optional&gt;
-&lt;/dependency&gt;
-</code></pre>
-<p>9、确认以上配置都OK之后，我们去测试类中测试一下：</p>
-<pre><code class="language-java">@SpringBootTest
-class DemoApplicationTests {
-
-    @Autowired
-    Person person; //将person自动注入进来
-
-    @Test
-    public void contextLoads() {
-        System.out.println(person); //打印person信息
-    }
-
-}
-</code></pre>
-<p>结果：所有值全部注入成功！</p>
-<figure data-type="image" tabindex="4"><img src="https://totoroay.github.io//post-images/1588594519838.png" alt="" loading="lazy"></figure>
-<p><strong>yaml配置注入到实体类完全OK！</strong></p>
-<p>课堂测试：</p>
-<p>1、将配置文件的key 值 和 属性的值设置为不一样，则结果输出为null，注入失败</p>
-<p>2、在配置一个person2，然后将 @ConfigurationProperties(prefix = &quot;person2&quot;) 指向我们的person2；</p>
-<h3 id="加载指定的配置文件">加载指定的配置文件</h3>
-<p>**@PropertySource ：**加载指定的配置文件；</p>
-<p><strong>@configurationProperties</strong>：默认从全局配置文件中获取值；</p>
-<p>1、我们去在resources目录下新建一个<strong>person.properties</strong>文件</p>
-<pre><code class="language-properties">name=zy
-</code></pre>
-<p>2、然后在我们的代码中指定加载person.properties文件</p>
-<pre><code class="language-java">@PropertySource(value = &quot;classpath:person.properties&quot;)
-@Component //注册bean
-public class Person {
-
-    @Value(&quot;${name}&quot;)
-    private String name;
-
-    ......  
-}
-</code></pre>
-<p>3、再次输出测试一下：指定配置文件绑定成功！</p>
-<figure data-type="image" tabindex="5"><img src="https://totoroay.github.io//post-images/1588594529477.png" alt="" loading="lazy"></figure>
-<h3 id="配置文件占位符">配置文件占位符</h3>
-<p>配置文件还可以编写占位符生成随机数</p>
-<pre><code class="language-yaml">person:
-    name: totoroay${random.uuid} # 随机uuid
-    age: ${random.int}  # 随机int
-    happy: false
-    birth: 1999/09/09
-    maps: {k1: v1,k2: v2}
-    lists:
-      - code
-      - girl
-      - music
-      - game
-    dog:
-      name: ${person.hello:other}_旺财
-      age: 1
-</code></pre>
-<h3 id="回顾properties配置">回顾properties配置</h3>
-<p>我们上面采用的yaml方法都是最简单的方式，开发中最常用的；也是springboot所推荐的！那我们来唠唠其他的实现方式，道理都是相同的；写还是那样写；配置文件除了yml还有我们之前常用的properties ， 我们没有讲，我们来唠唠！</p>
-<p>【注意】properties配置文件在写中文的时候，会有乱码 ， 我们需要去IDEA中设置编码格式为UTF-8；</p>
-<p>settings--&gt;FileEncodings 中配置；</p>
-<p><img src="https://totoroay.github.io//post-images/1588594536690.png" alt="" loading="lazy"><br>
-<strong>测试步骤：</strong></p>
-<p>1、新建一个实体类User</p>
-<pre><code class="language-java">@Component //注册bean
-public class User {
-    private String name;
-    private int age;
-    private String sex;
-}
-</code></pre>
-<p>2、编辑配置文件 user.properties</p>
-<pre><code class="language-properties">user1.name=kuangshenuser1.age=18user1.sex=男
-</code></pre>
-<p>3、我们在User类上使用@Value来进行注入！</p>
-<pre><code class="language-java">@Component //注册bean
-@PropertySource(value = &quot;classpath:user.properties&quot;)
-public class User {
-    //直接使用@value
-    @Value(&quot;${user.name}&quot;) //从配置文件中取值
-    private String name;
-    @Value(&quot;#{9*2}&quot;)  // #{SPEL} Spring表达式
-    private int age;
-    @Value(&quot;男&quot;)  // 字面量
-    private String sex;
-}
-</code></pre>
-<p>4、Springboot测试</p>
-<pre><code class="language-java">@SpringBootTest
-class DemoApplicationTests {
-
-    @Autowired
-    User user;
-
-    @Test
-    public void contextLoads() {
-        System.out.println(user);
-    }
-
-}
-</code></pre>
-<p>结果正常输出：</p>
-<figure data-type="image" tabindex="6"><img src="https://totoroay.github.io//post-images/1588594546320.png" alt="" loading="lazy"></figure>
-<h3 id="对比小结">对比小结</h3>
-<p>@Value这个使用起来并不友好！我们需要为每个属性单独注解赋值，比较麻烦；我们来看个功能对比图</p>
-<figure data-type="image" tabindex="7"><img src="https://totoroay.github.io//post-images/1588594553170.png" alt="" loading="lazy"></figure>
-<p>1、@ConfigurationProperties只需要写一次即可 ， @Value则需要每个字段都添加</p>
-<p>2、松散绑定：这个什么意思呢? 比如我的yml中写的last-name，这个和lastName是一样的， - 后面跟着的字母默认是大写的。这就是松散绑定。可以测试一下</p>
-<p>3、JSR303数据校验 ， 这个就是我们可以在字段是增加一层过滤器验证 ， 可以保证数据的合法性</p>
-<p>4、复杂类型封装，yml中可以封装对象 ， 使用value就不支持</p>
-<p><strong>结论：</strong></p>
-<p>配置yml和配置properties都可以获取到值 ， 强烈推荐 yml；</p>
-<p>如果我们在某个业务中，只需要获取配置文件中的某个值，可以使用一下 @value；</p>
-<p>如果说，我们专门编写了一个JavaBean来和配置文件进行一一映射，就直接@configurationProperties，不要犹豫！</p>
 ]]></content>
     </entry>
 </feed>
