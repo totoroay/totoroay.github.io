@@ -1,0 +1,471 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>totoroay</title>
+<meta name="description" content="每天学习5小时！！！" />
+<link rel="shortcut icon" href="https://totoroay.github.io//favicon.ico?v=1589003527911">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+
+<link rel="stylesheet" href="https://totoroay.github.io//styles/main.css">
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main px-4 flex flex-col lg:flex-row">
+      <div id="sidebar" class="sidebar-wrapper lg:static lg:w-1/4">
+  <div class="lg:sticky top-0">
+    <div class="sidebar-content">
+      <div class="flex lg:block p-4 lg:px-0 items-center fixed lg:static lg:block top-0 right-0 left-0 bg-white z-50">
+        <i class="ri-menu-2-line lg:mt-4 text-2xl cursor-pointer animated fadeIn" onclick="openMenu()"></i>
+        <a href="https://totoroay.github.io/">
+          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://totoroay.github.io//images/avatar.png?v=1589003527911" alt="">
+        </a>
+        <h1 class="animated fadeInLeft lg:text-4xl font-extrabold lg:mt-8 mt-0 text-xl" style="animation-delay: 0.2s">totoroay</h1>
+      </div>
+      
+        <div class="animated fadeInLeft" style="animation-delay: 0.4s">
+          <p class="my-4 text-gray-600 font-light hidden lg:block">
+            文章目录
+          </p>
+          <div class="toc-container hidden lg:block">
+            <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E4%BB%80%E4%B9%88%E6%98%AFaop">什么是AOP</a></li>
+<li><a href="#aop%E5%9C%A8spring%E4%B8%AD%E7%9A%84%E4%BD%9C%E7%94%A8">Aop在Spring中的作用</a></li>
+<li><a href="#%E4%BD%BF%E7%94%A8spring%E5%AE%9E%E7%8E%B0aop">使用Spring实现Aop</a>
+<ul>
+<li><a href="#%E7%AC%AC%E4%B8%80%E7%A7%8D%E6%96%B9%E5%BC%8F%E9%80%9A%E8%BF%87-spring-api-%E5%AE%9E%E7%8E%B0">第一种方式通过 Spring API 实现</a></li>
+<li><a href="#%E7%AC%AC%E4%BA%8C%E7%A7%8D%E6%96%B9%E5%BC%8F%E8%87%AA%E5%AE%9A%E4%B9%89%E7%B1%BB%E6%9D%A5%E5%AE%9E%E7%8E%B0aop">第二种方式自定义类来实现Aop</a></li>
+<li><a href="#%E7%AC%AC%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F%E4%BD%BF%E7%94%A8%E6%B3%A8%E8%A7%A3%E5%AE%9E%E7%8E%B0">第三种方式使用注解实现</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      
+    </div>
+  </div>
+</div>
+
+<div class="menu-container">
+  <i class="ri-arrow-left-line text-2xl cursor-pointer animated fadeIn close-menu-btn" onclick="closeMenu()"></i>
+  <div>
+    
+      
+        <a href="/" class="menu" style="animation-delay: 0s">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu" style="animation-delay: 0.2s">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu" style="animation-delay: 0.4s">
+          标签（分类）
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu" style="animation-delay: 0.6000000000000001s">
+          关于博主
+        </a>
+      
+    
+  </div>
+  <div class="site-footer">
+    <div class="py-4 text-gray-700"></div>
+    <a class="rss" href="https://totoroay.github.io//atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+<div class="mask" onclick="closeMenu()">
+</div>
+      <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
+        <h1 class="text-3xl font-bold lg:mt-16">Spring：AOP</h1>
+        <div class="text-sm text-gray-700 lg:my-8">
+          2020-05-09 / 8 min read
+        </div>
+        
+          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://totoroay.github.io//post-images/springaop.jpg" alt="">
+        
+        <div class="post-content yue">
+          <h2 id="什么是aop">什么是AOP</h2>
+<p>AOP（Aspect Oriented Programming）意为：面向切面编程，通过预编译方式和运行期动态代理实现程序功能的统一维护的一种技术。AOP是OOP的延续，是软件开发中的一个热点，也是Spring框架中的一个重要内容，是函数式编程的一种衍生范型。利用AOP可以对业务逻辑的各个部分进行隔离，从而使得业务逻辑各部分之间的耦合度降低，提高程序的可重用性，同时提高了开发的效率。</p>
+<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1589003489694.png" alt="" loading="lazy"></figure>
+<h2 id="aop在spring中的作用">Aop在Spring中的作用</h2>
+<p><mark>提供声明式事务；允许用户自定义切面</mark></p>
+<p><mark>以下名词需要了解下：</mark></p>
+<ul>
+<li>横切关注点：跨越应用程序多个模块的方法或功能。即是，与我们业务逻辑无关的，但是我们需要关注的部分，就是横切关注点。如日志 , 安全 , 缓存 , 事务等等 ....</li>
+<li>切面（ASPECT）：横切关注点 被模块化 的特殊对象。即，它是一个类。</li>
+<li>通知（Advice）：切面必须要完成的工作。即，它是类中的一个方法。</li>
+<li>目标（Target）：被通知对象。</li>
+<li>代理（Proxy）：向目标对象应用通知之后创建的对象。</li>
+<li>切入点（PointCut）：切面通知 执行的 “地点”的定义。</li>
+<li>连接点（JointPoint）：与切入点匹配的执行点。</li>
+</ul>
+<figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1589003480765.png" alt="" loading="lazy"></figure>
+<p>SpringAOP中，通过Advice定义横切逻辑，Spring中支持5种类型的Advice:</p>
+<figure data-type="image" tabindex="3"><img src="https://totoroay.github.io//post-images/1589003466003.png" alt="" loading="lazy"></figure>
+<p>即 Aop 在 不改变原有代码的情况下 , 去增加新的功能 .</p>
+<h2 id="使用spring实现aop">使用Spring实现Aop</h2>
+<p>【重点】使用AOP织入，需要导入一个依赖包！</p>
+<pre><code class="language-xml">&lt;!-- https://mvnrepository.com/artifact/org.aspectj/aspectjweaver --&gt;
+&lt;dependency&gt;
+   &lt;groupId&gt;org.aspectj&lt;/groupId&gt;
+   &lt;artifactId&gt;aspectjweaver&lt;/artifactId&gt;
+   &lt;version&gt;1.9.4&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+<h3 id="第一种方式通过-spring-api-实现">第一种方式通过 Spring API 实现</h3>
+<p>首先编写我们的业务接口和实现类</p>
+<pre><code class="language-java">public interface UserService {
+
+   public void add();
+
+   public void delete();
+
+   public void update();
+
+   public void search();
+
+}
+</code></pre>
+<pre><code class="language-java">public class UserServiceImpl implements UserService{
+
+   @Override
+   public void add() {
+       System.out.println(&quot;增加用户&quot;);
+  }
+
+   @Override
+   public void delete() {
+       System.out.println(&quot;删除用户&quot;);
+  }
+
+   @Override
+   public void update() {
+       System.out.println(&quot;更新用户&quot;);
+  }
+
+   @Override
+   public void search() {
+       System.out.println(&quot;查询用户&quot;);
+  }
+}
+</code></pre>
+<p>然后去写我们的增强类 , 我们编写两个 , 一个前置增强 一个后置增强</p>
+<pre><code class="language-java">// 前置增强
+public class Log implements MethodBeforeAdvice {
+
+   //method : 要执行的目标对象的方法
+   //objects : 被调用的方法的参数
+   //Object : 目标对象
+   @Override
+   public void before(Method method, Object[] objects, Object target) throwsThrowable {
+       System.out.println( target.getClass().getName() + &quot;的&quot; + method.getName() + &quot;方法被执行了&quot;);
+  }
+}
+</code></pre>
+<pre><code class="language-java">// 后置增强
+public class AfterLog implements AfterReturningAdvice {
+   //returnValue 返回值
+   //method被调用的方法
+   //args 被调用的方法的对象的参数
+   //target 被调用的目标对象
+   @Override
+   public void afterReturning(Object returnValue, Method method, Object[] args,Object target) throws Throwable {
+       System.out.println(&quot;执行了&quot; + target.getClass().getName()
+       +&quot;的&quot;+method.getName()+&quot;方法,&quot;
+       +&quot;返回值：&quot;+returnValue);
+  }
+}
+</code></pre>
+<p>最后去spring的文件中注册 , 并实现aop切入实现 , 注意导入约束 .</p>
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+      xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+      xmlns:aop=&quot;http://www.springframework.org/schema/aop&quot;
+      xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd&quot;&gt;
+
+   &lt;!--注册bean--&gt;
+   &lt;bean id=&quot;userService&quot; class=&quot;com.totoroay.service.UserServiceImpl&quot;/&gt;
+   &lt;bean id=&quot;log&quot; class=&quot;com.totoroay.log.Log&quot;/&gt;
+   &lt;bean id=&quot;afterLog&quot; class=&quot;com.totoroay.log.AfterLog&quot;/&gt;
+
+   &lt;!--aop的配置--&gt;
+   &lt;aop:config&gt;
+       &lt;!--切入点 expression:表达式匹配要执行的方法--&gt;
+       &lt;aop:pointcut id=&quot;pointcut&quot; expression=&quot;execution(* com.kuang.service.UserServiceImpl.*(..))&quot;/&gt;
+       &lt;!--执行环绕; advice-ref执行方法 . pointcut-ref切入点--&gt;
+       &lt;aop:advisor advice-ref=&quot;log&quot; pointcut-ref=&quot;pointcut&quot;/&gt;
+       &lt;aop:advisor advice-ref=&quot;afterLog&quot; pointcut-ref=&quot;pointcut&quot;/&gt;
+   &lt;/aop:config&gt;
+
+&lt;/beans&gt;
+</code></pre>
+<p>测试</p>
+<pre><code class="language-java">public class MyTest {
+   @Test
+   public void test(){
+       ApplicationContext context = newClassPathXmlApplicationContext(&quot;beans.xml&quot;);
+       UserService userService = (UserService) context.getBean(&quot;userService&quot;);
+       userService.search();
+  }
+}
+</code></pre>
+<p>Aop的重要性 : 很重要 . 一定要理解其中的思路 , 主要是思想的理解这一块 .</p>
+<p>Spring的Aop就是将公共的业务 (日志 , 安全等) 和领域业务结合起来 , 当执行领域业务时 , 将会把公共业务加进来 . 实现公共业务的重复利用 . 领域业务更纯粹 , 程序猿专注领域业务 , 其本质还是动态代理 .</p>
+<h3 id="第二种方式自定义类来实现aop">第二种方式自定义类来实现Aop</h3>
+<p>目标业务类不变依旧是userServiceImpl</p>
+<p>第一步 : 写我们自己的一个切入类</p>
+<pre><code class="language-java">public class DiyPointcut {
+
+   public void before(){
+       System.out.println(&quot;---------方法执行前---------&quot;);
+  }
+   public void after(){
+       System.out.println(&quot;---------方法执行后---------&quot;);
+  }
+   
+}
+</code></pre>
+<p>去spring中配置</p>
+<pre><code class="language-xml">&lt;!--第二种方式自定义实现--&gt;
+&lt;!--注册bean--&gt;
+&lt;bean id=&quot;diy&quot; class=&quot;com.totoroay.config.DiyPointcut&quot;/&gt;
+
+&lt;!--aop的配置--&gt;
+&lt;aop:config&gt;
+   &lt;!--第二种方式：使用AOP的标签实现--&gt;
+   &lt;aop:aspect ref=&quot;diy&quot;&gt;
+       &lt;aop:pointcut id=&quot;diyPonitcut&quot; expression=&quot;execution(* com.kuang.service.UserServiceImpl.*(..))&quot;/&gt;
+       &lt;aop:before pointcut-ref=&quot;diyPonitcut&quot; method=&quot;before&quot;/&gt;
+       &lt;aop:after pointcut-ref=&quot;diyPonitcut&quot; method=&quot;after&quot;/&gt;
+   &lt;/aop:aspect&gt;
+&lt;/aop:config&gt;
+</code></pre>
+<p>测试：</p>
+<pre><code class="language-java">public class MyTest {
+   @Test
+   public void test(){
+       ApplicationContext context = newClassPathXmlApplicationContext(&quot;beans.xml&quot;);
+       UserService userService = (UserService) context.getBean(&quot;userService&quot;);
+       userService.add();
+  }
+}
+</code></pre>
+<h3 id="第三种方式使用注解实现">第三种方式使用注解实现</h3>
+<p>第一步：编写一个注解实现的增强类</p>
+<pre><code class="language-java">package com.totoroay.config;
+
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+
+@Aspect //标注这个类是一个切面
+public class AnnotationPointcut {
+   @Before(&quot;execution(* com.totoroay.service.UserServiceImpl.*(..))&quot;)
+   public void before(){
+       System.out.println(&quot;---------方法执行前---------&quot;);
+  }
+
+   @After(&quot;execution(* com.totoroay.service.UserServiceImpl.*(..))&quot;)
+   public void after(){
+       System.out.println(&quot;---------方法执行后---------&quot;);
+  }
+
+   @Around(&quot;execution(* com.totoroay.service.UserServiceImpl.*(..))&quot;)
+   public void around(ProceedingJoinPoint jp) throws Throwable {
+       System.out.println(&quot;环绕前&quot;);
+       System.out.println(&quot;签名:&quot;+jp.getSignature());
+       //执行目标方法proceed
+       Object proceed = jp.proceed();
+       System.out.println(&quot;环绕后&quot;);
+       System.out.println(proceed);
+  }
+}
+</code></pre>
+<p>第二步：在Spring配置文件中，注册bean，并增加支持注解的配置</p>
+<pre><code class="language-xml">&lt;!--第三种方式:注解实现--&gt;
+&lt;bean id=&quot;annotationPointcut&quot; class=&quot;com.totoroay.config.AnnotationPointcut&quot;/&gt;
+&lt;aop:aspectj-autoproxy/
+</code></pre>
+<p>aop:aspectj-autoproxy：说明</p>
+<pre><code class="language-xml">通过aop命名空间的&lt;aop:aspectj-autoproxy /&gt;声明自动为spring容器中那些配置@aspectJ切面的bean创建代理，织入切面。当然，spring 在内部依旧采用AnnotationAwareAspectJAutoProxyCreator进行自动代理的创建工作，但具体实现的细节已经被&lt;aop:aspectj-autoproxy /&gt;隐藏起来了
+
+&lt;aop:aspectj-autoproxy /&gt;有一个proxy-target-class属性，默认为false，表示使用jdk动态代理织入增强，当配为&lt;aop:aspectj-autoproxy  poxy-target-class=&quot;true&quot;/&gt;时，表示使用CGLib动态代理技术织入增强。不过即使proxy-target-class设置为false，如果目标类没有声明接口，则spring将自动使用CGLib动态代理。
+</code></pre>
+
+        </div>
+
+        
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://totoroay.github.io/tag/kKVRbcS80/">
+            <span class="flex-auto">Spring</span>
+          </a>
+        
+
+
+        <div class="flex justify-between py-8">
+          
+
+          
+            <div class="next-post">
+              <a href="https://totoroay.github.io/post/ngork-nei-wang-chuan-tou/">
+                <h3 class="post-title">
+                  Ngork内网穿透
+                  <i class="ri-arrow-right-line"></i>
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '76af3abf5b345815d20f',
+    clientSecret: 'cd22dd44f3d5b861d2552cd4270bee0b3b1ad9cc',
+    repo: 'totoroay.github.io',
+    owner: 'totoroay',
+    admin: ['totoroay'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+      </div>
+    </div>
+
+    <script src="https://totoroay.github.io//media/prism.js"></script>  
+<script>
+
+Prism.highlightAll()
+let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+// This should probably be throttled.
+// Especially because it triggers during smooth scrolling.
+// https://lodash.com/docs/4.17.10#throttle
+// You could do like...
+// window.addEventListener("scroll", () => {
+//    _.throttle(doThatStuff, 100);
+// });
+// Only not doing it here to keep this Pen dependency-free.
+
+window.addEventListener("scroll", event => {
+  let fromTop = window.scrollY;
+
+  mainNavLinks.forEach((link, index) => {
+    let section = document.getElementById(decodeURI(link.hash).substring(1));
+    let nextSection = null
+    if (mainNavLinks[index + 1]) {
+      nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+    }
+    if (section.offsetTop <= fromTop) {
+      if (nextSection) {
+        if (nextSection.offsetTop > fromTop) {
+          link.classList.add("current");
+        } else {
+          link.classList.remove("current");    
+        }
+      } else {
+        link.classList.add("current");
+      }
+    } else {
+      link.classList.remove("current");
+    }
+  });
+});
+
+
+document.addEventListener("DOMContentLoaded", function() {
+  var lazyImages = [].slice.call(document.querySelectorAll(".post-feature-image.lazy"));
+
+  if ("IntersectionObserver" in window) {
+    let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          let lazyImage = entry.target
+          lazyImage.style.backgroundImage = `url(${lazyImage.dataset.bg})`
+          lazyImage.classList.remove("lazy")
+          lazyImageObserver.unobserve(lazyImage)
+        }
+      });
+    });
+
+    lazyImages.forEach(function(lazyImage) {
+      lazyImageObserver.observe(lazyImage)
+    })
+  } else {
+    // Possibly fall back to a more compatible method here
+  }
+});
+
+const menuContainer = document.querySelector('.menu-container')
+const menus = document.querySelectorAll('.menu-container .menu')
+const mask = document.querySelector('.mask')
+const contentWrapper = document.querySelector('.content-wrapper')
+const latestArticle = document.querySelector('.latest-article')
+const readMore = document.querySelector('.read-more')
+const indexPage = document.querySelector('.index-page')
+
+const isHome = location.pathname === '/'
+if (latestArticle) {
+  latestArticle.style.display = isHome ? 'block' : 'none'
+  readMore.style.display = isHome ? 'block' : 'none'
+  indexPage.style.display = isHome ? 'none' : 'block'
+}
+
+const openMenu = () => {
+  menuContainer.classList.add('open')
+  menus.forEach(menu => {
+    menu.classList.add('animated', 'fadeInLeft')
+  })
+  mask.classList.add('open')
+  contentWrapper.classList.add('is-second')
+}
+
+const closeMenu = () => {
+  menuContainer.classList.remove('open')
+  menus.forEach(menu => {
+    menu.classList.remove('animated', 'fadeInLeft')
+  })
+  mask.classList.remove('open')
+  contentWrapper.classList.remove('is-second')
+}
+</script>
+  
+  </body>
+</html>
