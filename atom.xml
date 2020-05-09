@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://totoroay.github.io/</id>
     <title>totoroay</title>
-    <updated>2020-05-09T05:52:11.629Z</updated>
+    <updated>2020-05-09T13:15:02.482Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://totoroay.github.io/"/>
     <link rel="self" href="https://totoroay.github.io/atom.xml"/>
@@ -10,6 +10,230 @@
     <logo>https://totoroay.github.io/images/avatar.png</logo>
     <icon>https://totoroay.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, totoroay</rights>
+    <entry>
+        <title type="html"><![CDATA[ SpringBoot07：Thymeleaf模板引擎]]></title>
+        <id>https://totoroay.github.io/post/springboot07thymeleaf-mo-ban-yin-qing/</id>
+        <link href="https://totoroay.github.io/post/springboot07thymeleaf-mo-ban-yin-qing/">
+        </link>
+        <updated>2020-05-09T13:11:42.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="thymeleaf">Thymeleaf</h2>
+<p>前端交给我们的页面，是html页面。如果是我们以前开发，我们需要把他们转成jsp页面，jsp好处就是当我们查出一些数据转发到JSP页面以后，我们可以用jsp轻松实现数据的显示，及交互等。</p>
+<p>jsp支持非常强大的功能，包括能写Java代码，但是呢，我们现在的这种情况，SpringBoot这个项目首先是以jar的方式，不是war，像第二，我们用的还是嵌入式的Tomcat，所以呢，<strong>他现在默认是不支持jsp的</strong>。</p>
+<p>那不支持jsp，如果我们直接用纯静态页面的方式，那给我们开发会带来非常大的麻烦，那怎么办呢？</p>
+<p><strong>SpringBoot推荐你可以来使用模板引擎：</strong></p>
+<p>模板引擎，我们其实大家听到很多，其实jsp就是一个模板引擎，还有用的比较多的freemarker，包括SpringBoot给我们推荐的Thymeleaf，模板引擎有非常多，但再多的模板引擎，他们的思想都是一样的，什么样一个思想呢我们来看一下这张图：</p>
+<p><img src="https://totoroay.github.io//post-images/1589030049112.png" alt="" loading="lazy"><br>
+模板引擎的作用就是我们来写一个页面模板，比如有些值呢，是动态的，我们写一些表达式。而这些值，从哪来呢，就是我们在后台封装一些数据。然后把这个模板和这个数据交给我们模板引擎，模板引擎按照我们这个数据帮你把这表达式解析、填充到我们指定的位置，然后把这个数据最终生成一个我们想要的内容给我们写出去，这就是我们这个模板引擎，不管是jsp还是其他模板引擎，都是这个思想。只不过呢，就是说不同模板引擎之间，他们可能这个语法有点不一样。其他的我就不介绍了，我主要来介绍一下SpringBoot给我们推荐的Thymeleaf模板引擎，这模板引擎呢，是一个高级语言的模板引擎，他的这个语法更简单。而且呢，功能更强大。</p>
+<p>我们呢，就来看一下这个模板引擎，那既然要看这个模板引擎。首先，我们来看SpringBoot里边怎么用。</p>
+<h2 id="引入thymeleaf">引入Thymeleaf</h2>
+<p>怎么引入呢，对于springboot来说，什么事情不都是一个start的事情嘛，我们去在项目中引入一下。给大家三个网址：</p>
+<p>Thymeleaf 官网：https://www.thymeleaf.org/</p>
+<p>Thymeleaf 在Github 的主页：https://github.com/thymeleaf/thymeleaf</p>
+<p>Spring官方文档：找到我们对应的版本</p>
+<p>https://docs.spring.io/spring-boot/docs/2.2.5.RELEASE/reference/htmlsingle/#using-boot-starter</p>
+<p>找到对应的pom依赖：可以适当点进源码看下本来的包！</p>
+<pre><code class="language-xml">&lt;!--thymeleaf--&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-thymeleaf&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>Maven会自动下载jar包，我们可以去看下下载的东西；</p>
+<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1589030040046.png" alt="" loading="lazy"></figure>
+<h2 id="thymeleaf分析">Thymeleaf分析</h2>
+<p>前面呢，我们已经引入了Thymeleaf，那这个要怎么使用呢？</p>
+<p>我们首先得按照SpringBoot的自动配置原理看一下我们这个Thymeleaf的自动配置规则，在按照那个规则，我们进行使用。</p>
+<p>我们去找一下Thymeleaf的自动配置类：ThymeleafProperties</p>
+<pre><code class="language-java">@ConfigurationProperties(
+    prefix = &quot;spring.thymeleaf&quot;
+)
+public class ThymeleafProperties {
+    private static final Charset DEFAULT_ENCODING;
+    public static final String DEFAULT_PREFIX = &quot;classpath:/templates/&quot;;
+    public static final String DEFAULT_SUFFIX = &quot;.html&quot;;
+    private boolean checkTemplate = true;
+    private boolean checkTemplateLocation = true;
+    private String prefix = &quot;classpath:/templates/&quot;;
+    private String suffix = &quot;.html&quot;;
+    private String mode = &quot;HTML&quot;;
+    private Charset encoding;
+}
+</code></pre>
+<p>我们可以在其中看到默认的前缀和后缀！</p>
+<p>我们只需要把我们的html页面放在类路径下的templates下，thymeleaf就可以帮我们自动渲染了。</p>
+<p>使用thymeleaf什么都不需要配置，只需要将他放在指定的文件夹下即可！</p>
+<h2 id="测试">测试</h2>
+<p>1、编写一个TestController</p>
+<pre><code class="language-java">@Controller
+public class TestController {
+    
+    @RequestMapping(&quot;/t1&quot;)
+    public String test1(){
+        //classpath:/templates/test.html
+        return &quot;test&quot;;
+    }
+    
+}
+</code></pre>
+<p>2、编写一个测试页面  test.html 放在 templates 目录下</p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;测试页面&lt;/h1&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>3、启动项目请求测试</p>
+<h2 id="thymeleaf-语法学习">Thymeleaf 语法学习</h2>
+<p>要学习语法，还是参考官网文档最为准确，我们找到对应的版本看一下；</p>
+<p>Thymeleaf 官网：https://www.thymeleaf.org/ ， 简单看一下官网！我们去下载Thymeleaf的官方文档！</p>
+<p><strong>我们做个最简单的练习 ：我们需要查出一些数据，在页面中展示</strong></p>
+<p>1、修改测试请求，增加数据传输；</p>
+<pre><code class="language-java">@RequestMapping(&quot;/t1&quot;)
+public String test1(Model model){
+    //存入数据
+    model.addAttribute(&quot;msg&quot;,&quot;Hello,Thymeleaf&quot;);
+    //classpath:/templates/test.html
+    return &quot;test&quot;;
+}
+</code></pre>
+<p>2、我们要使用thymeleaf，需要在html文件中导入命名空间的约束，方便提示。</p>
+<p>我们可以去官方文档的#3中看一下命名空间拿来过来：</p>
+<pre><code> xmlns:th=&quot;http://www.thymeleaf.org&quot;
+</code></pre>
+<p>3、我们去编写下前端页面</p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot; xmlns:th=&quot;http://www.thymeleaf.org&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;test&lt;/h1&gt;
+&lt;!--所有的html元素都可以被thymeleaf替换:   th:元素名--&gt;
+&lt;!--th:text就是将div中的内容设置为它指定的值，和Vue一样--&gt;
+&lt;div th:text=&quot;${msg}&quot;&gt;&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>4、启动测试</p>
+<figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1589030024666.png" alt="" loading="lazy"></figure>
+<p><strong>OK，入门搞定，我们来认真研习一下Thymeleaf的使用语法！</strong></p>
+<p><strong>1、我们可以使用任意的 th:attr 来替换Html中原生属性的值！</strong></p>
+<figure data-type="image" tabindex="3"><img src="https://totoroay.github.io//post-images/1589030016433.jpg" alt="" loading="lazy"></figure>
+<p><strong>2、我们能写哪些表达式呢？</strong></p>
+<pre><code>Simple expressions:（表达式语法）
+Variable Expressions: ${...}：获取变量值；OGNL；
+    1）、获取对象的属性、调用方法
+    2）、使用内置的基本对象：#18
+         #ctx : the context object.
+         #vars: the context variables.
+         #locale : the context locale.
+         #request : (only in Web Contexts) the HttpServletRequest object.
+         #response : (only in Web Contexts) the HttpServletResponse object.
+         #session : (only in Web Contexts) the HttpSession object.
+         #servletContext : (only in Web Contexts) the ServletContext object.
+
+    3）、内置的一些工具对象：
+　　　　　　#execInfo : information about the template being processed.
+　　　　　　#uris : methods for escaping parts of URLs/URIs
+　　　　　　#conversions : methods for executing the configured conversion service (if any).
+　　　　　　#dates : methods for java.util.Date objects: formatting, component extraction, etc.
+　　　　　　#calendars : analogous to #dates , but for java.util.Calendar objects.
+　　　　　　#numbers : methods for formatting numeric objects.
+　　　　　　#strings : methods for String objects: contains, startsWith, prepending/appending, etc.
+　　　　　　#objects : methods for objects in general.
+　　　　　　#bools : methods for boolean evaluation.
+　　　　　　#arrays : methods for arrays.
+　　　　　　#lists : methods for lists.
+　　　　　　#sets : methods for sets.
+　　　　　　#maps : methods for maps.
+　　　　　　#aggregates : methods for creating aggregates on arrays or collections.
+==================================================================================
+
+  Selection Variable Expressions: *{...}：选择表达式：和${}在功能上是一样；
+  Message Expressions: #{...}：获取国际化内容
+  Link URL Expressions: @{...}：定义URL；
+  Fragment Expressions: ~{...}：片段引用表达式
+
+Literals（字面量）
+      Text literals: 'one text' , 'Another one!' ,…
+      Number literals: 0 , 34 , 3.0 , 12.3 ,…
+      Boolean literals: true , false
+      Null literal: null
+      Literal tokens: one , sometext , main ,…
+      
+Text operations:（文本操作）
+    String concatenation: +
+    Literal substitutions: |The name is ${name}|
+    
+Arithmetic operations:（数学运算）
+    Binary operators: + , - , * , / , %
+    Minus sign (unary operator): -
+    
+Boolean operations:（布尔运算）
+    Binary operators: and , or
+    Boolean negation (unary operator): ! , not
+    
+Comparisons and equality:（比较运算）
+    Comparators: &gt; , &lt; , &gt;= , &lt;= ( gt , lt , ge , le )
+    Equality operators: == , != ( eq , ne )
+    
+Conditional operators:条件运算（三元运算符）
+    If-then: (if) ? (then)
+    If-then-else: (if) ? (then) : (else)
+    Default: (value) ?: (defaultvalue)
+    
+Special tokens:
+    No-Operation: _
+</code></pre>
+<p><strong>练习测试：</strong></p>
+<p>1、 我们编写一个Controller，放一些数据</p>
+<pre><code class="language-java">@RequestMapping(&quot;/t2&quot;)
+public String test2(Map&lt;String,Object&gt; map){
+    //存入数据
+    map.put(&quot;msg&quot;,&quot;&lt;h1&gt;Hello&lt;/h1&gt;&quot;);
+    map.put(&quot;users&quot;, Arrays.asList(&quot;qinjiang&quot;,&quot;kuangshen&quot;));
+    //classpath:/templates/test.html
+    return &quot;test&quot;;
+}
+</code></pre>
+<p>2、测试页面取出数据</p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot; xmlns:th=&quot;http://www.thymeleaf.org&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;test&lt;/h1&gt;
+
+&lt;div th:text=&quot;${msg}&quot;&gt;&lt;/div&gt;
+&lt;!--不转义--&gt;
+&lt;div th:utext=&quot;${msg}&quot;&gt;&lt;/div&gt;
+
+&lt;!--遍历数据--&gt;
+&lt;!--th:each每次遍历都会生成当前这个标签：官网#9--&gt;
+&lt;h4 th:each=&quot;user :${users}&quot; th:text=&quot;${user}&quot;&gt;&lt;/h4&gt;
+
+&lt;h4&gt;
+    &lt;!--行内写法：官网#12--&gt;
+    &lt;span th:each=&quot;user:${users}&quot;&gt;[[${user}]]&lt;/span&gt;
+&lt;/h4&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>3、启动项目测试</p>
+<figure data-type="image" tabindex="4"><img src="https://totoroay.github.io//post-images/1589030000687.png" alt="" loading="lazy"></figure>
+<p><strong>我们看完语法，很多样式，我们即使现在学习了，也会忘记，所以我们在学习过程中，需要使用什么，根据官方文档来查询，才是最重要的，要熟练使用官方文档！</strong></p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Spring：AOP]]></title>
         <id>https://totoroay.github.io/post/springaop/</id>
@@ -1482,192 +1706,6 @@ public class Client {
     }
 }
 </code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[建造者模式]]></title>
-        <id>https://totoroay.github.io/post/jian-zao-zhe-mo-shi/</id>
-        <link href="https://totoroay.github.io/post/jian-zao-zhe-mo-shi/">
-        </link>
-        <updated>2020-05-05T09:50:51.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="建造者模式">建造者模式</h1>
-<p><img src="https://totoroay.github.io//post-images/1588672365938.png" alt="" loading="lazy"><br>
-<img src="https://totoroay.github.io//post-images/1588672372510.png" alt="" loading="lazy"></p>
-<h6 id="demo1"><mark>demo1</mark></h6>
-<pre><code class="language-java">package totoroay.builder.demo1;
-// 抽象的建造者：方法
-public abstract class Builder {
-    abstract void buildA();// 地基
-    abstract void buildB();// 钢筋工程
-    abstract void buildC();// 铺电线
-    abstract void buildD();// 粉刷
-
-    // 完工：得到产品
-    abstract Product getProduct();
-}
-</code></pre>
-<pre><code class="language-java">package totoroay.builder.demo1;
-// 产品：房子
-public class Product {
-    private String buildA;// 地基
-    private String buildB;// 钢筋工程
-    private String buildC;// 铺电线
-    private String buildD;// 粉刷
-    
-    //get,set,toString方法自己补全
-}
-</code></pre>
-<pre><code class="language-java">package totoroay.builder.demo1;
-// 具体的建造者：工人
-public class Worker extends Builder {
-    private Product product;
-
-    // 工人生产产品
-    public Worker() {
-        product = new Product();
-    }
-
-    @Override
-    void buildA() {
-        product.setBuildA(&quot;地基&quot;);
-        System.out.println(&quot;地基&quot;);
-    }
-
-    @Override
-    void buildB() {
-        product.setBuildB(&quot;钢筋工程&quot;);
-        System.out.println(&quot;钢筋工程&quot;);
-    }
-
-    @Override
-    void buildC() {
-        product.setBuildC(&quot;铺电线&quot;);
-        System.out.println(&quot;铺电线&quot;);
-    }
-
-    @Override
-    void buildD() {
-        product.setBuildD(&quot;粉刷&quot;);
-        System.out.println(&quot;粉刷&quot;);
-    }
-
-    @Override
-    Product getProduct() {
-        return product;
-    }
-}
-</code></pre>
-<pre><code class="language-java">package totoroay.builder.demo1;
-// 指挥：核心。负责指挥构建一个工程，有它决定
-public class Director {
-    // 指挥具体的工人建房子
-    public Product builder(Builder builder){
-        builder.buildA();
-        builder.buildB();
-        builder.buildC();
-        builder.buildD();
-        return builder.getProduct();
-    }
-}
-</code></pre>
-<pre><code class="language-java">package totoroay.builder.demo1;
-
-public class Test {
-    public static void main(String[] args) {
-        // 指挥
-        Director director = new Director();
-        // 指挥具体的工人完成产品
-        Product builder = director.builder(new Worker());
-        System.out.println(builder.toString());
-    }
-}
-</code></pre>
-<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1588672354974.png" alt="" loading="lazy"></figure>
-<h6 id="demo2"><mark>demo2</mark></h6>
-<pre><code class="language-java">package totoroay.builder.demo2;
-// 抽象的建造者：方法
-public abstract class Builder {
-    // 静态内部类方式
-    abstract Builder buildA(String msg);// 汉堡
-    abstract Builder buildB(String msg);// 可乐
-    abstract Builder buildC(String msg);// 薯条
-    abstract Builder buildD(String msg);// 甜品
-
-    // 完工：得到产品
-    abstract Product getProduct();
-}
-</code></pre>
-<pre><code class="language-java">package totoroay.builder.demo2;
-// 产品：套餐
-public class Product {
-    private String buildA = &quot;汉堡&quot;;// 汉堡
-    private String buildB = &quot;可乐&quot;;// 可乐
-    private String buildC = &quot;薯条&quot;;// 薯条
-    private String buildD = &quot;甜品&quot;;// 甜品
-    
-    //get,set,toString方法自己补全
-}
-</code></pre>
-<pre><code class="language-java">package totoroay.builder.demo2;
-// 具体的建造者
-public class Worker extends Builder {
-    private Product product;
-
-    public Worker(){
-        product = new Product();
-    }
-
-    @Override
-    Builder buildA(String msg) {
-        product.setBuildA(msg);
-        return this;
-    }
-
-    @Override
-    Builder buildB(String msg) {
-        product.setBuildB(msg);
-        return this;
-    }
-
-    @Override
-    Builder buildC(String msg) {
-        product.setBuildC(msg);
-        return this;
-    }
-
-    @Override
-    Builder buildD(String msg) {
-        product.setBuildD(msg);
-        return this;
-    }
-
-    @Override
-    Product getProduct() {
-        return product;
-    }
-}
-
-</code></pre>
-<pre><code class="language-java">package totoroay.builder.demo2;
-
-public class Test {
-    public static void main(String[] args) {
-        // 服务员，默认套餐
-        Worker worker = new Worker();
-        Product product = worker.getProduct();
-        System.out.println(product.toString());
-
-        // 另一个服务员
-        Worker worker1 = new Worker();
-        // 链式编程
-        Product product1 = worker1.buildA(&quot;牛肉汉堡&quot;).buildB(&quot;大杯可乐&quot;)
-                .getProduct();
-        System.out.println(product1.toString());
-    }
-}
-</code></pre>
-<figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1588672343175.png" alt="" loading="lazy"></figure>
-<figure data-type="image" tabindex="3"><img src="https://totoroay.github.io//post-images/1588672337519.png" alt="" loading="lazy"></figure>
 ]]></content>
     </entry>
 </feed>

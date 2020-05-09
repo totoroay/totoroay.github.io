@@ -1,0 +1,471 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>totoroay</title>
+<meta name="description" content="每天学习5小时！！！" />
+<link rel="shortcut icon" href="https://totoroay.github.io//favicon.ico?v=1589030098172">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+
+<link rel="stylesheet" href="https://totoroay.github.io//styles/main.css">
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main px-4 flex flex-col lg:flex-row">
+      <div id="sidebar" class="sidebar-wrapper lg:static lg:w-1/4">
+  <div class="lg:sticky top-0">
+    <div class="sidebar-content">
+      <div class="flex lg:block p-4 lg:px-0 items-center fixed lg:static lg:block top-0 right-0 left-0 bg-white z-50">
+        <i class="ri-menu-2-line lg:mt-4 text-2xl cursor-pointer animated fadeIn" onclick="openMenu()"></i>
+        <a href="https://totoroay.github.io/">
+          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://totoroay.github.io//images/avatar.png?v=1589030098172" alt="">
+        </a>
+        <h1 class="animated fadeInLeft lg:text-4xl font-extrabold lg:mt-8 mt-0 text-xl" style="animation-delay: 0.2s">totoroay</h1>
+      </div>
+      
+        <div class="animated fadeInLeft" style="animation-delay: 0.4s">
+          <p class="my-4 text-gray-600 font-light hidden lg:block">
+            文章目录
+          </p>
+          <div class="toc-container hidden lg:block">
+            <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#thymeleaf">Thymeleaf</a></li>
+<li><a href="#%E5%BC%95%E5%85%A5thymeleaf">引入Thymeleaf</a></li>
+<li><a href="#thymeleaf%E5%88%86%E6%9E%90">Thymeleaf分析</a></li>
+<li><a href="#%E6%B5%8B%E8%AF%95">测试</a></li>
+<li><a href="#thymeleaf-%E8%AF%AD%E6%B3%95%E5%AD%A6%E4%B9%A0">Thymeleaf 语法学习</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      
+    </div>
+  </div>
+</div>
+
+<div class="menu-container">
+  <i class="ri-arrow-left-line text-2xl cursor-pointer animated fadeIn close-menu-btn" onclick="closeMenu()"></i>
+  <div>
+    
+      
+        <a href="/" class="menu" style="animation-delay: 0s">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu" style="animation-delay: 0.2s">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu" style="animation-delay: 0.4s">
+          标签（分类）
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu" style="animation-delay: 0.6000000000000001s">
+          关于博主
+        </a>
+      
+    
+  </div>
+  <div class="site-footer">
+    <div class="py-4 text-gray-700"></div>
+    <a class="rss" href="https://totoroay.github.io//atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+<div class="mask" onclick="closeMenu()">
+</div>
+      <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
+        <h1 class="text-3xl font-bold lg:mt-16"> SpringBoot07：Thymeleaf模板引擎</h1>
+        <div class="text-sm text-gray-700 lg:my-8">
+          2020-05-09 / 10 min read
+        </div>
+        
+          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://totoroay.github.io//post-images/springboot07thymeleaf-mo-ban-yin-qing.jpg" alt="">
+        
+        <div class="post-content yue">
+          <h2 id="thymeleaf">Thymeleaf</h2>
+<p>前端交给我们的页面，是html页面。如果是我们以前开发，我们需要把他们转成jsp页面，jsp好处就是当我们查出一些数据转发到JSP页面以后，我们可以用jsp轻松实现数据的显示，及交互等。</p>
+<p>jsp支持非常强大的功能，包括能写Java代码，但是呢，我们现在的这种情况，SpringBoot这个项目首先是以jar的方式，不是war，像第二，我们用的还是嵌入式的Tomcat，所以呢，<strong>他现在默认是不支持jsp的</strong>。</p>
+<p>那不支持jsp，如果我们直接用纯静态页面的方式，那给我们开发会带来非常大的麻烦，那怎么办呢？</p>
+<p><strong>SpringBoot推荐你可以来使用模板引擎：</strong></p>
+<p>模板引擎，我们其实大家听到很多，其实jsp就是一个模板引擎，还有用的比较多的freemarker，包括SpringBoot给我们推荐的Thymeleaf，模板引擎有非常多，但再多的模板引擎，他们的思想都是一样的，什么样一个思想呢我们来看一下这张图：</p>
+<p><img src="https://totoroay.github.io//post-images/1589030049112.png" alt="" loading="lazy"><br>
+模板引擎的作用就是我们来写一个页面模板，比如有些值呢，是动态的，我们写一些表达式。而这些值，从哪来呢，就是我们在后台封装一些数据。然后把这个模板和这个数据交给我们模板引擎，模板引擎按照我们这个数据帮你把这表达式解析、填充到我们指定的位置，然后把这个数据最终生成一个我们想要的内容给我们写出去，这就是我们这个模板引擎，不管是jsp还是其他模板引擎，都是这个思想。只不过呢，就是说不同模板引擎之间，他们可能这个语法有点不一样。其他的我就不介绍了，我主要来介绍一下SpringBoot给我们推荐的Thymeleaf模板引擎，这模板引擎呢，是一个高级语言的模板引擎，他的这个语法更简单。而且呢，功能更强大。</p>
+<p>我们呢，就来看一下这个模板引擎，那既然要看这个模板引擎。首先，我们来看SpringBoot里边怎么用。</p>
+<h2 id="引入thymeleaf">引入Thymeleaf</h2>
+<p>怎么引入呢，对于springboot来说，什么事情不都是一个start的事情嘛，我们去在项目中引入一下。给大家三个网址：</p>
+<p>Thymeleaf 官网：https://www.thymeleaf.org/</p>
+<p>Thymeleaf 在Github 的主页：https://github.com/thymeleaf/thymeleaf</p>
+<p>Spring官方文档：找到我们对应的版本</p>
+<p>https://docs.spring.io/spring-boot/docs/2.2.5.RELEASE/reference/htmlsingle/#using-boot-starter</p>
+<p>找到对应的pom依赖：可以适当点进源码看下本来的包！</p>
+<pre><code class="language-xml">&lt;!--thymeleaf--&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-thymeleaf&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>Maven会自动下载jar包，我们可以去看下下载的东西；</p>
+<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1589030040046.png" alt="" loading="lazy"></figure>
+<h2 id="thymeleaf分析">Thymeleaf分析</h2>
+<p>前面呢，我们已经引入了Thymeleaf，那这个要怎么使用呢？</p>
+<p>我们首先得按照SpringBoot的自动配置原理看一下我们这个Thymeleaf的自动配置规则，在按照那个规则，我们进行使用。</p>
+<p>我们去找一下Thymeleaf的自动配置类：ThymeleafProperties</p>
+<pre><code class="language-java">@ConfigurationProperties(
+    prefix = &quot;spring.thymeleaf&quot;
+)
+public class ThymeleafProperties {
+    private static final Charset DEFAULT_ENCODING;
+    public static final String DEFAULT_PREFIX = &quot;classpath:/templates/&quot;;
+    public static final String DEFAULT_SUFFIX = &quot;.html&quot;;
+    private boolean checkTemplate = true;
+    private boolean checkTemplateLocation = true;
+    private String prefix = &quot;classpath:/templates/&quot;;
+    private String suffix = &quot;.html&quot;;
+    private String mode = &quot;HTML&quot;;
+    private Charset encoding;
+}
+</code></pre>
+<p>我们可以在其中看到默认的前缀和后缀！</p>
+<p>我们只需要把我们的html页面放在类路径下的templates下，thymeleaf就可以帮我们自动渲染了。</p>
+<p>使用thymeleaf什么都不需要配置，只需要将他放在指定的文件夹下即可！</p>
+<h2 id="测试">测试</h2>
+<p>1、编写一个TestController</p>
+<pre><code class="language-java">@Controller
+public class TestController {
+    
+    @RequestMapping(&quot;/t1&quot;)
+    public String test1(){
+        //classpath:/templates/test.html
+        return &quot;test&quot;;
+    }
+    
+}
+</code></pre>
+<p>2、编写一个测试页面  test.html 放在 templates 目录下</p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;测试页面&lt;/h1&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>3、启动项目请求测试</p>
+<h2 id="thymeleaf-语法学习">Thymeleaf 语法学习</h2>
+<p>要学习语法，还是参考官网文档最为准确，我们找到对应的版本看一下；</p>
+<p>Thymeleaf 官网：https://www.thymeleaf.org/ ， 简单看一下官网！我们去下载Thymeleaf的官方文档！</p>
+<p><strong>我们做个最简单的练习 ：我们需要查出一些数据，在页面中展示</strong></p>
+<p>1、修改测试请求，增加数据传输；</p>
+<pre><code class="language-java">@RequestMapping(&quot;/t1&quot;)
+public String test1(Model model){
+    //存入数据
+    model.addAttribute(&quot;msg&quot;,&quot;Hello,Thymeleaf&quot;);
+    //classpath:/templates/test.html
+    return &quot;test&quot;;
+}
+</code></pre>
+<p>2、我们要使用thymeleaf，需要在html文件中导入命名空间的约束，方便提示。</p>
+<p>我们可以去官方文档的#3中看一下命名空间拿来过来：</p>
+<pre><code> xmlns:th=&quot;http://www.thymeleaf.org&quot;
+</code></pre>
+<p>3、我们去编写下前端页面</p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot; xmlns:th=&quot;http://www.thymeleaf.org&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;test&lt;/h1&gt;
+&lt;!--所有的html元素都可以被thymeleaf替换:   th:元素名--&gt;
+&lt;!--th:text就是将div中的内容设置为它指定的值，和Vue一样--&gt;
+&lt;div th:text=&quot;${msg}&quot;&gt;&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>4、启动测试</p>
+<figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1589030024666.png" alt="" loading="lazy"></figure>
+<p><strong>OK，入门搞定，我们来认真研习一下Thymeleaf的使用语法！</strong></p>
+<p><strong>1、我们可以使用任意的 th:attr 来替换Html中原生属性的值！</strong></p>
+<figure data-type="image" tabindex="3"><img src="https://totoroay.github.io//post-images/1589030016433.jpg" alt="" loading="lazy"></figure>
+<p><strong>2、我们能写哪些表达式呢？</strong></p>
+<pre><code>Simple expressions:（表达式语法）
+Variable Expressions: ${...}：获取变量值；OGNL；
+    1）、获取对象的属性、调用方法
+    2）、使用内置的基本对象：#18
+         #ctx : the context object.
+         #vars: the context variables.
+         #locale : the context locale.
+         #request : (only in Web Contexts) the HttpServletRequest object.
+         #response : (only in Web Contexts) the HttpServletResponse object.
+         #session : (only in Web Contexts) the HttpSession object.
+         #servletContext : (only in Web Contexts) the ServletContext object.
+
+    3）、内置的一些工具对象：
+　　　　　　#execInfo : information about the template being processed.
+　　　　　　#uris : methods for escaping parts of URLs/URIs
+　　　　　　#conversions : methods for executing the configured conversion service (if any).
+　　　　　　#dates : methods for java.util.Date objects: formatting, component extraction, etc.
+　　　　　　#calendars : analogous to #dates , but for java.util.Calendar objects.
+　　　　　　#numbers : methods for formatting numeric objects.
+　　　　　　#strings : methods for String objects: contains, startsWith, prepending/appending, etc.
+　　　　　　#objects : methods for objects in general.
+　　　　　　#bools : methods for boolean evaluation.
+　　　　　　#arrays : methods for arrays.
+　　　　　　#lists : methods for lists.
+　　　　　　#sets : methods for sets.
+　　　　　　#maps : methods for maps.
+　　　　　　#aggregates : methods for creating aggregates on arrays or collections.
+==================================================================================
+
+  Selection Variable Expressions: *{...}：选择表达式：和${}在功能上是一样；
+  Message Expressions: #{...}：获取国际化内容
+  Link URL Expressions: @{...}：定义URL；
+  Fragment Expressions: ~{...}：片段引用表达式
+
+Literals（字面量）
+      Text literals: 'one text' , 'Another one!' ,…
+      Number literals: 0 , 34 , 3.0 , 12.3 ,…
+      Boolean literals: true , false
+      Null literal: null
+      Literal tokens: one , sometext , main ,…
+      
+Text operations:（文本操作）
+    String concatenation: +
+    Literal substitutions: |The name is ${name}|
+    
+Arithmetic operations:（数学运算）
+    Binary operators: + , - , * , / , %
+    Minus sign (unary operator): -
+    
+Boolean operations:（布尔运算）
+    Binary operators: and , or
+    Boolean negation (unary operator): ! , not
+    
+Comparisons and equality:（比较运算）
+    Comparators: &gt; , &lt; , &gt;= , &lt;= ( gt , lt , ge , le )
+    Equality operators: == , != ( eq , ne )
+    
+Conditional operators:条件运算（三元运算符）
+    If-then: (if) ? (then)
+    If-then-else: (if) ? (then) : (else)
+    Default: (value) ?: (defaultvalue)
+    
+Special tokens:
+    No-Operation: _
+</code></pre>
+<p><strong>练习测试：</strong></p>
+<p>1、 我们编写一个Controller，放一些数据</p>
+<pre><code class="language-java">@RequestMapping(&quot;/t2&quot;)
+public String test2(Map&lt;String,Object&gt; map){
+    //存入数据
+    map.put(&quot;msg&quot;,&quot;&lt;h1&gt;Hello&lt;/h1&gt;&quot;);
+    map.put(&quot;users&quot;, Arrays.asList(&quot;qinjiang&quot;,&quot;kuangshen&quot;));
+    //classpath:/templates/test.html
+    return &quot;test&quot;;
+}
+</code></pre>
+<p>2、测试页面取出数据</p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot; xmlns:th=&quot;http://www.thymeleaf.org&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;test&lt;/h1&gt;
+
+&lt;div th:text=&quot;${msg}&quot;&gt;&lt;/div&gt;
+&lt;!--不转义--&gt;
+&lt;div th:utext=&quot;${msg}&quot;&gt;&lt;/div&gt;
+
+&lt;!--遍历数据--&gt;
+&lt;!--th:each每次遍历都会生成当前这个标签：官网#9--&gt;
+&lt;h4 th:each=&quot;user :${users}&quot; th:text=&quot;${user}&quot;&gt;&lt;/h4&gt;
+
+&lt;h4&gt;
+    &lt;!--行内写法：官网#12--&gt;
+    &lt;span th:each=&quot;user:${users}&quot;&gt;[[${user}]]&lt;/span&gt;
+&lt;/h4&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>3、启动项目测试</p>
+<figure data-type="image" tabindex="4"><img src="https://totoroay.github.io//post-images/1589030000687.png" alt="" loading="lazy"></figure>
+<p><strong>我们看完语法，很多样式，我们即使现在学习了，也会忘记，所以我们在学习过程中，需要使用什么，根据官方文档来查询，才是最重要的，要熟练使用官方文档！</strong></p>
+
+        </div>
+
+        
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://totoroay.github.io/tag/LkiY-qT6m/">
+            <span class="flex-auto">SpringBoot</span>
+          </a>
+        
+
+
+        <div class="flex justify-between py-8">
+          
+
+          
+            <div class="next-post">
+              <a href="https://totoroay.github.io/post/springaop/">
+                <h3 class="post-title">
+                  Spring：AOP
+                  <i class="ri-arrow-right-line"></i>
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '76af3abf5b345815d20f',
+    clientSecret: 'cd22dd44f3d5b861d2552cd4270bee0b3b1ad9cc',
+    repo: 'totoroay.github.io',
+    owner: 'totoroay',
+    admin: ['totoroay'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+      </div>
+    </div>
+
+    <script src="https://totoroay.github.io//media/prism.js"></script>  
+<script>
+
+Prism.highlightAll()
+let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+// This should probably be throttled.
+// Especially because it triggers during smooth scrolling.
+// https://lodash.com/docs/4.17.10#throttle
+// You could do like...
+// window.addEventListener("scroll", () => {
+//    _.throttle(doThatStuff, 100);
+// });
+// Only not doing it here to keep this Pen dependency-free.
+
+window.addEventListener("scroll", event => {
+  let fromTop = window.scrollY;
+
+  mainNavLinks.forEach((link, index) => {
+    let section = document.getElementById(decodeURI(link.hash).substring(1));
+    let nextSection = null
+    if (mainNavLinks[index + 1]) {
+      nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+    }
+    if (section.offsetTop <= fromTop) {
+      if (nextSection) {
+        if (nextSection.offsetTop > fromTop) {
+          link.classList.add("current");
+        } else {
+          link.classList.remove("current");    
+        }
+      } else {
+        link.classList.add("current");
+      }
+    } else {
+      link.classList.remove("current");
+    }
+  });
+});
+
+
+document.addEventListener("DOMContentLoaded", function() {
+  var lazyImages = [].slice.call(document.querySelectorAll(".post-feature-image.lazy"));
+
+  if ("IntersectionObserver" in window) {
+    let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          let lazyImage = entry.target
+          lazyImage.style.backgroundImage = `url(${lazyImage.dataset.bg})`
+          lazyImage.classList.remove("lazy")
+          lazyImageObserver.unobserve(lazyImage)
+        }
+      });
+    });
+
+    lazyImages.forEach(function(lazyImage) {
+      lazyImageObserver.observe(lazyImage)
+    })
+  } else {
+    // Possibly fall back to a more compatible method here
+  }
+});
+
+const menuContainer = document.querySelector('.menu-container')
+const menus = document.querySelectorAll('.menu-container .menu')
+const mask = document.querySelector('.mask')
+const contentWrapper = document.querySelector('.content-wrapper')
+const latestArticle = document.querySelector('.latest-article')
+const readMore = document.querySelector('.read-more')
+const indexPage = document.querySelector('.index-page')
+
+const isHome = location.pathname === '/'
+if (latestArticle) {
+  latestArticle.style.display = isHome ? 'block' : 'none'
+  readMore.style.display = isHome ? 'block' : 'none'
+  indexPage.style.display = isHome ? 'none' : 'block'
+}
+
+const openMenu = () => {
+  menuContainer.classList.add('open')
+  menus.forEach(menu => {
+    menu.classList.add('animated', 'fadeInLeft')
+  })
+  mask.classList.add('open')
+  contentWrapper.classList.add('is-second')
+}
+
+const closeMenu = () => {
+  menuContainer.classList.remove('open')
+  menus.forEach(menu => {
+    menu.classList.remove('animated', 'fadeInLeft')
+  })
+  mask.classList.remove('open')
+  contentWrapper.classList.remove('is-second')
+}
+</script>
+  
+  </body>
+</html>
