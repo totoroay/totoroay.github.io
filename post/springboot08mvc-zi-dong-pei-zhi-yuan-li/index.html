@@ -1,0 +1,498 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>totoroay</title>
+<meta name="description" content="每天学习5小时！！！" />
+<link rel="shortcut icon" href="https://totoroay.github.io//favicon.ico?v=1589115334358">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+
+<link rel="stylesheet" href="https://totoroay.github.io//styles/main.css">
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main px-4 flex flex-col lg:flex-row">
+      <div id="sidebar" class="sidebar-wrapper lg:static lg:w-1/4">
+  <div class="lg:sticky top-0">
+    <div class="sidebar-content">
+      <div class="flex lg:block p-4 lg:px-0 items-center fixed lg:static lg:block top-0 right-0 left-0 bg-white z-50">
+        <i class="ri-menu-2-line lg:mt-4 text-2xl cursor-pointer animated fadeIn" onclick="openMenu()"></i>
+        <a href="https://totoroay.github.io/">
+          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://totoroay.github.io//images/avatar.png?v=1589115334358" alt="">
+        </a>
+        <h1 class="animated fadeInLeft lg:text-4xl font-extrabold lg:mt-8 mt-0 text-xl" style="animation-delay: 0.2s">totoroay</h1>
+      </div>
+      
+        <div class="animated fadeInLeft" style="animation-delay: 0.4s">
+          <p class="my-4 text-gray-600 font-light hidden lg:block">
+            文章目录
+          </p>
+          <div class="toc-container hidden lg:block">
+            <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E5%AE%98%E7%BD%91%E9%98%85%E8%AF%BB">官网阅读</a></li>
+<li><a href="#contentnegotiatingviewresolver-%E5%86%85%E5%AE%B9%E5%8D%8F%E5%95%86%E8%A7%86%E5%9B%BE%E8%A7%A3%E6%9E%90%E5%99%A8"><strong>ContentNegotiatingViewResolver 内容协商视图解析器</strong></a></li>
+<li><a href="#%E8%BD%AC%E6%8D%A2%E5%99%A8%E5%92%8C%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%99%A8">转换器和格式化器</a></li>
+<li><a href="#%E4%BF%AE%E6%94%B9springboot%E7%9A%84%E9%BB%98%E8%AE%A4%E9%85%8D%E7%BD%AE">修改SpringBoot的默认配置</a></li>
+<li><a href="#%E5%85%A8%E9%9D%A2%E6%8E%A5%E7%AE%A1springmvc">全面接管SpringMVC</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      
+    </div>
+  </div>
+</div>
+
+<div class="menu-container">
+  <i class="ri-arrow-left-line text-2xl cursor-pointer animated fadeIn close-menu-btn" onclick="closeMenu()"></i>
+  <div>
+    
+      
+        <a href="/" class="menu" style="animation-delay: 0s">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu" style="animation-delay: 0.2s">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu" style="animation-delay: 0.4s">
+          标签（分类）
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu" style="animation-delay: 0.6000000000000001s">
+          关于博主
+        </a>
+      
+    
+  </div>
+  <div class="site-footer">
+    <div class="py-4 text-gray-700"></div>
+    <a class="rss" href="https://totoroay.github.io//atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+<div class="mask" onclick="closeMenu()">
+</div>
+      <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
+        <h1 class="text-3xl font-bold lg:mt-16">SpringBoot08：MVC自动配置原理</h1>
+        <div class="text-sm text-gray-700 lg:my-8">
+          2020-05-10 / 11 min read
+        </div>
+        
+          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://totoroay.github.io//post-images/springboot08mvc-zi-dong-pei-zhi-yuan-li.jpg" alt="">
+        
+        <div class="post-content yue">
+          <h2 id="官网阅读">官网阅读</h2>
+<p>在进行项目编写前，我们还需要知道一个东西，就是SpringBoot对我们的SpringMVC还做了哪些配置，包括如何扩展，如何定制。</p>
+<p>只有把这些都搞清楚了，我们在之后使用才会更加得心应手。途径一：源码分析，途径二：官方文档！</p>
+<p>地址 ：https://docs.spring.io/spring-boot/docs/2.2.5.RELEASE/reference/htmlsingle/#boot-features-spring-mvc-auto-configuration</p>
+<pre><code class="language-java">Spring MVC Auto-configuration
+    
+    
+// Spring Boot为Spring MVC提供了自动配置，它可以很好地与大多数应用程序一起工作。
+Spring Boot provides auto-configuration for Spring MVC that works well with most applications.
+// 自动配置在Spring默认设置的基础上添加了以下功能：
+The auto-configuration adds the following features on top of Spring’s defaults:
+// 包含视图解析器
+Inclusion of ContentNegotiatingViewResolver and BeanNameViewResolver beans.
+// 支持静态资源文件夹的路径，以及webjars
+Support for serving static resources, including support for WebJars 
+// 自动注册了Converter：
+// 转换器，这就是我们网页提交数据到后台自动封装成为对象的东西，比如把&quot;1&quot;字符串自动转换为int类型
+// Formatter：【格式化器，比如页面给我们了一个2019-8-10，它会给我们自动格式化为Date对象】
+Automatic registration of Converter, GenericConverter, and Formatter beans.
+// HttpMessageConverters
+// SpringMVC用来转换Http请求和响应的的，比如我们要把一个User对象转换为JSON字符串，可以去看官网文档解释；
+Support for HttpMessageConverters (covered later in this document).
+// 定义错误代码生成规则的
+Automatic registration of MessageCodesResolver (covered later in this document).
+// 首页定制
+Static index.html support.
+// 图标定制
+Custom Favicon support (covered later in this document).
+// 初始化数据绑定器：帮我们把请求数据绑定到JavaBean中！
+Automatic use of a ConfigurableWebBindingInitializer bean (covered later in this document).
+
+/*
+如果您希望保留Spring Boot MVC功能，并且希望添加其他MVC配置（拦截器、格式化程序、视图控制器和其他功能），则可以添加自己
+的@configuration类，类型为webmvcconfiguer，但不添加@EnableWebMvc。如果希望提供
+RequestMappingHandlerMapping、RequestMappingHandlerAdapter或ExceptionHandlerExceptionResolver的自定义
+实例，则可以声明WebMVCregistrationAdapter实例来提供此类组件。
+*/
+If you want to keep Spring Boot MVC features and you want to add additional MVC configuration 
+(interceptors, formatters, view controllers, and other features), you can add your own 
+@Configuration class of type WebMvcConfigurer but without @EnableWebMvc. If you wish to provide 
+custom instances of RequestMappingHandlerMapping, RequestMappingHandlerAdapter, or 
+ExceptionHandlerExceptionResolver, you can declare a WebMvcRegistrationsAdapter instance to provide such components.
+
+// 如果您想完全控制Spring MVC，可以添加自己的@Configuration，并用@EnableWebMvc进行注释。
+If you want to take complete control of Spring MVC, you can add your own @Configuration annotated with @EnableWebMvc.
+</code></pre>
+<p>我们来仔细对照，看一下它怎么实现的，它告诉我们SpringBoot已经帮我们自动配置好了SpringMVC，然后自动配置了哪些东西呢？</p>
+<h2 id="contentnegotiatingviewresolver-内容协商视图解析器"><strong>ContentNegotiatingViewResolver 内容协商视图解析器</strong></h2>
+<p>自动配置了ViewResolver，就是我们之前学习的SpringMVC的视图解析器；</p>
+<p>即根据方法的返回值取得视图对象（View），然后由视图对象决定如何渲染（转发，重定向）。</p>
+<p>我们去看看这里的源码：我们找到 WebMvcAutoConfiguration ， 然后搜索ContentNegotiatingViewResolver。找到如下方法！</p>
+<pre><code class="language-java">@Bean
+@ConditionalOnBean(ViewResolver.class)
+@ConditionalOnMissingBean(name = &quot;viewResolver&quot;, value = ContentNegotiatingViewResolver.class)
+public ContentNegotiatingViewResolver viewResolver(BeanFactory beanFactory) {
+    ContentNegotiatingViewResolver resolver = new ContentNegotiatingViewResolver();
+    resolver.setContentNegotiationManager(beanFactory.getBean(ContentNegotiationManager.class));
+    // ContentNegotiatingViewResolver使用所有其他视图解析器来定位视图，因此它应该具有较高的优先级
+    resolver.setOrder(Ordered.HIGHEST_PRECEDENCE);
+    return resolver;
+}
+</code></pre>
+<p>我们可以点进这类看看！找到对应的解析视图的代码；</p>
+<pre><code class="language-java">@Nullable // 注解说明：@Nullable 即参数可为null
+public View resolveViewName(String viewName, Locale locale) throws Exception {
+    RequestAttributes attrs = RequestContextHolder.getRequestAttributes();
+    Assert.state(attrs instanceof ServletRequestAttributes, &quot;No current ServletRequestAttributes&quot;);
+    List&lt;MediaType&gt; requestedMediaTypes = this.getMediaTypes(((ServletRequestAttributes)attrs).getRequest());
+    if (requestedMediaTypes != null) {
+        // 获取候选的视图对象
+        List&lt;View&gt; candidateViews = this.getCandidateViews(viewName, locale, requestedMediaTypes);
+        // 选择一个最适合的视图对象，然后把这个对象返回
+        View bestView = this.getBestView(candidateViews, requestedMediaTypes, attrs);
+        if (bestView != null) {
+            return bestView;
+        }
+    }
+    // .....
+}
+</code></pre>
+<p>我们继续点进去看，他是怎么获得候选的视图的呢？</p>
+<p>getCandidateViews中看到他是把所有的视图解析器拿来，进行while循环，挨个解析！</p>
+<pre><code> Iterator var5 = this.viewResolvers.iterator();
+</code></pre>
+<p>所以得出结论：<strong>ContentNegotiatingViewResolver 这个视图解析器就是用来组合所有的视图解析器的</strong></p>
+<p>我们再去研究下他的组合逻辑，看到有个属性viewResolvers，看看它是在哪里进行赋值的！</p>
+<pre><code class="language-java">protected void initServletContext(ServletContext servletContext) {
+    // 这里它是从beanFactory工具中获取容器中的所有视图解析器
+    // ViewRescolver.class 把所有的视图解析器来组合的
+    Collection&lt;ViewResolver&gt; matchingBeans = BeanFactoryUtils.beansOfTypeIncludingAncestors(this.obtainApplicationContext(), ViewResolver.class).values();
+    ViewResolver viewResolver;
+    if (this.viewResolvers == null) {
+        this.viewResolvers = new ArrayList(matchingBeans.size());
+    }
+    // ...............
+}
+</code></pre>
+<p>既然它是在容器中去找视图解析器，我们是否可以猜想，我们就可以去实现一个视图解析器了呢？</p>
+<p>我们可以自己给容器中去添加一个视图解析器；这个类就会帮我们自动的将它组合进来；<strong>我们去实现一下</strong></p>
+<p>1、我们在我们的主程序中去写一个视图解析器来试试；</p>
+<pre><code class="language-java">@Bean //放到bean中
+public ViewResolver myViewResolver(){
+    return new MyViewResolver();
+}
+
+//我们写一个静态内部类，视图解析器就需要实现ViewResolver接口
+private static class MyViewResolver implements ViewResolver{
+    @Override
+    public View resolveViewName(String s, Locale locale) throws Exception {
+        return null;
+    }
+}
+</code></pre>
+<p>2、怎么看我们自己写的视图解析器有没有起作用呢？</p>
+<p>我们给 DispatcherServlet 中的 doDispatch方法 加个断点进行调试一下，因为所有的请求都会走到这个方法中</p>
+<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1589115089253.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1589115082896.png" alt="" loading="lazy"></figure>
+<p>所以说，我们如果想要使用自己定制化的东西，我们只需要给容器中添加这个组件就好了！剩下的事情SpringBoot就会帮我们做了！</p>
+<h2 id="转换器和格式化器">转换器和格式化器</h2>
+<p>在WebMvcAutoConfiguration.java中找到格式化转换器：</p>
+<pre><code class="language-java">@Bean
+@Override
+public FormattingConversionService mvcConversionService() {
+    // 拿到配置文件中的格式化规则
+    WebConversionService conversionService = 
+        new WebConversionService(this.mvcProperties.getDateFormat());
+    addFormatters(conversionService);
+    return conversionService;
+}
+</code></pre>
+<p>点击去：</p>
+<pre><code class="language-java">public String getDateFormat() {
+    return this.dateFormat;
+}
+
+/**
+* Date format to use. For instance, `dd/MM/yyyy`. 默认的
+ */
+private String dateFormat;
+</code></pre>
+<p>可以看到在我们的Properties文件中，我们可以进行自动配置它！</p>
+<p>如果配置了自己的格式化方式，就会注册到Bean中生效，我们可以在配置文件中配置日期格式化的规则：</p>
+<figure data-type="image" tabindex="3"><img src="https://totoroay.github.io//post-images/1589115073930.png" alt="" loading="lazy"></figure>
+<p>其余的就不一一举例了，大家可以下去多研究探讨即可！</p>
+<h2 id="修改springboot的默认配置">修改SpringBoot的默认配置</h2>
+<p>这么多的自动配置，原理都是一样的，通过这个WebMVC的自动配置原理分析，我们要学会一种学习方式，通过源码探究，得出结论；这个结论一定是属于自己的，而且一通百通。</p>
+<p>SpringBoot的底层，大量用到了这些设计细节思想，所以，没事需要多阅读源码！得出结论；</p>
+<p>SpringBoot在自动配置很多组件的时候，先看容器中有没有用户自己配置的（如果用户自己配置@bean），如果有就用用户配置的，如果没有就用自动配置的；</p>
+<p>如果有些组件可以存在多个，比如我们的视图解析器，就将用户配置的和自己默认的组合起来！</p>
+<p><strong>扩展使用SpringMVC</strong>  官方文档如下：</p>
+<p>If you want to keep Spring Boot MVC features and you want to add additional MVC configuration (interceptors, formatters, view controllers, and other features), you can add your own @Configuration class of type WebMvcConfigurer but without @EnableWebMvc. If you wish to provide custom instances of RequestMappingHandlerMapping, RequestMappingHandlerAdapter, or ExceptionHandlerExceptionResolver, you can declare a WebMvcRegistrationsAdapter instance to provide such components.</p>
+<p>我们要做的就是编写一个@Configuration注解类，并且类型要为WebMvcConfigurer，还不能标注@EnableWebMvc注解；我们去自己写一个；我们新建一个包叫config，写一个类MyMvcConfig；</p>
+<pre><code class="language-java">// 应为类型要求为WebMvcConfigurer，所以我们实现其接口
+// 可以使用自定义类扩展MVC的功能
+@Configuration
+public class MyMvcConfig implements WebMvcConfigurer {
+
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        // 浏览器发送/test ， 就会跳转到test页面；
+        registry.addViewController(&quot;/totoroay&quot;).setViewName(&quot;test&quot;);
+    }
+}
+</code></pre>
+<p>我们去浏览器访问一下：</p>
+<figure data-type="image" tabindex="4"><img src="https://totoroay.github.io//post-images/1589115065920.png" alt="" loading="lazy"></figure>
+<p><strong>确实也跳转过来了！所以说，我们要扩展SpringMVC，官方就推荐我们这么去使用，既保SpringBoot留所有的自动配置，也能用我们扩展的配置！</strong></p>
+<p>我们可以去分析一下原理：</p>
+<p>1、WebMvcAutoConfiguration 是 SpringMVC的自动配置类，里面有一个类WebMvcAutoConfigurationAdapter</p>
+<p>2、这个类上有一个注解，在做其他自动配置时会导入：@Import(EnableWebMvcConfiguration.class)</p>
+<p>3、我们点进EnableWebMvcConfiguration这个类看一下，它继承了一个父类：DelegatingWebMvcConfiguration</p>
+<p>这个父类中有这样一段代码：</p>
+<pre><code class="language-java">public class DelegatingWebMvcConfiguration extends WebMvcConfigurationSupport {
+    private final WebMvcConfigurerComposite configurers = new WebMvcConfigurerComposite();
+    
+  // 从容器中获取所有的webmvcConfigurer
+    @Autowired(required = false)
+    public void setConfigurers(List&lt;WebMvcConfigurer&gt; configurers) {
+        if (!CollectionUtils.isEmpty(configurers)) {
+            this.configurers.addWebMvcConfigurers(configurers);
+        }
+    }
+}
+</code></pre>
+<p>4、我们可以在这个类中去寻找一个我们刚才设置的viewController当做参考，发现它调用了一个</p>
+<pre><code class="language-java">protected void addViewControllers(ViewControllerRegistry registry) {
+    this.configurers.addViewControllers(registry);
+}
+</code></pre>
+<p>5、我们点进去看一下</p>
+<pre><code class="language-java">public void addViewControllers(ViewControllerRegistry registry) {
+    Iterator var2 = this.delegates.iterator();
+
+    while(var2.hasNext()) {
+        // 将所有的WebMvcConfigurer相关配置来一起调用！包括我们自己配置的和Spring给我们配置的
+        WebMvcConfigurer delegate = (WebMvcConfigurer)var2.next();
+        delegate.addViewControllers(registry);
+    }
+
+}
+</code></pre>
+<p>所以得出结论：所有的WebMvcConfiguration都会被作用，不止Spring自己的配置类，我们自己的配置类当然也会被调用；</p>
+<h2 id="全面接管springmvc">全面接管SpringMVC</h2>
+<p>官方文档：</p>
+<pre><code>If you want to take complete control of Spring MVC
+you can add your own @Configuration annotated with @EnableWebMvc.
+</code></pre>
+<p>全面接管即：SpringBoot对SpringMVC的自动配置不需要了，所有都是我们自己去配置！</p>
+<p>只需在我们的配置类中要加一个@EnableWebMvc。</p>
+<p>我们看下如果我们全面接管了SpringMVC了，我们之前SpringBoot给我们配置的静态资源映射一定会无效，我们可以去测试一下；</p>
+<p>不加注解之前，访问首页：</p>
+<figure data-type="image" tabindex="5"><img src="https://totoroay.github.io//post-images/1589115054327.png" alt="" loading="lazy"></figure>
+<p>给配置类加上注解再重启：@EnableWebMvc</p>
+<figure data-type="image" tabindex="6"><img src="https://totoroay.github.io//post-images/1589115048051.png" alt="" loading="lazy"></figure>
+<p>我们发现所有的SpringMVC自动配置都失效了！回归到了最初的样子；</p>
+<p><strong>当然，我们开发中，不推荐使用全面接管SpringMVC</strong></p>
+<p>思考问题？为什么加了一个注解，自动配置就失效了！我们看下源码：</p>
+<p>1、这里发现它是导入了一个类，我们可以继续进去看</p>
+<pre><code class="language-java">@Import({DelegatingWebMvcConfiguration.class})
+public @interface EnableWebMvc {
+}
+</code></pre>
+<p>2、它继承了一个父类 WebMvcConfigurationSupport</p>
+<pre><code class="language-java">public class DelegatingWebMvcConfiguration extends WebMvcConfigurationSupport {
+  // ......
+}
+</code></pre>
+<p>3、我们来回顾一下Webmvc自动配置类</p>
+<pre><code class="language-java">@Configuration(proxyBeanMethods = false)
+@ConditionalOnWebApplication(type = Type.SERVLET)
+@ConditionalOnClass({ Servlet.class, DispatcherServlet.class, WebMvcConfigurer.class })
+// 这个注解的意思就是：容器中没有这个组件的时候，这个自动配置类才生效
+@ConditionalOnMissingBean(WebMvcConfigurationSupport.class)
+@AutoConfigureOrder(Ordered.HIGHEST_PRECEDENCE + 10)
+@AutoConfigureAfter({ DispatcherServletAutoConfiguration.class, TaskExecutionAutoConfiguration.class,
+    ValidationAutoConfiguration.class })
+public class WebMvcAutoConfiguration {
+    
+}
+</code></pre>
+<p>总结一句话：@EnableWebMvc将WebMvcConfigurationSupport组件导入进来了；</p>
+<p>而导入的WebMvcConfigurationSupport只是SpringMVC最基本的功能！</p>
+<p><strong>在SpringBoot中会有非常多的扩展配置，只要看见了这个，我们就应该多留心注意~</strong></p>
+
+        </div>
+
+        
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://totoroay.github.io/tag/LkiY-qT6m/">
+            <span class="flex-auto">SpringBoot</span>
+          </a>
+        
+
+
+        <div class="flex justify-between py-8">
+          
+
+          
+            <div class="next-post">
+              <a href="https://totoroay.github.io/post/springsheng-ming-shi-wu/">
+                <h3 class="post-title">
+                  Spring：声明事务
+                  <i class="ri-arrow-right-line"></i>
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '76af3abf5b345815d20f',
+    clientSecret: 'cd22dd44f3d5b861d2552cd4270bee0b3b1ad9cc',
+    repo: 'totoroay.github.io',
+    owner: 'totoroay',
+    admin: ['totoroay'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+      </div>
+    </div>
+
+    <script src="https://totoroay.github.io//media/prism.js"></script>  
+<script>
+
+Prism.highlightAll()
+let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+// This should probably be throttled.
+// Especially because it triggers during smooth scrolling.
+// https://lodash.com/docs/4.17.10#throttle
+// You could do like...
+// window.addEventListener("scroll", () => {
+//    _.throttle(doThatStuff, 100);
+// });
+// Only not doing it here to keep this Pen dependency-free.
+
+window.addEventListener("scroll", event => {
+  let fromTop = window.scrollY;
+
+  mainNavLinks.forEach((link, index) => {
+    let section = document.getElementById(decodeURI(link.hash).substring(1));
+    let nextSection = null
+    if (mainNavLinks[index + 1]) {
+      nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+    }
+    if (section.offsetTop <= fromTop) {
+      if (nextSection) {
+        if (nextSection.offsetTop > fromTop) {
+          link.classList.add("current");
+        } else {
+          link.classList.remove("current");    
+        }
+      } else {
+        link.classList.add("current");
+      }
+    } else {
+      link.classList.remove("current");
+    }
+  });
+});
+
+
+document.addEventListener("DOMContentLoaded", function() {
+  var lazyImages = [].slice.call(document.querySelectorAll(".post-feature-image.lazy"));
+
+  if ("IntersectionObserver" in window) {
+    let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          let lazyImage = entry.target
+          lazyImage.style.backgroundImage = `url(${lazyImage.dataset.bg})`
+          lazyImage.classList.remove("lazy")
+          lazyImageObserver.unobserve(lazyImage)
+        }
+      });
+    });
+
+    lazyImages.forEach(function(lazyImage) {
+      lazyImageObserver.observe(lazyImage)
+    })
+  } else {
+    // Possibly fall back to a more compatible method here
+  }
+});
+
+const menuContainer = document.querySelector('.menu-container')
+const menus = document.querySelectorAll('.menu-container .menu')
+const mask = document.querySelector('.mask')
+const contentWrapper = document.querySelector('.content-wrapper')
+const latestArticle = document.querySelector('.latest-article')
+const readMore = document.querySelector('.read-more')
+const indexPage = document.querySelector('.index-page')
+
+const isHome = location.pathname === '/'
+if (latestArticle) {
+  latestArticle.style.display = isHome ? 'block' : 'none'
+  readMore.style.display = isHome ? 'block' : 'none'
+  indexPage.style.display = isHome ? 'none' : 'block'
+}
+
+const openMenu = () => {
+  menuContainer.classList.add('open')
+  menus.forEach(menu => {
+    menu.classList.add('animated', 'fadeInLeft')
+  })
+  mask.classList.add('open')
+  contentWrapper.classList.add('is-second')
+}
+
+const closeMenu = () => {
+  menuContainer.classList.remove('open')
+  menus.forEach(menu => {
+    menu.classList.remove('animated', 'fadeInLeft')
+  })
+  mask.classList.remove('open')
+  contentWrapper.classList.remove('is-second')
+}
+</script>
+  
+  </body>
+</html>
