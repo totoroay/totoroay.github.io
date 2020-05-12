@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://totoroay.github.io/</id>
     <title>totoroay</title>
-    <updated>2020-05-10T12:55:38.521Z</updated>
+    <updated>2020-05-12T07:01:11.391Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://totoroay.github.io/"/>
     <link rel="self" href="https://totoroay.github.io/atom.xml"/>
@@ -10,6 +10,269 @@
     <logo>https://totoroay.github.io/images/avatar.png</logo>
     <icon>https://totoroay.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, totoroay</rights>
+    <entry>
+        <title type="html"><![CDATA[外观模式]]></title>
+        <id>https://totoroay.github.io/post/wai-guan-mo-shi/</id>
+        <link href="https://totoroay.github.io/post/wai-guan-mo-shi/">
+        </link>
+        <updated>2020-05-12T06:59:11.000Z</updated>
+        <content type="html"><![CDATA[<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1589266822489.png" alt="" loading="lazy"></figure>
+<p><strong>模式结构：主要角色</strong></p>
+<ul>
+<li>外观角色
+<ul>
+<li>为多个子系统对外提供一个共同的接口</li>
+</ul>
+</li>
+<li>子系统角色
+<ul>
+<li>实现系统的部分功能，客户可以通过外观角色访问他</li>
+</ul>
+</li>
+<li>客户角色
+<ul>
+<li>通过一个外观角色访问各个子系统的功能</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-java">package totoroay.facade;
+// 子系统：cpu
+public class CPU {
+    public void startup() {
+        System.out.println(&quot;cpu startup...&quot;);
+    }
+
+    public void shutdown() {
+        System.out.println(&quot;cpu shutdown...&quot;);
+    }
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.facade;
+// 子系统：memory
+public class Memory {
+    public void startup() {
+        System.out.println(&quot;memory startup...&quot;);
+    }
+
+    public void shutdown() {
+        System.out.println(&quot;memory shutdown...&quot;);
+    }
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.facade;
+// 子系统：disk
+public class Disk {
+    public void startup() {
+        System.out.println(&quot;disk startup...&quot;);
+    }
+
+    public void shutdown() {
+        System.out.println(&quot;disk shutdown...&quot;);
+    }
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.facade;
+// 外观角色：Computer
+public class Computer {
+    private CPU cpu;
+    private Memory memory;
+    private Disk disk;
+
+    public Computer() {
+        cpu = new CPU();
+        memory = new Memory();
+        disk = new Disk();
+    }
+
+    public void startup(){
+        System.out.println(&quot;computer startup...&quot;);
+        cpu.startup();
+        memory.startup();
+        disk.startup();
+        System.out.println(&quot;computer start successful...&quot;);
+    }
+
+    public void shutdown() {
+        System.out.println(&quot;computer shutdown...&quot;);
+        cpu.shutdown();
+        memory.shutdown();
+        disk.shutdown();
+        System.out.println(&quot;computer shutdown successful...&quot;);
+    }
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.facade;
+// 客户角色：
+public class ComputerFacade {
+    public static void main(String[] args) {
+        Computer computer = new Computer();
+        computer.startup();
+        System.out.println(&quot;电脑运行中...&quot;);
+
+        computer.shutdown();
+    }
+}
+</code></pre>
+<p><strong>结果</strong></p>
+<figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1589266814798.png" alt="" loading="lazy"></figure>
+<p><strong>结构分析</strong></p>
+<figure data-type="image" tabindex="3"><img src="https://totoroay.github.io//post-images/1589266811218.png" alt="" loading="lazy"></figure>
+<p><strong>应用场景</strong></p>
+<figure data-type="image" tabindex="4"><img src="https://totoroay.github.io//post-images/1589266806093.png" alt="" loading="lazy"></figure>
+<p><strong>扩展：系统升级！！！</strong></p>
+<figure data-type="image" tabindex="5"><img src="https://totoroay.github.io//post-images/1589266801540.png" alt="" loading="lazy"></figure>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[装饰模式]]></title>
+        <id>https://totoroay.github.io/post/zhuang-shi-mo-shi/</id>
+        <link href="https://totoroay.github.io/post/zhuang-shi-mo-shi/">
+        </link>
+        <updated>2020-05-12T06:56:33.000Z</updated>
+        <content type="html"><![CDATA[<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1589266708394.png" alt="" loading="lazy"></figure>
+<p><strong>模式结构：包含的角色</strong></p>
+<ul>
+<li>抽象构件角色：
+<ul>
+<li>定义一个抽象接口以规范准备接收附加责任的对象</li>
+</ul>
+</li>
+<li>具体构件角色：
+<ul>
+<li>实现抽象构件，通过装饰角色为其添加一些职责</li>
+</ul>
+</li>
+<li>抽象装饰角色：
+<ul>
+<li>继承抽象构件，并包含具体构件的实例，可以通过其子类扩展具体构件的功能</li>
+</ul>
+</li>
+<li>具体装饰角色：
+<ul>
+<li>实现抽象装饰的相关方法，并给具体构件对象添加附加的责任</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-java">package totoroay.decorator;
+// 抽象构件：奶茶
+public interface MilkTea {
+    String milkTeaName();
+    int milkTeaPrice();
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.decorator;
+// 具体构件：珍珠奶茶
+public class PearlMilkTea implements MilkTea {
+    @Override
+    public String milkTeaName() {
+        return &quot;珍珠奶茶&quot;;
+    }
+
+    @Override
+    public int milkTeaPrice() {
+        return 10;
+    }
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.decorator;
+// 具体构件：港式奶茶
+public class HongKongMilkTea implements MilkTea {
+    @Override
+    public String milkTeaName() {
+        return &quot;港式奶茶&quot;;
+    }
+
+    @Override
+    public int milkTeaPrice() {
+        return 12;
+    }
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.decorator;
+// 抽象装饰：奶茶口味
+public abstract class Taste implements MilkTea {
+    @Override
+    public String milkTeaName() {
+        return null;
+    }
+
+    @Override
+    public int milkTeaPrice() {
+        return 0;
+    }
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.decorator;
+// 具体装饰：加椰果
+public class AddYeGuoTaste extends Taste {
+    private String description = &quot;加椰果&quot;;
+    private MilkTea milkTea;
+
+    public AddYeGuoTaste(MilkTea milkTea) {
+        this.milkTea = milkTea;
+    }
+
+    @Override
+    public String milkTeaName() {
+        return milkTea.milkTeaName() + &quot;  &quot; + description;
+    }
+
+    @Override
+    public int milkTeaPrice() {
+        return milkTea.milkTeaPrice()+2;
+    }
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.decorator;
+// 具体装饰：加布丁
+public class AddBuDingTaste extends Taste {
+    private String description = &quot;加布丁&quot;;
+    private MilkTea milkTea;
+
+    public AddBuDingTaste(MilkTea milkTea) {
+        this.milkTea = milkTea;
+    }
+
+    @Override
+    public String milkTeaName() {
+        return milkTea.milkTeaName() + &quot;  &quot; + description;
+    }
+
+    @Override
+    public int milkTeaPrice() {
+        return milkTea.milkTeaPrice()+2;
+    }
+}
+</code></pre>
+<p><strong>测试</strong></p>
+<pre><code class="language-java">package totoroay.decorator;
+
+public class test {
+    public static void main(String[] args) {
+        MilkTea pearlMilkTea = new PearlMilkTea();
+        System.out.println(pearlMilkTea.milkTeaName()+&quot;  &quot;+pearlMilkTea.milkTeaPrice());
+        MilkTea hongKongMilkTea = new HongKongMilkTea();
+        System.out.println(hongKongMilkTea.milkTeaName()+&quot;  &quot;+hongKongMilkTea.milkTeaPrice());
+
+        System.out.println(&quot;============&quot;);
+        AddYeGuoTaste addYeGuoTaste = new AddYeGuoTaste(pearlMilkTea);
+        System.out.println(addYeGuoTaste.milkTeaName()+&quot;  &quot;+addYeGuoTaste.milkTeaPrice());
+        AddBuDingTaste addBuDingTaste = new AddBuDingTaste(hongKongMilkTea);
+        System.out.println(addBuDingTaste.milkTeaName()+&quot;  &quot;+addBuDingTaste.milkTeaPrice());
+    }
+}
+</code></pre>
+<p><strong>结果</strong></p>
+<figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1589266697409.png" alt="" loading="lazy"></figure>
+<p><strong>结构分析</strong></p>
+<figure data-type="image" tabindex="3"><img src="https://totoroay.github.io//post-images/1589266693620.png" alt="" loading="lazy"></figure>
+<p><strong>应用场景</strong></p>
+<figure data-type="image" tabindex="4"><img src="https://totoroay.github.io//post-images/1589266688028.png" alt="" loading="lazy"></figure>
+<p><strong>扩展</strong></p>
+<figure data-type="image" tabindex="5"><img src="https://totoroay.github.io//post-images/1589266682246.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="6"><img src="https://totoroay.github.io//post-images/1589266673645.png" alt="" loading="lazy"></figure>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[SpringBoot08：MVC自动配置原理]]></title>
         <id>https://totoroay.github.io/post/springboot08mvc-zi-dong-pei-zhi-yuan-li/</id>
@@ -1622,222 +1885,6 @@ debug=true
 <p><strong>Unconditional classes: （没有条件的类）</strong></p>
 <p>【演示：查看输出的日志】</p>
 <p>掌握吸收理解原理，即可以不变应万变！</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[SpringBoot04：JSR303数据校验及多环境切换]]></title>
-        <id>https://totoroay.github.io/post/springboot04jsr303-shu-ju-xiao-yan-ji-duo-huan-jing-qie-huan/</id>
-        <link href="https://totoroay.github.io/post/springboot04jsr303-shu-ju-xiao-yan-ji-duo-huan-jing-qie-huan/">
-        </link>
-        <updated>2020-05-07T05:46:01.000Z</updated>
-        <content type="html"><![CDATA[<h2 id="jsr303数据校验">JSR303数据校验</h2>
-<p>Springboot中可以用@validated来校验数据，如果数据异常则会统一抛出异常，方便异常中心统一处理。我们这里来写个注解让我们的name只能支持Email格式；</p>
-<pre><code class="language-java">@Component // 注册bean
-@ConfigurationProperties(prefix = &quot;person&quot;)
-@Validated  // 数据校验
-public class Person {
-
-    @Email(message=&quot;邮箱格式错误&quot;) // name必须是邮箱格式
-    private String name;
-    // 后面自行补全
-}
-</code></pre>
-<p>运行结果 ：default message [不是一个合法的电子邮件地址];</p>
-<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1588830441091.png" alt="" loading="lazy"></figure>
-<p><strong>使用数据校验，可以保证数据的正确性；</strong></p>
-<blockquote>
-<p>常见参数</p>
-</blockquote>
-<pre><code class="language-yaml">@NotNull(message=&quot;名字不能为空&quot;)
-private String userName;
-@Max(value=120,message=&quot;年龄最大不能查过120&quot;)
-private int age;
-@Email(message=&quot;邮箱格式错误&quot;)
-private String email;
-
-空检查
-@Null       验证对象是否为null
-@NotNull    验证对象是否不为null, 无法查检长度为0的字符串
-@NotBlank   检查约束字符串是不是Null还有被Trim的长度是否大于0,只对字符串,且会去掉前后空格.
-@NotEmpty   检查约束元素是否为NULL或者是EMPTY.
-    
-Booelan检查
-@AssertTrue     验证 Boolean 对象是否为 true  
-@AssertFalse    验证 Boolean 对象是否为 false  
-    
-长度检查
-@Size(min=, max=) 验证对象（Array,Collection,Map,String）长度是否在给定的范围之内  
-@Length(min=, max=) string is between min and max included.
-
-日期检查
-@Past       验证 Date 和 Calendar 对象是否在当前时间之前  
-@Future     验证 Date 和 Calendar 对象是否在当前时间之后  
-@Pattern    验证 String 对象是否符合正则表达式的规则
-    
-.......等等
-除此以外，我们还可以自定义一些数据校验规则
-</code></pre>
-<h2 id="多环境切换">多环境切换</h2>
-<p>profile是Spring对不同环境提供不同配置功能的支持，可以通过激活不同的环境版本，实现快速切换环境；</p>
-<blockquote>
-<p>多配置文件</p>
-</blockquote>
-<p>我们在主配置文件编写的时候，文件名可以是 application-{profile}.properties/yml , 用来指定多个环境版本；</p>
-<p><strong>例如：</strong></p>
-<p>application-test.properties 代表测试环境配置</p>
-<p>application-dev.properties 代表开发环境配置</p>
-<p>但是Springboot并不会直接启动这些配置文件，它<strong>默认使用application.properties主配置文件</strong>；</p>
-<p>我们需要通过一个配置来选择需要激活的环境：</p>
-<pre><code>#比如在配置文件中指定使用dev环境，我们可以通过设置不同的端口号进行测试；
-#我们启动SpringBoot，就可以看到已经切换到dev下的配置了；
-spring.profiles.active=dev
-</code></pre>
-<blockquote>
-<p>yaml的多文档块</p>
-</blockquote>
-<p>和properties配置文件中一样，但是使用yml去实现不需要创建多个配置文件，更加方便了 !</p>
-<pre><code class="language-yaml">server:
-  port: 8081
-#选择要激活那个环境块
-spring:
-  profiles:
-    active: dev
-
----
-server:
-  port: 8083
-spring:
-  profiles: dev #配置环境的名称
-
-
----
-
-server:
-  port: 8084
-spring:
-  profiles: test #配置环境的名称
-</code></pre>
-<p><strong>注意：如果yml和properties同时都配置了端口，并且没有激活其他环境 ， 默认会使用properties配置文件的！</strong></p>
-<blockquote>
-<p>配置文件加载位置</p>
-</blockquote>
-<p><strong>外部加载配置文件的方式十分多，我们选择最常用的即可，在开发的资源文件中进行配置！</strong></p>
-<p>官方外部配置文件说明参考文档</p>
-<figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1588830456817.png" alt="" loading="lazy"></figure>
-<p>springboot 启动会扫描以下位置的application.properties或者application.yml文件作为Spring boot的默认配置文件：</p>
-<pre><code>优先级1：项目路径下的config文件夹配置文件
-优先级2：项目路径下配置文件
-优先级3：资源路径下的config文件夹配置文件
-优先级4：资源路径下配置文件
-</code></pre>
-<p>优先级由高到底，高优先级的配置会覆盖低优先级的配置；</p>
-<p><strong>SpringBoot会从这四个位置全部加载主配置文件；互补配置；</strong></p>
-<p>我们在最低级的配置文件中设置一个项目访问路径的配置来测试互补问题；</p>
-<pre><code class="language-yaml">#配置项目的访问路径
-server.servlet.context-path=/totoroay
-</code></pre>
-<blockquote>
-<p>拓展，运维小技巧</p>
-</blockquote>
-<p>指定位置加载配置文件</p>
-<p>我们还可以通过spring.config.location来改变默认的配置文件位置</p>
-<p>项目打包好以后，我们可以使用命令行参数的形式，启动项目的时候来指定配置文件的新位置；这种情况，一般是后期运维做的多，相同配置，外部指定的配置文件优先级最高</p>
-<pre><code>java -jar spring-boot-config.jar --spring.config.location=F:/application.properties
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[桥接模式]]></title>
-        <id>https://totoroay.github.io/post/qiao-jie-mo-shi/</id>
-        <link href="https://totoroay.github.io/post/qiao-jie-mo-shi/">
-        </link>
-        <updated>2020-05-06T12:15:57.000Z</updated>
-        <content type="html"><![CDATA[<p><img src="https://totoroay.github.io//post-images/1588767488196.png" alt="" loading="lazy"><br>
-<strong><mark>实例分析</mark></strong></p>
-<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1588767482381.png" alt="" loading="lazy"></figure>
-<pre><code class="language-java">package totoroay.bridge;
-// 品牌
-public interface Brand {
-    void info();
-}
-</code></pre>
-<pre><code class="language-java">package totoroay.bridge;
-// 苹果品牌
-public class Apple implements Brand {
-    @Override
-    public void info() {
-        System.out.print(&quot;苹果&quot;);
-    }
-}
-</code></pre>
-<pre><code class="language-java">package totoroay.bridge;
-// 联想品牌
-public class Lenovo implements Brand {
-    @Override
-    public void info() {
-        System.out.print(&quot;联想&quot;);
-    }
-}
-</code></pre>
-<pre><code class="language-java">package totoroay.bridge;
-// 抽象的电脑类型类
-public abstract class Computer {
-    // 组合品牌
-    protected Brand brand;
-
-    public Computer(Brand brand) {
-        this.brand = brand;
-    }
-
-    public void info(){
-        brand.info();
-    }
-}
-</code></pre>
-<pre><code class="language-java">package totoroay.bridge;
-// 笔记本电脑
-public class Notebook extends Computer {
-    public Notebook(Brand brand) {
-        super(brand);
-    }
-
-    public void info(){
-        brand.info();
-        System.out.print(&quot;笔记本&quot;);
-    }
-}
-</code></pre>
-<pre><code class="language-java">package totoroay.bridge;
-// 台式机
-public class Desktop extends Computer {
-    public Desktop(Brand brand) {
-        super(brand);
-    }
-
-    public void info(){
-        brand.info();
-        System.out.print(&quot;台式机&quot;);
-    }
-}
-
-</code></pre>
-<pre><code class="language-java">package totoroay.bridge;
-
-public class test {
-    public static void main(String[] args) {
-        // 苹果笔记本
-        Notebook notebook = new Notebook(new Apple());
-        notebook.info();
-        System.out.println(&quot;\n&quot;);
-        // 联想台式机
-        Desktop desktop = new Desktop(new Lenovo());
-        desktop.info();
-    }
-}
-</code></pre>
-<figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1588767473029.png" alt="" loading="lazy"></figure>
-<figure data-type="image" tabindex="3"><img src="https://totoroay.github.io//post-images/1588767468462.png" alt="" loading="lazy"></figure>
-<figure data-type="image" tabindex="4"><img src="https://totoroay.github.io//post-images/1588767463245.png" alt="" loading="lazy"></figure>
 ]]></content>
     </entry>
 </feed>
