@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://totoroay.github.io/</id>
     <title>totoroay</title>
-    <updated>2020-05-13T11:06:29.847Z</updated>
+    <updated>2020-05-13T14:14:13.509Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://totoroay.github.io/"/>
     <link rel="self" href="https://totoroay.github.io/atom.xml"/>
@@ -1007,7 +1007,8 @@ public String test1(Model model){
 <p><strong>OK，入门搞定，我们来认真研习一下Thymeleaf的使用语法！</strong></p>
 <p><strong>1、我们可以使用任意的 th:attr 来替换Html中原生属性的值！</strong></p>
 <figure data-type="image" tabindex="3"><img src="https://totoroay.github.io//post-images/1589030016433.jpg" alt="" loading="lazy"></figure>
-<p><strong>2、我们能写哪些表达式呢？</strong></p>
+<p><strong>2、我们能写哪些表达式呢？</strong><br>
+<img src="https://totoroay.github.io//post-images/1589379234610.png" alt="" loading="lazy"></p>
 <pre><code>Simple expressions:（表达式语法）
 Variable Expressions: ${...}：获取变量值；OGNL；
     1）、获取对象的属性、调用方法
