@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://totoroay.github.io/</id>
     <title>totoroay</title>
-    <updated>2020-05-12T07:01:11.391Z</updated>
+    <updated>2020-05-13T11:06:29.847Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://totoroay.github.io/"/>
     <link rel="self" href="https://totoroay.github.io/atom.xml"/>
@@ -10,6 +10,184 @@
     <logo>https://totoroay.github.io/images/avatar.png</logo>
     <icon>https://totoroay.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, totoroay</rights>
+    <entry>
+        <title type="html"><![CDATA[SpringBoot09：页面国际化]]></title>
+        <id>https://totoroay.github.io/post/springboot09ye-mian-guo-ji-hua/</id>
+        <link href="https://totoroay.github.io/post/springboot09ye-mian-guo-ji-hua/">
+        </link>
+        <updated>2020-05-13T11:02:37.000Z</updated>
+        <content type="html"><![CDATA[<p>有的时候，我们的网站会去涉及中英文甚至多语言的切换，这时候我们就需要学习国际化了！</p>
+<h2 id="准备工作">准备工作</h2>
+<p>先在IDEA中统一设置properties的编码问题！</p>
+<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1589367893729.png" alt="" loading="lazy"></figure>
+<p>编写国际化配置文件，抽取页面需要显示的国际化页面消息。我们可以去登录页面查看一下，哪些内容我们需要编写国际化的配置！</p>
+<h2 id="配置文件编写">配置文件编写</h2>
+<p>1、我们在resources资源文件下新建一个i18n目录，存放国际化配置文件</p>
+<p>2、建立一个login.properties文件，还有一个login_zh_CN.properties；发现IDEA自动识别了我们要做国际化操作；文件夹自动合并了！</p>
+<figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1589367886727.png" alt="" loading="lazy"></figure>
+<p>3、我们可以在这上面去新建一个文件；</p>
+<figure data-type="image" tabindex="3"><img src="https://totoroay.github.io//post-images/1589367880956.png" alt="" loading="lazy"></figure>
+<p>弹出如下页面：我们再添加一个英文的；</p>
+<figure data-type="image" tabindex="4"><img src="https://totoroay.github.io//post-images/1589367876189.png" alt="" loading="lazy"></figure>
+<p><strong>4、接下来，我们就来编写配置，我们可以看到idea下面有另外一个视图；</strong></p>
+<p>这个视图我们点击 + 号就可以直接添加属性了；我们新建一个login.tip，可以看到边上有三个文件框可以输入</p>
+<figure data-type="image" tabindex="5"><img src="https://totoroay.github.io//post-images/1589367871076.png" alt="" loading="lazy"></figure>
+<p>然后去查看我们的配置文件；</p>
+<p>login.properties ：默认</p>
+<pre><code class="language-properties">login.btn=登录
+login.password=密码
+login.remember=记住我
+login.tip=请登录
+login.username=用户名
+</code></pre>
+<p>英文：</p>
+<pre><code class="language-properties">login.btn=sign in
+login.password=password
+login.remember=remember me
+login.tip=Please sign in
+login.username=username
+</code></pre>
+<p>中文：</p>
+<pre><code class="language-properties">login.btn=登录
+login.password=密码
+login.remember=记住我
+login.tip=请登录
+login.username=用户名
+</code></pre>
+<p>OK，配置文件步骤搞定！</p>
+<h2 id="配置文件生效探究">配置文件生效探究</h2>
+<p>我们去看一下SpringBoot对国际化的自动配置！这里又涉及到一个类：MessageSourceAutoConfiguration</p>
+<p>里面有一个方法，这里发现SpringBoot已经自动配置好了管理我们国际化资源文件的组件 ResourceBundleMessageSource；</p>
+<pre><code class="language-java">@Bean
+@ConfigurationProperties(prefix = &quot;spring.messages&quot;)
+public MessageSourceProperties messageSourceProperties() {
+	return new MessageSourceProperties();
+}
+
+
+// 获取 properties 传递过来的值进行判断
+@Bean
+public MessageSource messageSource(MessageSourceProperties properties) {
+    ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+    if (StringUtils.hasText(properties.getBasename())) {
+        // 设置国际化文件的基础名（去掉语言国家代码的）
+        messageSource.setBasenames(
+            StringUtils.commaDelimitedListToStringArray(
+                                       StringUtils.trimAllWhitespace(properties.getBasename())));
+    }
+    if (properties.getEncoding() != null) {
+        messageSource.setDefaultEncoding(properties.getEncoding().name());
+    }
+    messageSource.setFallbackToSystemLocale(properties.isFallbackToSystemLocale());
+    Duration cacheDuration = properties.getCacheDuration();
+    if (cacheDuration != null) {
+        messageSource.setCacheMillis(cacheDuration.toMillis());
+    }
+    messageSource.setAlwaysUseMessageFormat(properties.isAlwaysUseMessageFormat());
+    messageSource.setUseCodeAsDefaultMessage(properties.isUseCodeAsDefaultMessage());
+    return messageSource;
+}
+</code></pre>
+<p>我们真实 的情况是放在了i18n目录下，所以我们要去配置这个messages的路径；</p>
+<pre><code class="language-properties">spring.messages.basename=i18n/login
+</code></pre>
+<h2 id="配置页面国际化值">配置页面国际化值</h2>
+<p>去页面获取国际化的值，查看Thymeleaf的文档，找到message取值操作为：#{...}。我们去页面测试下：</p>
+<p>IDEA还有提示，非常智能的</p>
+<figure data-type="image" tabindex="6"><img src="https://totoroay.github.io//post-images/1589367857228.png" alt="" loading="lazy"></figure>
+<p>我们可以去启动项目，访问一下，发现已经自动识别为中文的了！</p>
+<figure data-type="image" tabindex="7"><img src="https://totoroay.github.io//post-images/1589367851133.png" alt="" loading="lazy"></figure>
+<p><strong>但是我们想要更好！可以根据按钮自动切换中文英文！</strong></p>
+<h2 id="配置国际化解析">配置国际化解析</h2>
+<p>在Spring中有一个国际化的Locale （区域信息对象）；里面有一个叫做LocaleResolver （获取区域信息对象）的解析器！</p>
+<p>我们去我们WebMvcAutoConfiguration自动配置文件，寻找一下！看到SpringBoot默认配置：</p>
+<pre><code class="language-java">@Bean
+@ConditionalOnMissingBean
+@ConditionalOnProperty(prefix = &quot;spring.mvc&quot;, name = &quot;locale&quot;)
+public LocaleResolver localeResolver() {
+    // 容器中没有就自己配，有的话就用用户配置的
+    if (this.mvcProperties.getLocaleResolver() == WebMvcProperties.LocaleResolver.FIXED) {
+        return new FixedLocaleResolver(this.mvcProperties.getLocale());
+    }
+    // 接收头国际化分解
+    AcceptHeaderLocaleResolver localeResolver = new AcceptHeaderLocaleResolver();
+    localeResolver.setDefaultLocale(this.mvcProperties.getLocale());
+    return localeResolver;
+}
+</code></pre>
+<p>AcceptHeaderLocaleResolver 这个类中有一个方法</p>
+<pre><code class="language-java">public Locale resolveLocale(HttpServletRequest request) {
+    Locale defaultLocale = this.getDefaultLocale();
+    // 默认的就是根据请求头带来的区域信息获取Locale进行国际化
+    if (defaultLocale != null &amp;&amp; request.getHeader(&quot;Accept-Language&quot;) == null) {
+        return defaultLocale;
+    } else {
+        Locale requestLocale = request.getLocale();
+        List&lt;Locale&gt; supportedLocales = this.getSupportedLocales();
+        if (!supportedLocales.isEmpty() &amp;&amp; !supportedLocales.contains(requestLocale)) {
+            Locale supportedLocale = this.findSupportedLocale(request, supportedLocales);
+            if (supportedLocale != null) {
+                return supportedLocale;
+            } else {
+                return defaultLocale != null ? defaultLocale : requestLocale;
+            }
+        } else {
+            return requestLocale;
+        }
+    }
+}
+</code></pre>
+<p>那假如我们现在想点击链接让我们的国际化资源生效，就需要让我们自己的Locale生效！</p>
+<p>我们去自己写一个自己的LocaleResolver，可以在链接上携带区域信息！</p>
+<p>修改一下前端页面的跳转连接：</p>
+<pre><code class="language-html">&lt;!-- 这里传入参数不需要使用 ？使用 （key=value）--&gt;
+&lt;a class=&quot;btn btn-sm&quot; th:href=&quot;@{/index.html(language='zh_CN')}&quot;&gt;中文&lt;/a&gt;
+&lt;a class=&quot;btn btn-sm&quot; th:href=&quot;@{/index.html(language='en_US')}&quot;&gt;English&lt;/a&gt;
+</code></pre>
+<p>我们去写一个处理的组件类！</p>
+<pre><code class="language-java">package com.totoroay.config;
+
+import org.springframework.util.StringUtils;
+import org.springframework.web.servlet.LocaleResolver;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Locale;
+
+public class MyLocaleResolver implements LocaleResolver {
+    // 解析请求
+    @Override
+    public Locale resolveLocale(HttpServletRequest request) {
+        // 获取请求中的语言参数
+        String language = request.getParameter(&quot;language&quot;);
+        // 默认
+        Locale locale = Locale.getDefault();
+        // 如果请求中的链接携带了国际化的参数
+        if (!StringUtils.isEmpty(language)) {
+            // zh_CN
+            String[] split = language.split(&quot;_&quot;);
+            // 国家，地区
+            locale = new Locale(split[0], split[1]);
+        }
+        return locale;
+    }
+
+    @Override
+    public void setLocale(HttpServletRequest request, HttpServletResponse response, Locale locale) {
+
+    }
+}
+</code></pre>
+<p>为了让我们的区域化信息能够生效，我们需要再配置一下这个组件！在我们自己的MyMvcConfig下添加bean；</p>
+<pre><code class="language-java">// 自定义国际化组件
+@Bean
+public LocaleResolver localeResolver(){
+    return new MyLocaleResolver();
+}
+</code></pre>
+<p><strong>我们重启项目，来访问一下，发现点击按钮可以实现成功切换！搞定收工！</strong></p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[外观模式]]></title>
         <id>https://totoroay.github.io/post/wai-guan-mo-shi/</id>
@@ -1777,114 +1955,6 @@ private Resource getIndexHtml(String location) {
 <p><mark><strong>关于网站图标说明</strong>：</mark></p>
 <figure data-type="image" tabindex="3"><img src="https://totoroay.github.io//post-images/1588916438545.png" alt="" loading="lazy"></figure>
 <p>将图标改名为favicon.ico放在public目录下即可</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[SpringBoot05：自动配置原理]]></title>
-        <id>https://totoroay.github.io/post/springboot05zi-dong-pei-zhi-yuan-li/</id>
-        <link href="https://totoroay.github.io/post/springboot05zi-dong-pei-zhi-yuan-li/">
-        </link>
-        <updated>2020-05-07T11:43:49.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="springboot05自动配置原理">SpringBoot05：自动配置原理</h1>
-<h2 id="自动配置原理">自动配置原理</h2>
-<p>配置文件到底能写什么？怎么写？</p>
-<p>SpringBoot官方文档中有大量的配置，我们无法全部记住</p>
-<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1588852012088.jpg" alt="" loading="lazy"></figure>
-<blockquote>
-<p>分析自动配置原理</p>
-</blockquote>
-<p>我们以**HttpEncodingAutoConfiguration（Http编码自动配置）**为例解释自动配置原理;</p>
-<pre><code class="language-java">//表示这是一个配置类，和以前编写的配置文件一样，也可以给容器中添加组件；
-@Configuration 
-
-//启动指定类的ConfigurationProperties功能；
-  //进入这个HttpProperties查看，将配置文件中对应的值和HttpProperties绑定起来；
-  //并把HttpProperties加入到ioc容器中
-@EnableConfigurationProperties({HttpProperties.class}) 
-
-//Spring底层@Conditional注解
-  //根据不同的条件判断，如果满足指定的条件，整个配置类里面的配置就会生效；
-  //这里的意思就是判断当前应用是否是web应用，如果是，当前配置类生效
-@ConditionalOnWebApplication(
-    type = Type.SERVLET
-)
-
-//判断当前项目有没有这个类CharacterEncodingFilter；SpringMVC中进行乱码解决的过滤器；
-@ConditionalOnClass({CharacterEncodingFilter.class})
-
-//判断配置文件中是否存在某个配置：spring.http.encoding.enabled；
-  //如果不存在，判断也是成立的
-  //即使我们配置文件中不配置pring.http.encoding.enabled=true，也是默认生效的；
-@ConditionalOnProperty(
-    prefix = &quot;spring.http.encoding&quot;,
-    value = {&quot;enabled&quot;},
-    matchIfMissing = true
-)
-
-public class HttpEncodingAutoConfiguration {
-    //他已经和SpringBoot的配置文件映射了
-    private final Encoding properties;
-    //只有一个有参构造器的情况下，参数的值就会从容器中拿
-    public HttpEncodingAutoConfiguration(HttpProperties properties) {
-        this.properties = properties.getEncoding();
-    }
-    
-    //给容器中添加一个组件，这个组件的某些值需要从properties中获取
-    @Bean
-    @ConditionalOnMissingBean //判断容器没有这个组件？
-    public CharacterEncodingFilter characterEncodingFilter() {
-        CharacterEncodingFilter filter = new OrderedCharacterEncodingFilter();
-        filter.setEncoding(this.properties.getCharset().name());
-        filter.setForceRequestEncoding(this.properties.shouldForce(org.springframework.boot.autoconfigure.http.HttpProperties.Encoding.Type.REQUEST));
-        filter.setForceResponseEncoding(this.properties.shouldForce(org.springframework.boot.autoconfigure.http.HttpProperties.Encoding.Type.RESPONSE));
-        return filter;
-    }
-    //。。。。。。。
-}
-</code></pre>
-<p><strong>一句话总结 ：根据当前不同的条件判断，决定这个配置类是否生效！</strong></p>
-<ul>
-<li>一但这个配置类生效；这个配置类就会给容器中添加各种组件；</li>
-<li>这些组件的属性是从对应的properties类中获取的，这些类里面的每一个属性又是和配置文件绑定的；</li>
-<li>所有在配置文件中能配置的属性都是在xxxxProperties类中封装着；</li>
-<li>配置文件能配置什么就可以参照某个功能对应的这个属性类</li>
-</ul>
-<pre><code class="language-java">//从配置文件中获取指定的值和bean的属性进行绑定
-@ConfigurationProperties(prefix = &quot;spring.http&quot;) 
-public class HttpProperties {
-    // .....
-}
-</code></pre>
-<p>我们去配置文件里面试试前缀，看提示！</p>
-<figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1588852045330.png" alt="" loading="lazy"></figure>
-<p><strong>这就是自动装配的原理！</strong></p>
-<blockquote>
-<p>精髓</p>
-</blockquote>
-<p>1、SpringBoot启动会加载大量的自动配置类</p>
-<p>2、我们看我们需要的功能有没有在SpringBoot默认写好的自动配置类当中；</p>
-<p>3、我们再来看这个自动配置类中到底配置了哪些组件；（只要我们要用的组件存在在其中，我们就不需要再手动配置了）</p>
-<p>4、给容器中自动配置类添加组件的时候，会从xxxproperties类中获取某些属性。我们只需要在配置文件中指定这些属性的值即可；</p>
-<p>**xxxxAutoConfigurartion：自动配置类；**给容器中添加组件</p>
-<p><strong>xxxxProperties:封装配置文件中相关属性；</strong></p>
-<blockquote>
-<p>了解：@Conditional</p>
-</blockquote>
-<p>了解完自动装配的原理后，我们来关注一个细节问题，<strong>自动配置类必须在一定的条件下才能生效；</strong></p>
-<p><strong>@Conditional派生注解（Spring注解版原生的@Conditional作用）</strong></p>
-<p>作用：必须是@Conditional指定的条件成立，才给容器中添加组件，配置配里面的所有内容才生效；</p>
-<figure data-type="image" tabindex="3"><img src="https://totoroay.github.io//post-images/1588851996746.jpg" alt="" loading="lazy"></figure>
-<p><strong>那么多的自动配置类，必须在一定的条件下才能生效；也就是说，我们加载了这么多的配置类，但不是所有的都生效了。</strong></p>
-<p>我们怎么知道哪些自动配置类生效？</p>
-<p><strong>我们可以通过启用 debug=true属性；来让控制台打印自动配置报告，这样我们就可以很方便的知道哪些自动配置类生效；</strong></p>
-<pre><code class="language-yaml">#开启springboot的调试类
-debug=true
-</code></pre>
-<p><strong>Positive matches:（自动配置类启用的：正匹配）</strong></p>
-<p><strong>Negative matches:（没有启动，没有匹配成功的自动配置类：负匹配）</strong></p>
-<p><strong>Unconditional classes: （没有条件的类）</strong></p>
-<p>【演示：查看输出的日志】</p>
-<p>掌握吸收理解原理，即可以不变应万变！</p>
 ]]></content>
     </entry>
 </feed>

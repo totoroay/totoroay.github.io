@@ -1,0 +1,425 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>totoroay</title>
+<meta name="description" content="每天学习5小时！！！" />
+<link rel="shortcut icon" href="https://totoroay.github.io//favicon.ico?v=1589367981467">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+
+<link rel="stylesheet" href="https://totoroay.github.io//styles/main.css">
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main px-4 flex flex-col lg:flex-row">
+      <div id="sidebar" class="sidebar-wrapper lg:static lg:w-1/4">
+  <div class="lg:sticky top-0">
+    <div class="sidebar-content">
+      <div class="flex lg:block p-4 lg:px-0 items-center fixed lg:static lg:block top-0 right-0 left-0 bg-white z-50">
+        <i class="ri-menu-2-line lg:mt-4 text-2xl cursor-pointer animated fadeIn" onclick="openMenu()"></i>
+        <a href="https://totoroay.github.io/">
+          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://totoroay.github.io//images/avatar.png?v=1589367981467" alt="">
+        </a>
+        <h1 class="animated fadeInLeft lg:text-4xl font-extrabold lg:mt-8 mt-0 text-xl" style="animation-delay: 0.2s">totoroay</h1>
+      </div>
+      
+        <div class="animated fadeInLeft" style="animation-delay: 0.4s">
+          <p class="my-4 text-gray-600 font-light hidden lg:block">
+            文章目录
+          </p>
+          <div class="toc-container hidden lg:block">
+            <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C">准备工作</a></li>
+<li><a href="#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E7%BC%96%E5%86%99">配置文件编写</a></li>
+<li><a href="#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E7%94%9F%E6%95%88%E6%8E%A2%E7%A9%B6">配置文件生效探究</a></li>
+<li><a href="#%E9%85%8D%E7%BD%AE%E9%A1%B5%E9%9D%A2%E5%9B%BD%E9%99%85%E5%8C%96%E5%80%BC">配置页面国际化值</a></li>
+<li><a href="#%E9%85%8D%E7%BD%AE%E5%9B%BD%E9%99%85%E5%8C%96%E8%A7%A3%E6%9E%90">配置国际化解析</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      
+    </div>
+  </div>
+</div>
+
+<div class="menu-container">
+  <i class="ri-arrow-left-line text-2xl cursor-pointer animated fadeIn close-menu-btn" onclick="closeMenu()"></i>
+  <div>
+    
+      
+        <a href="/" class="menu" style="animation-delay: 0s">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu" style="animation-delay: 0.2s">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu" style="animation-delay: 0.4s">
+          标签（分类）
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu" style="animation-delay: 0.6000000000000001s">
+          关于博主
+        </a>
+      
+    
+  </div>
+  <div class="site-footer">
+    <div class="py-4 text-gray-700"></div>
+    <a class="rss" href="https://totoroay.github.io//atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+<div class="mask" onclick="closeMenu()">
+</div>
+      <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
+        <h1 class="text-3xl font-bold lg:mt-16">SpringBoot09：页面国际化</h1>
+        <div class="text-sm text-gray-700 lg:my-8">
+          2020-05-13 / 6 min read
+        </div>
+        
+          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://totoroay.github.io//post-images/springboot09ye-mian-guo-ji-hua.jpg" alt="">
+        
+        <div class="post-content yue">
+          <p>有的时候，我们的网站会去涉及中英文甚至多语言的切换，这时候我们就需要学习国际化了！</p>
+<h2 id="准备工作">准备工作</h2>
+<p>先在IDEA中统一设置properties的编码问题！</p>
+<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1589367893729.png" alt="" loading="lazy"></figure>
+<p>编写国际化配置文件，抽取页面需要显示的国际化页面消息。我们可以去登录页面查看一下，哪些内容我们需要编写国际化的配置！</p>
+<h2 id="配置文件编写">配置文件编写</h2>
+<p>1、我们在resources资源文件下新建一个i18n目录，存放国际化配置文件</p>
+<p>2、建立一个login.properties文件，还有一个login_zh_CN.properties；发现IDEA自动识别了我们要做国际化操作；文件夹自动合并了！</p>
+<figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1589367886727.png" alt="" loading="lazy"></figure>
+<p>3、我们可以在这上面去新建一个文件；</p>
+<figure data-type="image" tabindex="3"><img src="https://totoroay.github.io//post-images/1589367880956.png" alt="" loading="lazy"></figure>
+<p>弹出如下页面：我们再添加一个英文的；</p>
+<figure data-type="image" tabindex="4"><img src="https://totoroay.github.io//post-images/1589367876189.png" alt="" loading="lazy"></figure>
+<p><strong>4、接下来，我们就来编写配置，我们可以看到idea下面有另外一个视图；</strong></p>
+<p>这个视图我们点击 + 号就可以直接添加属性了；我们新建一个login.tip，可以看到边上有三个文件框可以输入</p>
+<figure data-type="image" tabindex="5"><img src="https://totoroay.github.io//post-images/1589367871076.png" alt="" loading="lazy"></figure>
+<p>然后去查看我们的配置文件；</p>
+<p>login.properties ：默认</p>
+<pre><code class="language-properties">login.btn=登录
+login.password=密码
+login.remember=记住我
+login.tip=请登录
+login.username=用户名
+</code></pre>
+<p>英文：</p>
+<pre><code class="language-properties">login.btn=sign in
+login.password=password
+login.remember=remember me
+login.tip=Please sign in
+login.username=username
+</code></pre>
+<p>中文：</p>
+<pre><code class="language-properties">login.btn=登录
+login.password=密码
+login.remember=记住我
+login.tip=请登录
+login.username=用户名
+</code></pre>
+<p>OK，配置文件步骤搞定！</p>
+<h2 id="配置文件生效探究">配置文件生效探究</h2>
+<p>我们去看一下SpringBoot对国际化的自动配置！这里又涉及到一个类：MessageSourceAutoConfiguration</p>
+<p>里面有一个方法，这里发现SpringBoot已经自动配置好了管理我们国际化资源文件的组件 ResourceBundleMessageSource；</p>
+<pre><code class="language-java">@Bean
+@ConfigurationProperties(prefix = &quot;spring.messages&quot;)
+public MessageSourceProperties messageSourceProperties() {
+	return new MessageSourceProperties();
+}
+
+
+// 获取 properties 传递过来的值进行判断
+@Bean
+public MessageSource messageSource(MessageSourceProperties properties) {
+    ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+    if (StringUtils.hasText(properties.getBasename())) {
+        // 设置国际化文件的基础名（去掉语言国家代码的）
+        messageSource.setBasenames(
+            StringUtils.commaDelimitedListToStringArray(
+                                       StringUtils.trimAllWhitespace(properties.getBasename())));
+    }
+    if (properties.getEncoding() != null) {
+        messageSource.setDefaultEncoding(properties.getEncoding().name());
+    }
+    messageSource.setFallbackToSystemLocale(properties.isFallbackToSystemLocale());
+    Duration cacheDuration = properties.getCacheDuration();
+    if (cacheDuration != null) {
+        messageSource.setCacheMillis(cacheDuration.toMillis());
+    }
+    messageSource.setAlwaysUseMessageFormat(properties.isAlwaysUseMessageFormat());
+    messageSource.setUseCodeAsDefaultMessage(properties.isUseCodeAsDefaultMessage());
+    return messageSource;
+}
+</code></pre>
+<p>我们真实 的情况是放在了i18n目录下，所以我们要去配置这个messages的路径；</p>
+<pre><code class="language-properties">spring.messages.basename=i18n/login
+</code></pre>
+<h2 id="配置页面国际化值">配置页面国际化值</h2>
+<p>去页面获取国际化的值，查看Thymeleaf的文档，找到message取值操作为：#{...}。我们去页面测试下：</p>
+<p>IDEA还有提示，非常智能的</p>
+<figure data-type="image" tabindex="6"><img src="https://totoroay.github.io//post-images/1589367857228.png" alt="" loading="lazy"></figure>
+<p>我们可以去启动项目，访问一下，发现已经自动识别为中文的了！</p>
+<figure data-type="image" tabindex="7"><img src="https://totoroay.github.io//post-images/1589367851133.png" alt="" loading="lazy"></figure>
+<p><strong>但是我们想要更好！可以根据按钮自动切换中文英文！</strong></p>
+<h2 id="配置国际化解析">配置国际化解析</h2>
+<p>在Spring中有一个国际化的Locale （区域信息对象）；里面有一个叫做LocaleResolver （获取区域信息对象）的解析器！</p>
+<p>我们去我们WebMvcAutoConfiguration自动配置文件，寻找一下！看到SpringBoot默认配置：</p>
+<pre><code class="language-java">@Bean
+@ConditionalOnMissingBean
+@ConditionalOnProperty(prefix = &quot;spring.mvc&quot;, name = &quot;locale&quot;)
+public LocaleResolver localeResolver() {
+    // 容器中没有就自己配，有的话就用用户配置的
+    if (this.mvcProperties.getLocaleResolver() == WebMvcProperties.LocaleResolver.FIXED) {
+        return new FixedLocaleResolver(this.mvcProperties.getLocale());
+    }
+    // 接收头国际化分解
+    AcceptHeaderLocaleResolver localeResolver = new AcceptHeaderLocaleResolver();
+    localeResolver.setDefaultLocale(this.mvcProperties.getLocale());
+    return localeResolver;
+}
+</code></pre>
+<p>AcceptHeaderLocaleResolver 这个类中有一个方法</p>
+<pre><code class="language-java">public Locale resolveLocale(HttpServletRequest request) {
+    Locale defaultLocale = this.getDefaultLocale();
+    // 默认的就是根据请求头带来的区域信息获取Locale进行国际化
+    if (defaultLocale != null &amp;&amp; request.getHeader(&quot;Accept-Language&quot;) == null) {
+        return defaultLocale;
+    } else {
+        Locale requestLocale = request.getLocale();
+        List&lt;Locale&gt; supportedLocales = this.getSupportedLocales();
+        if (!supportedLocales.isEmpty() &amp;&amp; !supportedLocales.contains(requestLocale)) {
+            Locale supportedLocale = this.findSupportedLocale(request, supportedLocales);
+            if (supportedLocale != null) {
+                return supportedLocale;
+            } else {
+                return defaultLocale != null ? defaultLocale : requestLocale;
+            }
+        } else {
+            return requestLocale;
+        }
+    }
+}
+</code></pre>
+<p>那假如我们现在想点击链接让我们的国际化资源生效，就需要让我们自己的Locale生效！</p>
+<p>我们去自己写一个自己的LocaleResolver，可以在链接上携带区域信息！</p>
+<p>修改一下前端页面的跳转连接：</p>
+<pre><code class="language-html">&lt;!-- 这里传入参数不需要使用 ？使用 （key=value）--&gt;
+&lt;a class=&quot;btn btn-sm&quot; th:href=&quot;@{/index.html(language='zh_CN')}&quot;&gt;中文&lt;/a&gt;
+&lt;a class=&quot;btn btn-sm&quot; th:href=&quot;@{/index.html(language='en_US')}&quot;&gt;English&lt;/a&gt;
+</code></pre>
+<p>我们去写一个处理的组件类！</p>
+<pre><code class="language-java">package com.totoroay.config;
+
+import org.springframework.util.StringUtils;
+import org.springframework.web.servlet.LocaleResolver;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Locale;
+
+public class MyLocaleResolver implements LocaleResolver {
+    // 解析请求
+    @Override
+    public Locale resolveLocale(HttpServletRequest request) {
+        // 获取请求中的语言参数
+        String language = request.getParameter(&quot;language&quot;);
+        // 默认
+        Locale locale = Locale.getDefault();
+        // 如果请求中的链接携带了国际化的参数
+        if (!StringUtils.isEmpty(language)) {
+            // zh_CN
+            String[] split = language.split(&quot;_&quot;);
+            // 国家，地区
+            locale = new Locale(split[0], split[1]);
+        }
+        return locale;
+    }
+
+    @Override
+    public void setLocale(HttpServletRequest request, HttpServletResponse response, Locale locale) {
+
+    }
+}
+</code></pre>
+<p>为了让我们的区域化信息能够生效，我们需要再配置一下这个组件！在我们自己的MyMvcConfig下添加bean；</p>
+<pre><code class="language-java">// 自定义国际化组件
+@Bean
+public LocaleResolver localeResolver(){
+    return new MyLocaleResolver();
+}
+</code></pre>
+<p><strong>我们重启项目，来访问一下，发现点击按钮可以实现成功切换！搞定收工！</strong></p>
+
+        </div>
+
+        
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://totoroay.github.io/tag/LkiY-qT6m/">
+            <span class="flex-auto">SpringBoot</span>
+          </a>
+        
+
+
+        <div class="flex justify-between py-8">
+          
+
+          
+            <div class="next-post">
+              <a href="https://totoroay.github.io/post/wai-guan-mo-shi/">
+                <h3 class="post-title">
+                  外观模式
+                  <i class="ri-arrow-right-line"></i>
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '76af3abf5b345815d20f',
+    clientSecret: 'cd22dd44f3d5b861d2552cd4270bee0b3b1ad9cc',
+    repo: 'totoroay.github.io',
+    owner: 'totoroay',
+    admin: ['totoroay'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+      </div>
+    </div>
+
+    <script src="https://totoroay.github.io//media/prism.js"></script>  
+<script>
+
+Prism.highlightAll()
+let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+// This should probably be throttled.
+// Especially because it triggers during smooth scrolling.
+// https://lodash.com/docs/4.17.10#throttle
+// You could do like...
+// window.addEventListener("scroll", () => {
+//    _.throttle(doThatStuff, 100);
+// });
+// Only not doing it here to keep this Pen dependency-free.
+
+window.addEventListener("scroll", event => {
+  let fromTop = window.scrollY;
+
+  mainNavLinks.forEach((link, index) => {
+    let section = document.getElementById(decodeURI(link.hash).substring(1));
+    let nextSection = null
+    if (mainNavLinks[index + 1]) {
+      nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+    }
+    if (section.offsetTop <= fromTop) {
+      if (nextSection) {
+        if (nextSection.offsetTop > fromTop) {
+          link.classList.add("current");
+        } else {
+          link.classList.remove("current");    
+        }
+      } else {
+        link.classList.add("current");
+      }
+    } else {
+      link.classList.remove("current");
+    }
+  });
+});
+
+
+document.addEventListener("DOMContentLoaded", function() {
+  var lazyImages = [].slice.call(document.querySelectorAll(".post-feature-image.lazy"));
+
+  if ("IntersectionObserver" in window) {
+    let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          let lazyImage = entry.target
+          lazyImage.style.backgroundImage = `url(${lazyImage.dataset.bg})`
+          lazyImage.classList.remove("lazy")
+          lazyImageObserver.unobserve(lazyImage)
+        }
+      });
+    });
+
+    lazyImages.forEach(function(lazyImage) {
+      lazyImageObserver.observe(lazyImage)
+    })
+  } else {
+    // Possibly fall back to a more compatible method here
+  }
+});
+
+const menuContainer = document.querySelector('.menu-container')
+const menus = document.querySelectorAll('.menu-container .menu')
+const mask = document.querySelector('.mask')
+const contentWrapper = document.querySelector('.content-wrapper')
+const latestArticle = document.querySelector('.latest-article')
+const readMore = document.querySelector('.read-more')
+const indexPage = document.querySelector('.index-page')
+
+const isHome = location.pathname === '/'
+if (latestArticle) {
+  latestArticle.style.display = isHome ? 'block' : 'none'
+  readMore.style.display = isHome ? 'block' : 'none'
+  indexPage.style.display = isHome ? 'none' : 'block'
+}
+
+const openMenu = () => {
+  menuContainer.classList.add('open')
+  menus.forEach(menu => {
+    menu.classList.add('animated', 'fadeInLeft')
+  })
+  mask.classList.add('open')
+  contentWrapper.classList.add('is-second')
+}
+
+const closeMenu = () => {
+  menuContainer.classList.remove('open')
+  menus.forEach(menu => {
+    menu.classList.remove('animated', 'fadeInLeft')
+  })
+  mask.classList.remove('open')
+  contentWrapper.classList.remove('is-second')
+}
+</script>
+  
+  </body>
+</html>
