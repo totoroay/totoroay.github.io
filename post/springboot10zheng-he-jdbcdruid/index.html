@@ -1,0 +1,589 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>totoroay</title>
+<meta name="description" content="每天学习5小时！！！" />
+<link rel="shortcut icon" href="https://totoroay.github.io//favicon.ico?v=1589543110593">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+
+<link rel="stylesheet" href="https://totoroay.github.io//styles/main.css">
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main px-4 flex flex-col lg:flex-row">
+      <div id="sidebar" class="sidebar-wrapper lg:static lg:w-1/4">
+  <div class="lg:sticky top-0">
+    <div class="sidebar-content">
+      <div class="flex lg:block p-4 lg:px-0 items-center fixed lg:static lg:block top-0 right-0 left-0 bg-white z-50">
+        <i class="ri-menu-2-line lg:mt-4 text-2xl cursor-pointer animated fadeIn" onclick="openMenu()"></i>
+        <a href="https://totoroay.github.io/">
+          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://totoroay.github.io//images/avatar.png?v=1589543110593" alt="">
+        </a>
+        <h1 class="animated fadeInLeft lg:text-4xl font-extrabold lg:mt-8 mt-0 text-xl" style="animation-delay: 0.2s">totoroay</h1>
+      </div>
+      
+        <div class="animated fadeInLeft" style="animation-delay: 0.4s">
+          <p class="my-4 text-gray-600 font-light hidden lg:block">
+            文章目录
+          </p>
+          <div class="toc-container hidden lg:block">
+            <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#springdata%E7%AE%80%E4%BB%8B">SpringData简介</a></li>
+<li><a href="#%E6%95%B4%E5%90%88jdbc">整合JDBC</a>
+<ul>
+<li><a href="#%E5%88%9B%E5%BB%BA%E6%B5%8B%E8%AF%95%E9%A1%B9%E7%9B%AE%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE%E6%BA%90">创建测试项目测试数据源</a></li>
+<li><a href="#jdbctemplate">JDBCTemplate</a></li>
+<li><a href="#%E6%B5%8B%E8%AF%95">测试</a></li>
+</ul>
+</li>
+<li><a href="#druid">Druid</a>
+<ul>
+<li><a href="#druid%E7%AE%80%E4%BB%8B">Druid简介</a></li>
+<li><a href="#%E9%85%8D%E7%BD%AE%E6%95%B0%E6%8D%AE%E6%BA%90">配置数据源</a></li>
+<li><a href="#%E9%85%8D%E7%BD%AEdruid%E6%95%B0%E6%8D%AE%E6%BA%90%E7%9B%91%E6%8E%A7">配置Druid数据源监控</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      
+    </div>
+  </div>
+</div>
+
+<div class="menu-container">
+  <i class="ri-arrow-left-line text-2xl cursor-pointer animated fadeIn close-menu-btn" onclick="closeMenu()"></i>
+  <div>
+    
+      
+        <a href="/" class="menu" style="animation-delay: 0s">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu" style="animation-delay: 0.2s">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu" style="animation-delay: 0.4s">
+          标签（分类）
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu" style="animation-delay: 0.6000000000000001s">
+          关于博主
+        </a>
+      
+    
+  </div>
+  <div class="site-footer">
+    <div class="py-4 text-gray-700"></div>
+    <a class="rss" href="https://totoroay.github.io//atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+<div class="mask" onclick="closeMenu()">
+</div>
+      <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
+        <h1 class="text-3xl font-bold lg:mt-16"> SpringBoot10：整合JDBC、Druid</h1>
+        <div class="text-sm text-gray-700 lg:my-8">
+          2020-05-15 / 13 min read
+        </div>
+        
+          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://totoroay.github.io//post-images/springboot10zheng-he-jdbcdruid.jpg" alt="">
+        
+        <div class="post-content yue">
+          <h2 id="springdata简介">SpringData简介</h2>
+<p>对于数据访问层，无论是 SQL(关系型数据库) 还是 NOSQL(非关系型数据库)，Spring Boot 底层都是采用 Spring Data 的方式进行统一处理。</p>
+<p>Spring Boot 底层都是采用 Spring Data 的方式进行统一处理各种数据库，Spring Data 也是 Spring 中与 Spring Boot、Spring Cloud 等齐名的知名项目。</p>
+<p>Sping Data 官网：https://spring.io/projects/spring-data</p>
+<p>数据库相关的启动器 ：可以参考官方文档：</p>
+<p>https://docs.spring.io/spring-boot/docs/2.2.5.RELEASE/reference/htmlsingle/#using-boot-starter</p>
+<h2 id="整合jdbc">整合JDBC</h2>
+<h3 id="创建测试项目测试数据源">创建测试项目测试数据源</h3>
+<p>1、我去新建一个项目测试：springboot-data-jdbc ; 引入相应的模块！基础模块</p>
+<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1589543058422.png" alt="" loading="lazy"></figure>
+<p>2、项目建好之后，发现自动帮我们导入了如下的启动器：</p>
+<pre><code class="language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-jdbc&lt;/artifactId&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;mysql&lt;/groupId&gt;
+    &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;
+    &lt;scope&gt;runtime&lt;/scope&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>3、编写yaml配置文件连接数据库；</p>
+<pre><code class="language-yaml">spring:
+  datasource:
+    username: root
+    password: root
+    #?serverTimezone=UTC解决时区的报错
+    url: jdbc:mysql://localhost:3306/mybatis?serverTimezone=UTC&amp;useUnicode=true&amp;characterEncoding=utf-8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+</code></pre>
+<p>4、配置完这一些东西后，我们就可以直接去使用了，因为SpringBoot已经默认帮我们进行了自动配置；去测试类测试一下</p>
+<pre><code class="language-java">@SpringBootTest
+class Springboot05DataApplicationTests {
+    @Autowired
+    DataSource dataSource;
+
+    @Test
+    void contextLoads() throws SQLException {
+        //看一下默认数据源
+        System.out.println(dataSource.getClass());
+        //获得连接
+        Connection connection = dataSource.getConnection();
+        System.out.println(connection);
+        //关闭连接
+        connection.close();
+    }
+
+}
+</code></pre>
+<p>结果：我们可以看到他默认给我们配置的数据源为 : class com.zaxxer.hikari.HikariDataSource ， 我们并没有手动配置</p>
+<p>我们来全局搜索一下，找到数据源的所有自动配置都在 ：DataSourceAutoConfiguration文件：</p>
+<pre><code class="language-java">@Import(
+    {Hikari.class, Tomcat.class, Dbcp2.class, Generic.class, DataSourceJmxConfiguration.class}
+)
+protected static class PooledDataSourceConfiguration {
+    protected PooledDataSourceConfiguration() {
+    }
+}
+</code></pre>
+<p>这里导入的类都在 DataSourceConfiguration 配置类下，可以看出 Spring Boot 2.2.5 默认使用HikariDataSource 数据源，而以前版本，如 Spring Boot 1.5 默认使用 org.apache.tomcat.jdbc.pool.DataSource 作为数据源；</p>
+<p><strong>HikariDataSource 号称 Java WEB 当前速度最快的数据源，相比于传统的 C3P0 、DBCP、Tomcat jdbc 等连接池更加优秀；</strong></p>
+<p><strong>可以使用 spring.datasource.type 指定自定义的数据源类型，值为 要使用的连接池实现的完全限定名。</strong></p>
+<p>关于数据源我们并不做介绍，有了数据库连接，显然就可以 CRUD 操作数据库了。但是我们需要先了解一个对象 JdbcTemplate</p>
+<h3 id="jdbctemplate">JDBCTemplate</h3>
+<p>1、有了数据源(com.zaxxer.hikari.HikariDataSource)，然后可以拿到数据库连接(java.sql.Connection)，有了连接，就可以使用原生的 JDBC 语句来操作数据库；</p>
+<p>2、即使不使用第三方第数据库操作框架，如 MyBatis等，Spring 本身也对原生的JDBC 做了轻量级的封装，即JdbcTemplate。</p>
+<p>3、数据库操作的所有 CRUD 方法都在 JdbcTemplate 中。</p>
+<p>4、Spring Boot 不仅提供了默认的数据源，同时默认已经配置好了 JdbcTemplate 放在了容器中，程序员只需自己注入即可使用</p>
+<p>5、JdbcTemplate 的自动配置是依赖 org.springframework.boot.autoconfigure.jdbc 包下的 JdbcTemplateConfiguration 类</p>
+<p><strong>JdbcTemplate主要提供以下几类方法：</strong></p>
+<ul>
+<li>execute方法：可以用于执行任何SQL语句，一般用于执行DDL语句；</li>
+<li>update方法及batchUpdate方法：update方法用于执行新增、修改、删除等语句；batchUpdate方法用于执行批处理相关语句；</li>
+<li>query方法及queryForXXX方法：用于执行查询相关语句；</li>
+<li>call方法：用于执行存储过程、函数相关语句。</li>
+</ul>
+<h3 id="测试">测试</h3>
+<p>编写一个Controller，注入 jdbcTemplate，编写测试方法进行访问测试；</p>
+<pre><code class="language-java">package com.totoroay.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+@RestController
+@RequestMapping(&quot;/jdbc&quot;)
+public class JdbcController {
+
+    /**
+     * Spring Boot 默认提供了数据源，默认提供了 org.springframework.jdbc.core.JdbcTemplate
+     * JdbcTemplate 中会自己注入数据源，用于简化 JDBC操作
+     * 还能避免一些常见的错误,使用起来也不用再自己来关闭数据库连接
+     */
+    @Autowired
+    JdbcTemplate jdbcTemplate;
+
+    //查询employee表中所有数据
+    //List 中的1个 Map 对应数据库的 1行数据
+    //Map 中的 key 对应数据库的字段名，value 对应数据库的字段值
+    @GetMapping(&quot;/userList&quot;)
+    public List&lt;Map&lt;String, Object&gt;&gt; userList(){
+        String sql = &quot;select * from user&quot;;
+        List&lt;Map&lt;String, Object&gt;&gt; maps = jdbcTemplate.queryForList(sql);
+        return maps;
+    }
+    
+    //新增一个用户
+    @GetMapping(&quot;/add&quot;)
+    public String addUser(){
+        //插入语句，注意时间问题
+        String sql = &quot;insert into user(id, name, pwd) values (8, 'shabi', 'shabi')&quot;;
+        jdbcTemplate.update(sql);
+        //查询
+        return &quot;addOk&quot;;
+    }
+
+    //修改用户信息
+    @GetMapping(&quot;/update/{id}&quot;)
+    public String updateUser(@PathVariable(&quot;id&quot;) int id){
+        //插入语句
+        String sql = &quot;update user set name=?, pwd=? where id=&quot;+id;
+        //数据
+        Object[] objects = new Object[2];
+        objects[0] = &quot;shabilibili&quot;;
+        objects[1] = &quot;shabilibili&quot;;
+        jdbcTemplate.update(sql,objects);
+        //查询
+        return &quot;updateOk&quot;;
+    }
+
+    //删除用户
+    @GetMapping(&quot;/delete/{id}&quot;)
+    public String delUser(@PathVariable(&quot;id&quot;) int id){
+        //插入语句
+        String sql = &quot;delete from user where id=?&quot;;
+        jdbcTemplate.update(sql,id);
+        //查询
+        return &quot;deleteOk&quot;;
+    }
+    
+}
+</code></pre>
+<p>测试请求，结果正常；</p>
+<p>到此，CURD的基本操作，使用 JDBC 就搞定了。</p>
+<h2 id="druid">Druid</h2>
+<h3 id="druid简介">Druid简介</h3>
+<p>Java程序很大一部分要操作数据库，为了提高性能操作数据库的时候，又不得不使用数据库连接池。</p>
+<p>Druid 是阿里巴巴开源平台上一个数据库连接池实现，结合了 C3P0、DBCP 等 DB 池的优点，同时加入了日志监控。</p>
+<p>Druid 可以很好的监控 DB 池连接和 SQL 的执行情况，天生就是针对监控而生的 DB 连接池。</p>
+<p>Druid已经在阿里巴巴部署了超过600个应用，经过一年多生产环境大规模部署的严苛考验。</p>
+<p>Spring Boot 2.0 以上默认使用 Hikari 数据源，可以说 Hikari 与 Driud 都是当前 Java Web 上最优秀的数据源，我们来重点介绍 Spring Boot 如何集成 Druid 数据源，如何实现数据库监控。</p>
+<p>Github地址：https://github.com/alibaba/druid/</p>
+<p><strong>com.alibaba.druid.pool.DruidDataSource 基本配置参数如下：</strong></p>
+<figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1589543035853.png" alt="" loading="lazy"></figure>
+<h3 id="配置数据源">配置数据源</h3>
+<p>1、添加上 Druid 数据源依赖。</p>
+<pre><code class="language-xml">&lt;!-- https://mvnrepository.com/artifact/com.alibaba/druid --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;com.alibaba&lt;/groupId&gt;
+    &lt;artifactId&gt;druid&lt;/artifactId&gt;
+    &lt;version&gt;1.1.21&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>2、切换数据源；之前已经说过 Spring Boot 2.0 以上默认使用 com.zaxxer.hikari.HikariDataSource 数据源，但可以 通过 spring.datasource.type 指定数据源</p>
+<pre><code class="language-yml">spring:
+  datasource:
+    username: root
+    password: root
+    #?serverTimezone=UTC解决时区的报错
+    url: jdbc:mysql://localhost:3306/mybatis?serverTimezone=UTC&amp;useUnicode=true&amp;characterEncoding=utf-8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource # 自定义数据源
+</code></pre>
+<p>3、数据源切换之后，在测试类中注入 DataSource，然后获取到它，输出一看便知是否成功切换；</p>
+<figure data-type="image" tabindex="3"><img src="https://totoroay.github.io//post-images/1589543023867.png" alt="" loading="lazy"></figure>
+<p>4、切换成功！既然切换成功，就可以设置数据源连接初始化大小、最大连接数、等待时间、最小连接数 等设置项；可以查看源码</p>
+<pre><code class="language-yml">spring:
+  datasource:
+    username: root
+    password: 123456
+    #?serverTimezone=UTC解决时区的报错
+    url: jdbc:mysql://localhost:3306/springboot?serverTimezone=UTC&amp;useUnicode=true&amp;characterEncoding=utf-8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+
+    #Spring Boot 默认是不注入这些属性值的，需要自己绑定
+    #druid 数据源专有配置
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+
+    #配置监控统计拦截的filters，stat:监控统计、log4j：日志记录、wall：防御sql注入
+    #如果允许时报错  java.lang.ClassNotFoundException: org.apache.log4j.Priority
+    #则导入 log4j 依赖即可，Maven 地址：https://mvnrepository.com/artifact/log4j/log4j
+    filters: stat,wall,log4j
+    maxPoolPreparedStatementPerConnectionSize: 20
+    useGlobalDataSourceStat: true
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+</code></pre>
+<p>5、导入Log4j 的依赖</p>
+<pre><code class="language-xml">&lt;!-- https://mvnrepository.com/artifact/log4j/log4j --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;log4j&lt;/groupId&gt;
+    &lt;artifactId&gt;log4j&lt;/artifactId&gt;
+    &lt;version&gt;1.2.17&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>6、现在需要程序员自己为 DruidDataSource 绑定全局配置文件中的参数，再添加到容器中，而不再使用 Spring Boot 的自动生成了；我们需要 自己添加 DruidDataSource 组件到容器中，并绑定属性；</p>
+<pre><code class="language-java">package com.totoroay.config;
+
+import com.alibaba.druid.pool.DruidDataSource;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import javax.sql.DataSource;
+
+@Configuration
+public class DruidConfig {
+
+    /*
+       将自定义的 Druid数据源添加到容器中，不再让 Spring Boot 自动创建
+       绑定全局配置文件中的 druid 数据源属性到 com.alibaba.druid.pool.DruidDataSource从而让它们生效
+       @ConfigurationProperties(prefix = &quot;spring.datasource&quot;)：作用就是将 全局配置文件中
+       前缀为 spring.datasource的属性值注入到 com.alibaba.druid.pool.DruidDataSource 的同名参数中
+     */
+    @ConfigurationProperties(prefix = &quot;spring.datasource&quot;)
+    @Bean
+    public DataSource druidDataSource() {
+        return new DruidDataSource();
+    }
+
+}
+</code></pre>
+<p>7、去测试类中测试一下；看是否成功！</p>
+<pre><code class="language-java">@SpringBootTest
+class Springboot05DataApplicationTests {
+
+    //DI注入数据源
+    @Autowired
+    DataSource dataSource;
+
+    @Test
+    public void contextLoads() throws SQLException {
+        //看一下默认数据源
+        System.out.println(dataSource.getClass());
+        //获得连接
+        Connection connection =   dataSource.getConnection();
+        System.out.println(connection);
+
+        DruidDataSource druidDataSource = (DruidDataSource) dataSource;
+        System.out.println(&quot;druidDataSource 数据源最大连接数：&quot; + druidDataSource.getMaxActive());
+        System.out.println(&quot;druidDataSource 数据源初始化连接数：&quot; + druidDataSource.getInitialSize());
+
+        //关闭连接
+        connection.close();
+    }
+}
+</code></pre>
+<p>输出结果 ：可见配置参数已经生效！</p>
+<figure data-type="image" tabindex="4"><img src="https://totoroay.github.io//post-images/1589543010291.png" alt="" loading="lazy"></figure>
+<h3 id="配置druid数据源监控">配置Druid数据源监控</h3>
+<p>Druid 数据源具有监控的功能，并提供了一个 web 界面方便用户查看，类似安装 路由器 时，人家也提供了一个默认的 web 页面。</p>
+<p>所以第一步需要设置 Druid 的后台管理页面，比如 登录账号、密码 等；配置后台管理；</p>
+<pre><code class="language-java">//配置 Druid 监控管理后台的Servlet；
+//内置 Servlet 容器时没有web.xml文件，所以使用 Spring Boot 的注册 Servlet 方式
+@Bean
+public ServletRegistrationBean statViewServlet() {
+    ServletRegistrationBean bean = new ServletRegistrationBean(new StatViewServlet(), &quot;/druid/*&quot;);
+
+    // 这些参数可以在 com.alibaba.druid.support.http.StatViewServlet 
+    // 的父类 com.alibaba.druid.support.http.ResourceServlet 中找到
+    Map&lt;String, String&gt; initParams = new HashMap&lt;&gt;();
+    initParams.put(&quot;loginUsername&quot;, &quot;admin&quot;); //后台管理界面的登录账号
+    initParams.put(&quot;loginPassword&quot;, &quot;123456&quot;); //后台管理界面的登录密码
+
+    //后台允许谁可以访问
+    //initParams.put(&quot;allow&quot;, &quot;localhost&quot;)：表示只有本机可以访问
+    //initParams.put(&quot;allow&quot;, &quot;&quot;)：为空或者为null时，表示允许所有访问
+    initParams.put(&quot;allow&quot;, &quot;&quot;);
+    //deny：Druid 后台拒绝谁访问
+    //initParams.put(&quot;kuangshen&quot;, &quot;192.168.1.20&quot;);表示禁止此ip访问
+
+    //设置初始化参数
+    bean.setInitParameters(initParams);
+    return bean;
+}
+</code></pre>
+<p>配置完毕后，我们可以选择访问 ：http://localhost:8080/druid/login.html</p>
+<figure data-type="image" tabindex="5"><img src="https://totoroay.github.io//post-images/1589543000151.png" alt="" loading="lazy"></figure>
+<p><strong>配置 Druid web 监控 filter 过滤器</strong></p>
+<pre><code class="language-java">//配置 Druid 监控 之  web 监控的 filter
+//WebStatFilter：用于配置Web和Druid数据源之间的管理关联监控统计
+@Bean
+public FilterRegistrationBean webStatFilter() {
+    FilterRegistrationBean bean = new FilterRegistrationBean();
+    bean.setFilter(new WebStatFilter());
+
+    //exclusions：设置哪些请求进行过滤排除掉，从而不进行统计
+    Map&lt;String, String&gt; initParams = new HashMap&lt;&gt;();
+    initParams.put(&quot;exclusions&quot;, &quot;*.js, *.css, /druid/*, /jdbc/*&quot;);
+    bean.setInitParameters(initParams);
+
+    //&quot;/*&quot; 表示过滤所有请求
+    bean.setUrlPatterns(Arrays.asList(&quot;/*&quot;));
+    return bean;
+}
+</code></pre>
+<p>平时在工作中，按需求进行配置即可，主要用作监控！</p>
+
+        </div>
+
+        
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://totoroay.github.io/tag/LkiY-qT6m/">
+            <span class="flex-auto">SpringBoot</span>
+          </a>
+        
+
+
+        <div class="flex justify-between py-8">
+          
+
+          
+            <div class="next-post">
+              <a href="https://totoroay.github.io/post/springboot09ye-mian-guo-ji-hua/">
+                <h3 class="post-title">
+                  SpringBoot09：页面国际化
+                  <i class="ri-arrow-right-line"></i>
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '76af3abf5b345815d20f',
+    clientSecret: 'cd22dd44f3d5b861d2552cd4270bee0b3b1ad9cc',
+    repo: 'totoroay.github.io',
+    owner: 'totoroay',
+    admin: ['totoroay'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+      </div>
+    </div>
+
+    <script src="https://totoroay.github.io//media/prism.js"></script>  
+<script>
+
+Prism.highlightAll()
+let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+// This should probably be throttled.
+// Especially because it triggers during smooth scrolling.
+// https://lodash.com/docs/4.17.10#throttle
+// You could do like...
+// window.addEventListener("scroll", () => {
+//    _.throttle(doThatStuff, 100);
+// });
+// Only not doing it here to keep this Pen dependency-free.
+
+window.addEventListener("scroll", event => {
+  let fromTop = window.scrollY;
+
+  mainNavLinks.forEach((link, index) => {
+    let section = document.getElementById(decodeURI(link.hash).substring(1));
+    let nextSection = null
+    if (mainNavLinks[index + 1]) {
+      nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+    }
+    if (section.offsetTop <= fromTop) {
+      if (nextSection) {
+        if (nextSection.offsetTop > fromTop) {
+          link.classList.add("current");
+        } else {
+          link.classList.remove("current");    
+        }
+      } else {
+        link.classList.add("current");
+      }
+    } else {
+      link.classList.remove("current");
+    }
+  });
+});
+
+
+document.addEventListener("DOMContentLoaded", function() {
+  var lazyImages = [].slice.call(document.querySelectorAll(".post-feature-image.lazy"));
+
+  if ("IntersectionObserver" in window) {
+    let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          let lazyImage = entry.target
+          lazyImage.style.backgroundImage = `url(${lazyImage.dataset.bg})`
+          lazyImage.classList.remove("lazy")
+          lazyImageObserver.unobserve(lazyImage)
+        }
+      });
+    });
+
+    lazyImages.forEach(function(lazyImage) {
+      lazyImageObserver.observe(lazyImage)
+    })
+  } else {
+    // Possibly fall back to a more compatible method here
+  }
+});
+
+const menuContainer = document.querySelector('.menu-container')
+const menus = document.querySelectorAll('.menu-container .menu')
+const mask = document.querySelector('.mask')
+const contentWrapper = document.querySelector('.content-wrapper')
+const latestArticle = document.querySelector('.latest-article')
+const readMore = document.querySelector('.read-more')
+const indexPage = document.querySelector('.index-page')
+
+const isHome = location.pathname === '/'
+if (latestArticle) {
+  latestArticle.style.display = isHome ? 'block' : 'none'
+  readMore.style.display = isHome ? 'block' : 'none'
+  indexPage.style.display = isHome ? 'none' : 'block'
+}
+
+const openMenu = () => {
+  menuContainer.classList.add('open')
+  menus.forEach(menu => {
+    menu.classList.add('animated', 'fadeInLeft')
+  })
+  mask.classList.add('open')
+  contentWrapper.classList.add('is-second')
+}
+
+const closeMenu = () => {
+  menuContainer.classList.remove('open')
+  menus.forEach(menu => {
+    menu.classList.remove('animated', 'fadeInLeft')
+  })
+  mask.classList.remove('open')
+  contentWrapper.classList.remove('is-second')
+}
+</script>
+  
+  </body>
+</html>
