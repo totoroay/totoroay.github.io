@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://totoroay.github.io/</id>
     <title>totoroay</title>
-    <updated>2020-05-15T11:45:18.941Z</updated>
+    <updated>2020-05-15T13:36:23.392Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://totoroay.github.io/"/>
     <link rel="self" href="https://totoroay.github.io/atom.xml"/>
@@ -10,6 +10,156 @@
     <logo>https://totoroay.github.io/images/avatar.png</logo>
     <icon>https://totoroay.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, totoroay</rights>
+    <entry>
+        <title type="html"><![CDATA[SpringBoot11：整合MyBatis]]></title>
+        <id>https://totoroay.github.io/post/springboot11zheng-he-mybatis/</id>
+        <link href="https://totoroay.github.io/post/springboot11zheng-he-mybatis/">
+        </link>
+        <updated>2020-05-15T13:35:14.000Z</updated>
+        <content type="html"><![CDATA[<p>官方文档：http://mybatis.org/spring-boot-starter/mybatis-spring-boot-autoconfigure/</p>
+<p>Maven仓库地址：https://mvnrepository.com/artifact/org.mybatis.spring.boot/mybatis-spring-boot-starter/2.1.1</p>
+<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1589549768349.png" alt="" loading="lazy"></figure>
+<h2 id="整合测试">整合测试</h2>
+<p>1、导入 MyBatis 所需要的依赖</p>
+<pre><code class="language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.mybatis.spring.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;mybatis-spring-boot-starter&lt;/artifactId&gt;
+    &lt;version&gt;2.1.1&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;com.alibaba&lt;/groupId&gt;
+    &lt;artifactId&gt;druid&lt;/artifactId&gt;
+    &lt;version&gt;1.1.21&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;log4j&lt;/groupId&gt;
+    &lt;artifactId&gt;log4j&lt;/artifactId&gt;
+    &lt;version&gt;1.2.17&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>2、配置数据库连接信息（不变）</p>
+<pre><code class="language-yml">spring:
+  datasource:
+    username: root
+    password: root
+    #?serverTimezone=UTC解决时区的报错
+    url: jdbc:mysql://localhost:3306/mybatis?serverTimezone=UTC&amp;useUnicode=true&amp;characterEncoding=utf-8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+
+    #Spring Boot 默认是不注入这些属性值的，需要自己绑定
+    #druid 数据源专有配置
+    initialSize: 5
+    minIdle: 5
+    maxActive: 20
+    maxWait: 60000
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+
+    #配置监控统计拦截的filters，stat:监控统计、log4j：日志记录、wall：防御sql注入
+    #如果允许时报错  java.lang.ClassNotFoundException: org.apache.log4j.Priority
+    #则导入 log4j 依赖即可，Maven 地址：https://mvnrepository.com/artifact/log4j/log4j
+    filters: stat,wall,log4j
+    maxPoolPreparedStatementPerConnectionSize: 20
+    useGlobalDataSourceStat: true
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+
+# 整合mybatis
+mybatis:
+  type-aliases-package: com.totoroay.pojo
+  mapper-locations: classpath:mapper/*.xml
+</code></pre>
+<p><strong>3、测试数据库是否连接成功！</strong></p>
+<p><strong>4、创建实体类，导入 Lombok！</strong></p>
+<p>User.java</p>
+<pre><code class="language-java">package com.totoroay.pojo;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class User {
+
+    private Integer id;
+    private String name;
+    private String pwd;
+
+}
+</code></pre>
+<p><strong>5、创建mapper目录以及对应的 Mapper 接口</strong></p>
+<p>UserMapper.java</p>
+<pre><code class="language-java">//@Mapper : 表示本类是一个 MyBatis 的 Mapper
+@Mapper
+@Repository
+public interface UserMapper {
+	// 获取所有用户信息
+    List&lt;User&gt; queryUserList();
+
+    // 通过id获得用户
+    User queryUserById(Integer id);
+
+    int addUser(User user);
+    int updateUser(User user);
+    int deleteUser(Integer id);
+}
+</code></pre>
+<p><strong>6、对应的Mapper映射文件</strong></p>
+<p>UserMapper.xml</p>
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
+&lt;!DOCTYPE mapper
+        PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;
+        &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;
+
+&lt;mapper namespace=&quot;com.totoroay.mapper.UserMapper&quot;&gt;
+
+    &lt;select id=&quot;queryUserList&quot; resultType=&quot;com.totoroay.pojo.User&quot;&gt;
+        select * from user
+    &lt;/select&gt;
+
+    &lt;select id=&quot;queryUserById&quot; resultType=&quot;com.totoroay.pojo.User&quot;&gt;
+        select * from user where id = #{id}
+    &lt;/select&gt;
+
+    &lt;insert id=&quot;addUser&quot;&gt;
+        insert into user (id, name, pwd) values (#{id}, #{name}, #{pwd});
+    &lt;/insert&gt;
+
+    &lt;update id=&quot;updateUser&quot;&gt;
+        update user set name = #{name}, pwd = #{pwd} where id = #{id};
+    &lt;/update&gt;
+
+    &lt;delete id=&quot;deleteUser&quot;&gt;
+        delete from user where id = #{id}
+    &lt;/delete&gt;
+
+&lt;/mapper&gt;
+</code></pre>
+<p><strong>7、编写的 UserController 进行测试（实际开发中需要写service层）</strong></p>
+<pre><code class="language-java">@RestController
+public class UserController {
+    @Resource
+    private UserMapper userMapper;
+
+    @GetMapping(&quot;/queryUserList&quot;)
+    public List&lt;User&gt; queryUserList(){
+        List&lt;User&gt; userList = userMapper.queryUserList();
+        for (User user : userList) {
+            System.out.println(user);
+        }
+        return userList;
+    }
+}
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[ SpringBoot10：整合JDBC、Druid]]></title>
         <id>https://totoroay.github.io/post/springboot10zheng-he-jdbcdruid/</id>
@@ -1697,458 +1847,6 @@ public class AnnotationPointcut {
 </ul>
 <figure data-type="image" tabindex="10"><img src="https://totoroay.github.io//post-images/1588998018034.png" alt="" loading="lazy"></figure>
 <figure data-type="image" tabindex="11"><img src="https://totoroay.github.io//post-images/1588998024505.jpg" alt="" loading="lazy"></figure>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Spring：自动装配及使用注解开发]]></title>
-        <id>https://totoroay.github.io/post/springzi-dong-zhuang-pei-ji-shi-yong-zhu-jie-kai-fa/</id>
-        <link href="https://totoroay.github.io/post/springzi-dong-zhuang-pei-ji-shi-yong-zhu-jie-kai-fa/">
-        </link>
-        <updated>2020-05-08T09:36:03.000Z</updated>
-        <content type="html"><![CDATA[<h2 id="自动装配">自动装配</h2>
-<blockquote>
-<p>自动装配说明</p>
-</blockquote>
-<ul>
-<li>自动装配是使用spring满足bean依赖的一种方法</li>
-<li>spring会在应用上下文中为某个bean寻找其依赖的bean。</li>
-</ul>
-<p>Spring中bean有三种装配机制，分别是：</p>
-<ol>
-<li>在xml中显式配置；</li>
-<li>在java中显式配置；</li>
-<li>隐式的bean发现机制和自动装配。</li>
-</ol>
-<p>这里我们主要讲第三种：自动化的装配bean。</p>
-<p>Spring的自动装配需要从两个角度来实现，或者说是两个操作：</p>
-<ol>
-<li>组件扫描(component scanning)：spring会自动发现应用上下文中所创建的bean；</li>
-<li>自动装配(autowiring)：spring自动满足bean之间的依赖，也就是我们说的IoC/DI；</li>
-</ol>
-<p>组件扫描和自动装配组合发挥巨大威力，使得显示的配置降低到最少。</p>
-<p><strong>推荐不使用自动装配xml配置 , 而使用注解 .</strong></p>
-<blockquote>
-<p>测试环境搭建</p>
-</blockquote>
-<p>1、新建一个项目</p>
-<p>2、新建两个实体类，Cat  Dog  都有一个叫的方法</p>
-<pre><code class="language-java">package com.totoroay.pojo;
-
-public class Cat {
-    public void shout(){
-        System.out.println(&quot;喵&quot;);
-    }
-}
-</code></pre>
-<pre><code class="language-java">package com.totoroay.pojo;
-
-public class Dog {
-    public void shout(){
-        System.out.println(&quot;汪&quot;);
-    }
-}
-</code></pre>
-<p>3、新建一个用户类 User</p>
-<pre><code class="language-java">public class User {
-   private Cat cat;
-   private Dog dog;
-   private String name;
-}
-</code></pre>
-<p>4、编写Spring配置文件</p>
-<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
-      xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-      xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans
-       http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&gt;
-
-   &lt;bean id=&quot;dog&quot; class=&quot;com.totoroay.pojo.Dog&quot;/&gt;
-   &lt;bean id=&quot;cat&quot; class=&quot;com.totoroay.pojo.Cat&quot;/&gt;
-
-   &lt;bean id=&quot;user&quot; class=&quot;com.totoroay.pojo.User&quot;&gt;
-       &lt;property name=&quot;cat&quot; ref=&quot;cat&quot;/&gt;
-       &lt;property name=&quot;dog&quot; ref=&quot;dog&quot;/&gt;
-       &lt;property name=&quot;name&quot; value=&quot;totoroay&quot;/&gt;
-   &lt;/bean&gt;
-&lt;/beans&gt;
-</code></pre>
-<p>5、测试</p>
-<pre><code class="language-java">public class MyTest {
-   @Test
-   public void testMethodAutowire() {
-       ApplicationContext context = newClassPathXmlApplicationContext(&quot;beans.xml&quot;);
-       User user = (User) context.getBean(&quot;user&quot;);
-       user.getCat().shout();
-       user.getDog().shout();
-  }
-}
-</code></pre>
-<p>结果正常输出，环境OK</p>
-<blockquote>
-<p>byName</p>
-</blockquote>
-<p><strong>autowire byName (按名称自动装配)</strong></p>
-<p>由于在手动配置xml过程中，常常发生字母缺漏和大小写等错误，而无法对其进行检查，使得开发效率降低。</p>
-<p>采用自动装配将避免这些错误，并且使配置简单化。</p>
-<p>测试：</p>
-<p>1、修改bean配置，增加一个属性  autowire=&quot;byName&quot;</p>
-<pre><code class="language-xml">&lt;bean id=&quot;user&quot; class=&quot;com.totoroay.pojo.User&quot; autowire=&quot;byName&quot;&gt;
-   &lt;property name=&quot;name&quot; value=&quot;totoroay&quot;/&gt;
-&lt;/bean&gt;
-</code></pre>
-<p>2、再次测试，结果依旧成功输出！</p>
-<p>3、我们将 cat 的bean id修改为 catXXX</p>
-<p>4、再次测试， 执行时报空指针java.lang.NullPointerException。因为按byName规则找不对应set方法，真正的setCat就没执行，对象就没有初始化，所以调用时就会报空指针错误。</p>
-<p><strong>小结：</strong></p>
-<p>当一个bean节点带有 autowire byName的属性时。</p>
-<ol>
-<li>
-<p>将查找其类中所有的set方法名，例如setCat，获得将set去掉并且首字母小写的字符串，即cat。</p>
-</li>
-<li>
-<p>去spring容器中寻找是否有此字符串名称id的对象。</p>
-</li>
-<li>
-<p>如果有，就取出注入；如果没有，就报空指针异常。</p>
-</li>
-</ol>
-<blockquote>
-<p>byType</p>
-</blockquote>
-<p><strong>autowire byType (按类型自动装配)</strong></p>
-<p>使用autowire byType首先需要保证：同一类型的对象，在spring容器中唯一。如果不唯一，会报不唯一的异常。</p>
-<pre><code>NoUniqueBeanDefinitionException
-</code></pre>
-<p>测试：</p>
-<p>1、将user的bean配置修改一下 ： autowire=&quot;byType&quot;</p>
-<p>2、测试，正常输出</p>
-<p>3、在注册一个cat 的bean对象！</p>
-<pre><code class="language-xml">&lt;bean id=&quot;dog&quot; class=&quot;com.totoroay.pojo.Dog&quot;/&gt;
-&lt;bean id=&quot;cat&quot; class=&quot;com.totoroay.pojo.Cat&quot;/&gt;
-&lt;bean id=&quot;cat2&quot; class=&quot;com.totoroay.pojo.Cat&quot;/&gt;
-
-&lt;bean id=&quot;user&quot; class=&quot;com.totoroay.pojo.User&quot; autowire=&quot;byType&quot;&gt;
-   &lt;property name=&quot;name&quot; value=&quot;totoroay&quot;/&gt;
-&lt;/bean&gt;
-</code></pre>
-<p>4、测试，报错：NoUniqueBeanDefinitionException</p>
-<p>5、删掉cat2，将cat的bean名称改掉！测试！因为是按类型装配，所以并不会报异常，也不影响最后的结果。甚至将id属性去掉，也不影响结果。</p>
-<p>这就是按照类型自动装配！</p>
-<h2 id="使用注解">使用注解</h2>
-<blockquote>
-<p>使用注解</p>
-</blockquote>
-<p>jdk1.5开始支持注解，spring2.5开始全面支持注解。</p>
-<p>准备工作：利用注解的方式注入属性。</p>
-<p>1、在spring配置文件中引入context文件头</p>
-<pre><code class="language-xml">xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
-
-http://www.springframework.org/schema/context
-http://www.springframework.org/schema/context/spring-context.xsd
-</code></pre>
-<p>2、开启属性注解支持！</p>
-<pre><code class="language-xml">&lt;context:annotation-config/&gt;
-</code></pre>
-<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
-       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-       xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
-       xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans
-       http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://www.springframework.org/schema/context
-       http://www.springframework.org/schema/context/spring-context.xsd&quot;&gt;
-
-    &lt;context:annotation-config/&gt;
-
-    &lt;bean id=&quot;user&quot; class=&quot;com.totoroay.pojo.User&quot;/&gt;
-    &lt;bean id=&quot;cat&quot; class=&quot;com.totoroay.pojo.Cat&quot;/&gt;
-    &lt;bean id=&quot;dog&quot; class=&quot;com.totoroay.pojo.Dog&quot;/&gt;
-&lt;/beans&gt;
-</code></pre>
-<h4 id="autowired">@Autowired</h4>
-<ul>
-<li>@Autowired是按类型自动转配的，不支持id匹配。</li>
-<li>需要导入 spring-aop的包！</li>
-</ul>
-<p>测试：</p>
-<p>1、将User类中的set方法去掉，使用@Autowired注解</p>
-<pre><code class="language-java">public class User {
-   @Autowired
-   private Cat cat;
-   @Autowired
-   private Dog dog;
-   private String name;
-
-   public Cat getCat() {
-       return cat;
-  }
-   public Dog getDog() {
-       return dog;
-  }
-   public String getName() {
-       return str;
-  }
-}
-</code></pre>
-<p>2、此时配置文件内容</p>
-<pre><code class="language-xml">&lt;context:annotation-config/&gt;
-
-&lt;bean id=&quot;user&quot; class=&quot;com.totoroay.pojo.User&quot;/&gt;
-&lt;bean id=&quot;cat&quot; class=&quot;com.totoroay.pojo.Cat&quot;/&gt;
-&lt;bean id=&quot;dog&quot; class=&quot;com.totoroay.pojo.Dog&quot;/&gt;
-</code></pre>
-<p>3、测试，成功输出结果！</p>
-<p>【科普时间】</p>
-<p>@Autowired(required=false)  说明：false，对象可以为null；true，对象必须存对象，不能为null。</p>
-<pre><code>//如果允许对象为null，设置required = false,默认为true
-@Autowired(required = false)
-private Cat cat;
-</code></pre>
-<h4 id="qualifier">@Qualifier</h4>
-<ul>
-<li>@Autowired是根据类型自动装配的，加上@Qualifier则可以根据byName的方式自动装配</li>
-<li>@Qualifier不能单独使用。</li>
-</ul>
-<p>测试实验步骤：</p>
-<p>1、配置文件修改内容，保证类型存在对象。且名字不为类的默认名字！</p>
-<pre><code class="language-xml">&lt;bean id=&quot;dog1&quot; class=&quot;com.totoroay.pojo.Dog&quot;/&gt;
-&lt;bean id=&quot;dog2&quot; class=&quot;com.totoroay.pojo.Dog&quot;/&gt;
-&lt;bean id=&quot;cat1&quot; class=&quot;com.totoroay.pojo.Cat&quot;/&gt;
-&lt;bean id=&quot;cat2&quot; class=&quot;com.totoroay.pojo.Cat&quot;/&gt;
-</code></pre>
-<p>2、没有加Qualifier测试，直接报错</p>
-<p>3、在属性上添加Qualifier注解</p>
-<pre><code class="language-java">@Autowired
-@Qualifier(value = &quot;cat2&quot;)
-private Cat cat;
-@Autowired
-@Qualifier(value = &quot;dog2&quot;)
-private Dog dog;
-</code></pre>
-<p>测试，成功输出！</p>
-<h4 id="resource">@Resource</h4>
-<ul>
-<li>@Resource如有指定的name属性，先按该属性进行byName方式查找装配；</li>
-<li>其次再进行默认的byName方式进行装配；</li>
-<li>如果以上都不成功，则按byType的方式自动装配。</li>
-<li>都不成功，则报异常。</li>
-</ul>
-<p>实体类：</p>
-<pre><code class="language-java">public class User {
-   //如果允许对象为null，设置required = false,默认为true
-   @Resource(name = &quot;cat2&quot;)
-   private Cat cat;
-   @Resource
-   private Dog dog;
-   private String str;
-}
-</code></pre>
-<p>beans.xml</p>
-<pre><code class="language-xml">&lt;bean id=&quot;dog&quot; class=&quot;com.totoroay.pojo.Dog&quot;/&gt;
-&lt;bean id=&quot;cat1&quot; class=&quot;com.totoroay.pojo.Cat&quot;/&gt;
-&lt;bean id=&quot;cat2&quot; class=&quot;com.totoroay.pojo.Cat&quot;/&gt;
-
-&lt;bean id=&quot;user&quot; class=&quot;com.totoroay.pojo.User&quot;/&gt;
-</code></pre>
-<p>测试：结果OK</p>
-<p>配置文件2：beans.xml ， 删掉cat2</p>
-<pre><code class="language-xml">&lt;bean id=&quot;dog&quot; class=&quot;com.kuang.pojo.Dog&quot;/&gt;
-&lt;bean id=&quot;cat1&quot; class=&quot;com.kuang.pojo.Cat&quot;/&gt;
-</code></pre>
-<p>实体类上只保留注解</p>
-<pre><code class="language-java">@Resource
-private Cat cat;
-@Resource
-private Dog dog;
-</code></pre>
-<p>结果：OK</p>
-<p>结论：先进行byName查找，失败；再进行byType查找，成功。</p>
-<h3 id="小结">小结</h3>
-<p>@Autowired与@Resource异同：</p>
-<p>1、@Autowired与@Resource都可以用来装配bean。都可以写在字段上，或写在setter方法上。</p>
-<p>2、@Autowired默认按类型装配（属于spring规范），默认情况下必须要求依赖对象必须存在，如果要允许null 值，可以设置它的required属性为false，如：@Autowired(required=false) ，如果我们想使用名称装配可以结合@Qualifier注解进行使用</p>
-<p>3、@Resource（属于J2EE复返），默认按照名称进行装配，名称可以通过name属性进行指定。如果没有指定name属性，当注解写在字段上时，默认取字段名进行按照名称查找，如果注解写在setter方法上默认取属性名进行装配。当找不到与名称匹配的bean时才按照类型进行装配。但是需要注意的是，如果name属性一旦指定，就只会按照名称进行装配。</p>
-<p>它们的作用相同都是用注解方式注入对象，但执行顺序不同。@Autowired先byType，@Resource先byName。</p>
-<h2 id="使用注解开发">使用注解开发</h2>
-<p>在spring4之后，想要使用注解形式，必须得要引入aop的包</p>
-<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1588930619093.png" alt="" loading="lazy"></figure>
-<p>在配置文件当中，还得要引入一个context约束</p>
-<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
-      xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-      xmlns:context=&quot;http://www.springframework.org/schema/context&quot;
-      xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans
-       http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://www.springframework.org/schema/context
-       http://www.springframework.org/schema/context/spring-context.xsd&quot;&gt;
-    
-    &lt;!--指定要扫描的包，这个包下的注解就会生效--&gt;
-    &lt;context:component-scan base-package=&quot;com.totoroay.pojo&quot;/&gt;
-    &lt;context:annotation-config/&gt;
-
-&lt;/beans&gt;
-</code></pre>
-<blockquote>
-<p>Bean的实现</p>
-</blockquote>
-<p>我们之前都是使用 bean 的标签进行bean注入，但是实际开发中，我们一般都会使用注解！</p>
-<p>1、配置扫描哪些包下的注解</p>
-<pre><code class="language-xml">&lt;!--指定注解扫描包--&gt;
-&lt;context:component-scan base-package=&quot;com.totoroay.pojo&quot;/&gt;
-</code></pre>
-<p>2、在指定包下编写类，增加注解</p>
-<pre><code class="language-java">@Component(&quot;user&quot;)
-// 相当于配置文件中 &lt;bean id=&quot;user&quot; class=&quot;当前注解的类&quot;/&gt;
-public class User {
-   public String name = &quot;totoroay&quot;;
-}
-</code></pre>
-<p>3、测试</p>
-<pre><code class="language-java">@Test
-public void test(){
-    ApplicationContext context = new ClassPathXmlApplicationContext(&quot;beans.xml&quot;);
-    User user = context.getBean(&quot;user&quot;, User.class);
-    System.out.println(user.getName());
-}
-</code></pre>
-<blockquote>
-<p>属性注入</p>
-</blockquote>
-<p>使用注解注入属性</p>
-<p>1、可以不用提供set方法，直接在直接名上添加@value(&quot;值&quot;)</p>
-<pre><code class="language-java">@Component(&quot;user&quot;)
-// 相当于配置文件中 &lt;bean id=&quot;user&quot; class=&quot;当前注解的类&quot;/&gt;
-public class User {
-   @Value(&quot;totoroay&quot;)
-   // 相当于配置文件中 &lt;property name=&quot;name&quot; value=&quot;totoroay&quot;/&gt;
-   public String name;
-}
-</code></pre>
-<p>2、如果提供了set方法，也可以在set方法上添加@value(&quot;值&quot;);</p>
-<pre><code class="language-java">@Component(&quot;user&quot;)
-public class User {
-
-   public String name;
-
-   @Value(&quot;totoroay&quot;)
-   public void setName(String name) {
-       this.name = name;
-  }
-}
-</code></pre>
-<blockquote>
-<p>衍生注解</p>
-</blockquote>
-<p>我们这些注解，就是替代了在配置文件当中配置步骤而已！更加的方便快捷！</p>
-<p><strong>@Component三个衍生注解</strong></p>
-<p>为了更好的进行分层，Spring可以使用其它三个注解，功能一样，目前使用哪一个功能都一样。</p>
-<ul>
-<li>@Controller：web层</li>
-<li>@Service：service层</li>
-<li>@Repository：dao层</li>
-</ul>
-<p>写上这些注解，就相当于将这个类交给Spring管理装配了！</p>
-<blockquote>
-<p>自动装配注解</p>
-</blockquote>
-<p>在Bean的自动装配已经讲过了，可以回顾！</p>
-<blockquote>
-<p>作用域</p>
-</blockquote>
-<p>@scope</p>
-<ul>
-<li>singleton：默认的，Spring会采用单例模式创建这个对象。关闭工厂 ，所有的对象都会销毁。</li>
-<li>prototype：多例模式（原型模式）。关闭工厂 ，所有的对象不会销毁。内部的垃圾回收机制会回收</li>
-</ul>
-<pre><code class="language-java">@Controller(&quot;user&quot;)
-@Scope(&quot;prototype&quot;)
-public class User {
-   @Value(&quot;totoroay&quot;)
-   public String name;
-}
-</code></pre>
-<blockquote>
-<p>小结</p>
-</blockquote>
-<p><strong>XML与注解比较</strong></p>
-<ul>
-<li>XML可以适用任何场景 ，结构清晰，维护方便</li>
-<li>注解不是自己提供的类使用不了，开发简单方便</li>
-</ul>
-<p><strong>xml与注解整合开发</strong> ：推荐最佳实践</p>
-<ul>
-<li>xml管理Bean</li>
-<li>注解完成属性注入</li>
-<li>使用过程中， 可以不用扫描，扫描是为了类上的注解</li>
-</ul>
-<pre><code class="language-xml">&lt;context:annotation-config/&gt;  
-</code></pre>
-<p>作用：</p>
-<ul>
-<li>
-<p>进行注解驱动注册，从而使注解生效</p>
-</li>
-<li>
-<p>用于激活那些已经在spring容器里注册过的bean上面的注解，也就是显示的向Spring注册</p>
-</li>
-<li>
-<p>如果不扫描包，就需要手动配置bean</p>
-</li>
-<li>
-<p>如果不加注解驱动，则注入的值为null！</p>
-</li>
-</ul>
-<blockquote>
-<p>基于Java类进行配置</p>
-</blockquote>
-<p>JavaConfig 原来是 Spring 的一个子项目，它通过 Java 类的方式提供 Bean 的定义信息，在 Spring4 的版本， JavaConfig 已正式成为 Spring4 的核心功能 。</p>
-<p>测试：</p>
-<p>1、编写一个实体类，Dog</p>
-<pre><code class="language-java">@Component  //将这个类标注为Spring的一个组件，放到容器中！
-public class Dog {
-   public String name = &quot;dog&quot;;
-}
-</code></pre>
-<p>2、新建一个config配置包，编写一个MyConfig配置类</p>
-<pre><code class="language-java">@Configuration  //代表这是一个配置类
-public class MyConfig {
-
-   @Bean //通过方法注册一个bean，这里的返回值就Bean的类型，方法名就是bean的id！
-   public Dog dog(){
-       return new Dog();
-  }
-
-}
-</code></pre>
-<p>3、测试</p>
-<pre><code class="language-java">@Test
-public void test2(){
-   ApplicationContext applicationContext =
-           new AnnotationConfigApplicationContext(MyConfig.class);
-   Dog dog = (Dog) applicationContext.getBean(&quot;dog&quot;);
-   System.out.println(dog.name);
-}
-</code></pre>
-<p>4、成功输出结果！</p>
-<p><strong>导入其他配置如何做呢？</strong></p>
-<p>1、我们再编写一个配置类！</p>
-<pre><code class="language-java">@Configuration  //代表这是一个配置类
-public class MyConfig2 {
-}
-</code></pre>
-<p>2、在之前的配置类中我们来选择导入这个配置类</p>
-<pre><code class="language-ja">@Configuration
-@Import(MyConfig2.class)  //导入合并其他配置类，类似于配置文件中的 inculde 标签
-public class MyConfig {
-
-   @Bean
-   public Dog dog(){
-       return new Dog();
-  }
-
-}
-</code></pre>
-<p>关于这种Java类的配置方式，我们在之后的SpringBoot 和 SpringCloud中还会大量看到，我们需要知道这些注解的作用即可！</p>
 ]]></content>
     </entry>
 </feed>
