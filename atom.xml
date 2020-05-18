@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://totoroay.github.io/</id>
     <title>totoroay</title>
-    <updated>2020-05-15T13:36:23.392Z</updated>
+    <updated>2020-05-18T13:36:47.933Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://totoroay.github.io/"/>
     <link rel="self" href="https://totoroay.github.io/atom.xml"/>
@@ -10,6 +10,420 @@
     <logo>https://totoroay.github.io/images/avatar.png</logo>
     <icon>https://totoroay.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, totoroay</rights>
+    <entry>
+        <title type="html"><![CDATA[SpringBoot12：集成SpringSecurity]]></title>
+        <id>https://totoroay.github.io/post/springboot12ji-cheng-springsecurity/</id>
+        <link href="https://totoroay.github.io/post/springboot12ji-cheng-springsecurity/">
+        </link>
+        <updated>2020-05-18T13:32:25.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="安全简介">安全简介</h2>
+<p>在 Web 开发中，安全一直是非常重要的一个方面。安全虽然属于应用的非功能性需求，但是应该在应用开发的初期就考虑进来。如果在应用开发的后期才考虑安全的问题，就可能陷入一个两难的境地：一方面，应用存在严重的安全漏洞，无法满足用户的要求，并可能造成用户的隐私数据被攻击者窃取；另一方面，应用的基本架构已经确定，要修复安全漏洞，可能需要对系统的架构做出比较重大的调整，因而需要更多的开发时间，影响应用的发布进程。因此，从应用开发的第一天就应该把安全相关的因素考虑进来，并在整个应用的开发过程中。</p>
+<p>市面上存在比较有名的：Shiro，Spring Security ！</p>
+<p>这里需要阐述一下的是，每一个框架的出现都是为了解决某一问题而产生了，那么Spring Security框架的出现是为了解决什么问题呢？</p>
+<p>首先我们看下它的官网介绍：Spring Security官网地址</p>
+<p>Spring Security is a powerful and highly customizable authentication and access-control framework. It is the de-facto standard for securing Spring-based applications.</p>
+<p>Spring Security is a framework that focuses on providing both authentication and authorization to Java applications. Like all Spring projects, the real power of Spring Security is found in how easily it can be extended to meet custom requirements</p>
+<p>Spring Security是一个功能强大且高度可定制的身份验证和访问控制框架。它实际上是保护基于spring的应用程序的标准。</p>
+<p>Spring Security是一个框架，侧重于为Java应用程序提供身份验证和授权。与所有Spring项目一样，Spring安全性的真正强大之处在于它可以轻松地扩展以满足定制需求</p>
+<p>从官网的介绍中可以知道这是一个权限框架。想我们之前做项目是没有使用框架是怎么控制权限的？对于权限 一般会细分为功能权限，访问权限，和菜单权限。代码会写的非常的繁琐，冗余。</p>
+<p>怎么解决之前写权限代码繁琐，冗余的问题，一些主流框架就应运而生而Spring Scecurity就是其中的一种。</p>
+<p>Spring 是一个非常流行和成功的 Java 应用开发框架。Spring Security 基于 Spring 框架，提供了一套 Web 应用安全性的完整解决方案。一般来说，Web 应用的安全性包括用户认证（Authentication）和用户授权（Authorization）两个部分。用户认证指的是验证某个用户是否为系统中的合法主体，也就是说用户能否访问该系统。用户认证一般要求用户提供用户名和密码。系统通过校验用户名和密码来完成认证过程。用户授权指的是验证某个用户是否有权限执行某个操作。在一个系统中，不同用户所具有的权限是不同的。比如对一个文件来说，有的用户只能进行读取，而有的用户可以进行修改。一般来说，系统会为不同的用户分配不同的角色，而每个角色则对应一系列的权限。</p>
+<p>对于上面提到的两种应用情景，Spring Security 框架都有很好的支持。在用户认证方面，Spring Security 框架支持主流的认证方式，包括 HTTP 基本认证、HTTP 表单验证、HTTP 摘要认证、OpenID 和 LDAP 等。在用户授权方面，Spring Security 提供了基于角色的访问控制和访问控制列表（Access Control List，ACL），可以对应用中的领域对象进行细粒度的控制。</p>
+<h2 id="实验环境搭建">实验环境搭建</h2>
+<p>1、新建一个初始的springboot项目web模块，thymeleaf模块</p>
+<p>2、导入静态资源</p>
+<p>3、controller跳转！</p>
+<pre><code class="language-java">package com.totoroay.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+public class RouteController {
+    @RequestMapping({&quot;/&quot;,&quot;/index&quot;,&quot;/index.html&quot;})
+    public String index(){
+        return &quot;index&quot;;
+    }
+
+    @RequestMapping(&quot;/toLogin&quot;)
+    public String toLogin(){
+        return &quot;views/login&quot;;
+    }
+
+    @RequestMapping(&quot;/level1/{id}&quot;)
+    public String level1(@PathVariable(&quot;id&quot;) int id){
+        return &quot;views/level1/&quot;+id;
+    }
+    @RequestMapping(&quot;/level2/{id}&quot;)
+    public String level2(@PathVariable(&quot;id&quot;) int id){
+        return &quot;views/level2/&quot;+id;
+    }
+    @RequestMapping(&quot;/level3/{id}&quot;)
+    public String level3(@PathVariable(&quot;id&quot;) int id){
+        return &quot;views/level3/&quot;+id;
+    }
+}
+</code></pre>
+<p>4、测试实验环境是否OK！</p>
+<h2 id="认识springsecurity">认识SpringSecurity</h2>
+<p>Spring Security 是针对Spring项目的安全框架，也是Spring Boot底层安全模块默认的技术选型，他可以实现强大的Web安全控制，对于安全控制，我们仅需要引入 spring-boot-starter-security 模块，进行少量的配置，即可实现强大的安全管理！</p>
+<p>记住几个类：</p>
+<ul>
+<li>WebSecurityConfigurerAdapter：自定义Security策略</li>
+<li>AuthenticationManagerBuilder：自定义认证策略</li>
+<li>@EnableWebSecurity：开启WebSecurity模式</li>
+</ul>
+<p>Spring Security的两个主要目标是 “认证” 和 “授权”（访问控制）。</p>
+<p><strong>“认证”（Authentication）</strong></p>
+<p>身份验证是关于验证您的凭据，如用户名/用户ID和密码，以验证您的身份。</p>
+<p>身份验证通常通过用户名和密码完成，有时与身份验证因素结合使用。</p>
+<p><strong>“授权” （Authorization）</strong></p>
+<p>授权发生在系统成功验证您的身份后，最终会授予您访问资源（如信息，文件，数据库，资金，位置，几乎任何内容）的完全权限。</p>
+<p>这个概念是通用的，而不是只在Spring Security 中存在。</p>
+<h2 id="认证和授权">认证和授权</h2>
+<p>目前，我们的测试环境，是谁都可以访问的，我们使用 Spring Security 增加上认证和授权的功能</p>
+<p>1、引入 Spring Security 模块</p>
+<pre><code class="language-xml">&lt;dependency&gt;
+   &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+   &lt;artifactId&gt;spring-boot-starter-security&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>2、编写 Spring Security 配置类</p>
+<p>参考官网：https://spring.io/projects/spring-security</p>
+<p>查看我们自己项目中的版本，找到对应的帮助文档：</p>
+<p>https://docs.spring.io/spring-security/site/docs/5.3.0.RELEASE/reference/html5#servlet-applications8.16.4</p>
+<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1589808847466.png" alt="" loading="lazy"></figure>
+<p>3、编写基础配置类</p>
+<pre><code class="language-java">package com.totoroay.config;
+
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        
+    }
+}
+</code></pre>
+<p>4、定制请求的授权规则</p>
+<pre><code class="language-java">@Override
+protected void configure(HttpSecurity http) throws Exception {
+   // 定制请求的授权规则
+   // 首页所有人可以访问
+   http.authorizeRequests().antMatchers(&quot;/&quot;).permitAll()
+  .antMatchers(&quot;/level1/**&quot;).hasRole(&quot;vip1&quot;)
+  .antMatchers(&quot;/level2/**&quot;).hasRole(&quot;vip2&quot;)
+  .antMatchers(&quot;/level3/**&quot;).hasRole(&quot;vip3&quot;);
+}
+</code></pre>
+<p>5、测试一下：发现除了首页都进不去了！因为我们目前没有登录的角色，因为请求需要登录的角色拥有对应的权限才可以！</p>
+<p>6、在configure()方法中加入以下配置，开启自动配置的登录功能！</p>
+<pre><code class="language-java">// 开启自动配置的登录功能
+// /login 请求来到登录页
+// /login?error 重定向到这里表示登录失败
+http.formLogin();
+</code></pre>
+<p>7、测试一下：发现，没有权限的时候，会跳转到登录的页面！</p>
+<figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1589808839089.png" alt="" loading="lazy"></figure>
+<p>8、查看刚才登录页的注释信息；</p>
+<p>我们可以定义认证规则，重写configure(AuthenticationManagerBuilder auth)方法</p>
+<pre><code class="language-java">//定义认证规则
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception{
+
+        //在内存中定义，也可以在jdbc中去拿....
+        auth.inMemoryAuthentication()
+                .withUser(&quot;totoroay&quot;).password(&quot;totoroay&quot;).roles(&quot;vip1&quot;,&quot;vip2&quot;,&quot;vip3&quot;)
+                .and()
+                .withUser(&quot;root&quot;).password(&quot;root&quot;).roles(&quot;vip1&quot;,&quot;vip2&quot;)
+                .and()
+                .withUser(&quot;guest&quot;).password(&quot;guest&quot;).roles(&quot;vip1&quot;);
+    }
+</code></pre>
+<p>9、测试，我们可以使用这些账号登录进行测试！发现会报错！</p>
+<p>There is no PasswordEncoder mapped for the id “null”</p>
+<figure data-type="image" tabindex="3"><img src="https://totoroay.github.io//post-images/1589808831367.png" alt="" loading="lazy"></figure>
+<p>10、原因，我们要将前端传过来的密码进行某种方式加密，否则就无法登录，修改代码</p>
+<pre><code class="language-java">// 缓存
+//定义认证规则
+@Override
+protected void configure(AuthenticationManagerBuilder auth) throws Exception{
+   //在内存中定义，也可以在jdbc中去拿....
+   //Spring security 5.0中新增了多种加密方式，也改变了密码的格式。
+   //要想我们的项目还能够正常登陆，需要修改一下configure中的代码。我们要将前端传过来的密码进行某种方式加密
+   //spring security 官方推荐的是使用bcrypt加密方式。
+   
+   auth.inMemoryAuthentication().passwordEncoder(new BCryptPasswordEncoder())
+          .withUser(&quot;totoroay&quot;).password(new BCryptPasswordEncoder().encode(&quot;totoroay&quot;)).roles(&quot;vip1&quot;,&quot;vip2&quot;,&quot;vip3&quot;)
+          .and()
+          .withUser(&quot;root&quot;).password(new BCryptPasswordEncoder().encode(&quot;root&quot;)).roles(&quot;vip1&quot;,&quot;vip2&quot;)
+          .and()
+          .withUser(&quot;guest&quot;).password(new BCryptPasswordEncoder().encode(&quot;guest&quot;)).roles(&quot;vip1&quot;);
+}
+</code></pre>
+<pre><code class="language-java">// 数据库
+@Autowired
+private DataSource dataSource;
+
+@Autowired
+public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+    // ensure the passwords are encoded properly
+    UserBuilder users = User.withDefaultPasswordEncoder();
+    auth
+        .jdbcAuthentication()
+            .dataSource(dataSource)
+            .withDefaultSchema()
+            .withUser(users.username(&quot;user&quot;).password(&quot;password&quot;).roles(&quot;USER&quot;))
+            .withUser(users.username(&quot;admin&quot;).password(&quot;password&quot;).roles(&quot;USER&quot;,&quot;ADMIN&quot;));
+}
+</code></pre>
+<p>11、测试，发现，登录成功，并且每个角色只能访问自己认证下的规则！搞定</p>
+<h2 id="权限控制和注销">权限控制和注销</h2>
+<p>1、开启自动配置的注销的功能</p>
+<pre><code class="language-java">//定制请求的授权规则
+@Override
+protected void configure(HttpSecurity http) throws Exception {
+   //....
+   //开启自动配置的注销的功能
+      // /logout 注销请求
+   http.logout();
+}
+</code></pre>
+<p>2、我们在前端，增加一个注销的按钮，index.html 导航栏中</p>
+<pre><code class="language-html">&lt;a class=&quot;item&quot; th:href=&quot;@{/logout}&quot;&gt;
+   &lt;i class=&quot;address card icon&quot;&gt;&lt;/i&gt; 注销
+&lt;/a&gt;
+</code></pre>
+<p>3、我们可以去测试一下，登录成功后点击注销，发现注销完毕会跳转到登录页面！</p>
+<p>4、但是，我们想让他注销成功后，依旧可以跳转到首页，该怎么处理呢？</p>
+<pre><code class="language-java">// .logoutSuccessUrl(&quot;/&quot;); 注销成功来到首页
+http.logout().logoutSuccessUrl(&quot;/&quot;);
+</code></pre>
+<p>5、测试，注销完毕后，发现跳转到首页OK</p>
+<p>6、我们现在又来一个需求：用户没有登录的时候，导航栏上只显示登录按钮，用户登录之后，导航栏可以显示登录的用户信息及注销按钮！还有就是，比如kuangshen这个用户，它只有 vip2，vip3功能，那么登录则只显示这两个功能，而vip1的功能菜单不显示！这个就是真实的网站情况了！该如何做呢？</p>
+<p>我们需要结合thymeleaf中的一些功能</p>
+<p>sec：authorize=&quot;isAuthenticated()&quot;:是否认证登录！来显示不同的页面</p>
+<p>Maven依赖：</p>
+<pre><code class="language-xml">&lt;!-- https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-springsecurity4 --&gt;
+&lt;dependency&gt;
+   &lt;groupId&gt;org.thymeleaf.extras&lt;/groupId&gt;
+   &lt;artifactId&gt;thymeleaf-extras-springsecurity5&lt;/artifactId&gt;
+   &lt;version&gt;3.0.4.RELEASE&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>7、修改我们的 前端页面</p>
+<ol>
+<li>导入命名空间</li>
+</ol>
+<pre><code>xmlns:sec=&quot;http://www.thymeleaf.org/thymeleaf-extras-springsecurity5&quot;
+</code></pre>
+<p>​		修改导航栏，增加认证判断</p>
+<pre><code class="language-html">&lt;!--登录注销--&gt;
+&lt;div class=&quot;right menu&quot;&gt;
+
+   &lt;!--如果未登录--&gt;
+   &lt;div sec:authorize=&quot;!isAuthenticated()&quot;&gt;
+       &lt;a class=&quot;item&quot; th:href=&quot;@{/login}&quot;&gt;
+           &lt;i class=&quot;address card icon&quot;&gt;&lt;/i&gt; 登录
+       &lt;/a&gt;
+   &lt;/div&gt;
+
+   &lt;!--如果已登录--&gt;
+   &lt;div sec:authorize=&quot;isAuthenticated()&quot;&gt;
+       &lt;a class=&quot;item&quot;&gt;
+           &lt;i class=&quot;address card icon&quot;&gt;&lt;/i&gt;
+          用户名：&lt;span sec:authentication=&quot;principal.username&quot;&gt;&lt;/span&gt;
+          角色：&lt;span sec:authentication=&quot;principal.authorities&quot;&gt;&lt;/span&gt;
+       &lt;/a&gt;
+   &lt;/div&gt;
+
+   &lt;div sec:authorize=&quot;isAuthenticated()&quot;&gt;
+       &lt;a class=&quot;item&quot; th:href=&quot;@{/logout}&quot;&gt;
+           &lt;i class=&quot;address card icon&quot;&gt;&lt;/i&gt; 注销
+       &lt;/a&gt;
+   &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<p>8、重启测试，我们可以登录试试看，登录成功后确实，显示了我们想要的页面；</p>
+<p>9、如果注销404了，就是因为它默认防止csrf跨站请求伪造，因为会产生安全问题，我们可以将请求改为post表单提交，或者在spring security中关闭csrf功能；我们试试：在 配置中增加 <code>http.csrf().disable();</code></p>
+<pre><code class="language-java">http.csrf().disable();//关闭csrf功能:跨站请求伪造,默认只能通过post方式提交logout请求
+http.logout().logoutSuccessUrl(&quot;/&quot;);
+</code></pre>
+<p>10、我们继续将下面的角色功能块认证完成！</p>
+<pre><code class="language-html">&lt;!-- sec:authorize=&quot;hasRole('vip1')&quot; --&gt;
+&lt;div class=&quot;column&quot; sec:authorize=&quot;hasRole('vip1')&quot;&gt;
+   &lt;div class=&quot;ui raised segment&quot;&gt;
+       &lt;div class=&quot;ui&quot;&gt;
+           &lt;div class=&quot;content&quot;&gt;
+               &lt;h5 class=&quot;content&quot;&gt;Level 1&lt;/h5&gt;
+               &lt;hr&gt;
+               &lt;div&gt;&lt;a th:href=&quot;@{/level1/1}&quot;&gt;&lt;i class=&quot;bullhorn icon&quot;&gt;&lt;/i&gt; Level-1-1&lt;/a&gt;&lt;/div&gt;
+               &lt;div&gt;&lt;a th:href=&quot;@{/level1/2}&quot;&gt;&lt;i class=&quot;bullhorn icon&quot;&gt;&lt;/i&gt; Level-1-2&lt;/a&gt;&lt;/div&gt;
+               &lt;div&gt;&lt;a th:href=&quot;@{/level1/3}&quot;&gt;&lt;i class=&quot;bullhorn icon&quot;&gt;&lt;/i&gt; Level-1-3&lt;/a&gt;&lt;/div&gt;
+           &lt;/div&gt;
+       &lt;/div&gt;
+   &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;column&quot; sec:authorize=&quot;hasRole('vip2')&quot;&gt;
+   &lt;div class=&quot;ui raised segment&quot;&gt;
+       &lt;div class=&quot;ui&quot;&gt;
+           &lt;div class=&quot;content&quot;&gt;
+               &lt;h5 class=&quot;content&quot;&gt;Level 2&lt;/h5&gt;
+               &lt;hr&gt;
+               &lt;div&gt;&lt;a th:href=&quot;@{/level2/1}&quot;&gt;&lt;i class=&quot;bullhorn icon&quot;&gt;&lt;/i&gt; Level-2-1&lt;/a&gt;&lt;/div&gt;
+               &lt;div&gt;&lt;a th:href=&quot;@{/level2/2}&quot;&gt;&lt;i class=&quot;bullhorn icon&quot;&gt;&lt;/i&gt; Level-2-2&lt;/a&gt;&lt;/div&gt;
+               &lt;div&gt;&lt;a th:href=&quot;@{/level2/3}&quot;&gt;&lt;i class=&quot;bullhorn icon&quot;&gt;&lt;/i&gt; Level-2-3&lt;/a&gt;&lt;/div&gt;
+           &lt;/div&gt;
+       &lt;/div&gt;
+   &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;column&quot; sec:authorize=&quot;hasRole('vip3')&quot;&gt;
+   &lt;div class=&quot;ui raised segment&quot;&gt;
+       &lt;div class=&quot;ui&quot;&gt;
+           &lt;div class=&quot;content&quot;&gt;
+               &lt;h5 class=&quot;content&quot;&gt;Level 3&lt;/h5&gt;
+               &lt;hr&gt;
+               &lt;div&gt;&lt;a th:href=&quot;@{/level3/1}&quot;&gt;&lt;i class=&quot;bullhorn icon&quot;&gt;&lt;/i&gt; Level-3-1&lt;/a&gt;&lt;/div&gt;
+               &lt;div&gt;&lt;a th:href=&quot;@{/level3/2}&quot;&gt;&lt;i class=&quot;bullhorn icon&quot;&gt;&lt;/i&gt; Level-3-2&lt;/a&gt;&lt;/div&gt;
+               &lt;div&gt;&lt;a th:href=&quot;@{/level3/3}&quot;&gt;&lt;i class=&quot;bullhorn icon&quot;&gt;&lt;/i&gt; Level-3-3&lt;/a&gt;&lt;/div&gt;
+           &lt;/div&gt;
+       &lt;/div&gt;
+   &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<p>11、测试一下！</p>
+<p>12、权限控制和注销搞定！</p>
+<h2 id="记住我">记住我</h2>
+<p>现在的情况，我们只要登录之后，关闭浏览器，再登录，就会让我们重新登录，但是很多网站的情况，就是有一个记住密码的功能，这个该如何实现呢？很简单</p>
+<p>1、开启记住我功能</p>
+<pre><code class="language-java">//定制请求的授权规则
+@Override
+protected void configure(HttpSecurity http) throws Exception {
+//。。。。。。。。。。。
+   //记住我
+   http.rememberMe();
+}
+</code></pre>
+<p>2、我们再次启动项目测试一下，发现登录页多了一个记住我功能，我们登录之后关闭 浏览器，然后重新打开浏览器访问，发现用户依旧存在！</p>
+<p>思考：如何实现的呢？其实非常简单</p>
+<p>我们可以查看浏览器的cookie</p>
+<figure data-type="image" tabindex="4"><img src="https://totoroay.github.io//post-images/1589808811830.png" alt="" loading="lazy"></figure>
+<p>3、我们点击注销的时候，可以发现，spring security 帮我们自动删除了这个 cookie</p>
+<figure data-type="image" tabindex="5"><img src="https://totoroay.github.io//post-images/1589808804512.png" alt="" loading="lazy"></figure>
+<p>4、结论：登录成功后，将cookie发送给浏览器保存，以后登录带上这个cookie，只要通过检查就可以免登录了。如果点击注销，则会删除这个cookie，具体的原理我们在JavaWeb阶段都讲过了，这里就不在多说了！</p>
+<h2 id="定制登录页">定制登录页</h2>
+<p>现在这个登录页面都是spring security 默认的，怎么样可以使用我们自己写的Login界面呢？</p>
+<p>1、在刚才的登录页配置后面指定 loginpage</p>
+<pre><code class="language-java">http.formLogin().loginPage(&quot;/toLogin&quot;);
+</code></pre>
+<p>2、然后前端也需要指向我们自己定义的 login请求</p>
+<pre><code class="language-xml">&lt;a class=&quot;item&quot; th:href=&quot;@{/toLogin}&quot;&gt;
+   &lt;i class=&quot;address card icon&quot;&gt;&lt;/i&gt; 登录
+&lt;/a&gt;
+</code></pre>
+<p>3、我们登录，需要将这些信息发送到哪里，我们也需要配置，login.html 配置提交请求及方式，方式必须为post:</p>
+<p>在 loginPage()源码中的注释上有写明：</p>
+<figure data-type="image" tabindex="6"><img src="https://totoroay.github.io//post-images/1589808795276.png" alt="" loading="lazy"></figure>
+<pre><code class="language-xml">&lt;form th:action=&quot;@{/login}&quot; method=&quot;post&quot;&gt;
+   &lt;div class=&quot;field&quot;&gt;
+       &lt;label&gt;Username&lt;/label&gt;
+       &lt;div class=&quot;ui left icon input&quot;&gt;
+           &lt;input type=&quot;text&quot; placeholder=&quot;Username&quot; name=&quot;username&quot;&gt;
+           &lt;i class=&quot;user icon&quot;&gt;&lt;/i&gt;
+       &lt;/div&gt;
+   &lt;/div&gt;
+   &lt;div class=&quot;field&quot;&gt;
+       &lt;label&gt;Password&lt;/label&gt;
+       &lt;div class=&quot;ui left icon input&quot;&gt;
+           &lt;input type=&quot;password&quot; name=&quot;password&quot;&gt;
+           &lt;i class=&quot;lock icon&quot;&gt;&lt;/i&gt;
+       &lt;/div&gt;
+   &lt;/div&gt;
+   &lt;input type=&quot;submit&quot; class=&quot;ui blue submit button&quot;/&gt;
+&lt;/form&gt;
+</code></pre>
+<p>4、这个请求提交上来，我们还需要验证处理，怎么做呢？我们可以查看formLogin()方法的源码！我们配置接收登录的用户名和密码的参数！</p>
+<pre><code class="language-java">http.formLogin()
+  .usernameParameter(&quot;username&quot;)
+  .passwordParameter(&quot;password&quot;)
+  .loginPage(&quot;/toLogin&quot;)
+  .loginProcessingUrl(&quot;/login&quot;); // 登陆表单提交请求
+</code></pre>
+<p>5、在登录页增加记住我的多选框</p>
+<pre><code class="language-html">&lt;input type=&quot;checkbox&quot; name=&quot;remember&quot;&gt; 记住我
+</code></pre>
+<p>6、后端验证处理！</p>
+<pre><code class="language-java">//定制记住我的参数！
+http.rememberMe().rememberMeParameter(&quot;remember&quot;);
+</code></pre>
+<p>7、测试，OK</p>
+<h2 id="完整配置代码">完整配置代码</h2>
+<pre><code class="language-java">package com.totoroay.config;
+
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+   //定制请求的授权规则
+   @Override
+   protected void configure(HttpSecurity http) throws Exception {
+
+       http.authorizeRequests().antMatchers(&quot;/&quot;).permitAll()
+      .antMatchers(&quot;/level1/**&quot;).hasRole(&quot;vip1&quot;)
+      .antMatchers(&quot;/level2/**&quot;).hasRole(&quot;vip2&quot;)
+      .antMatchers(&quot;/level3/**&quot;).hasRole(&quot;vip3&quot;);
+
+
+       //开启自动配置的登录功能：如果没有权限，就会跳转到登录页面！
+           // /login 请求来到登录页
+           // /login?error 重定向到这里表示登录失败
+       http.formLogin()
+          .usernameParameter(&quot;username&quot;)
+          .passwordParameter(&quot;password&quot;)
+          .loginPage(&quot;/toLogin&quot;)
+          .loginProcessingUrl(&quot;/login&quot;); // 登陆表单提交请求
+
+       //开启自动配置的注销的功能
+           // /logout 注销请求
+           // .logoutSuccessUrl(&quot;/&quot;); 注销成功来到首页
+
+       http.csrf().disable();//关闭csrf功能:跨站请求伪造,默认只能通过post方式提交logout请求
+       http.logout().logoutSuccessUrl(&quot;/&quot;);
+
+       //记住我
+       http.rememberMe().rememberMeParameter(&quot;remember&quot;);
+  }
+
+   //定义认证规则
+   @Override
+   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+       //在内存中定义，也可以在jdbc中去拿....
+       //Spring security 5.0中新增了多种加密方式，也改变了密码的格式。
+       //要想我们的项目还能够正常登陆，需要修改一下configure中的代码。我们要将前端传过来的密码进行某种方式加密
+       //spring security 官方推荐的是使用bcrypt加密方式。
+
+       auth.inMemoryAuthentication().passwordEncoder(new BCryptPasswordEncoder())
+              .withUser(&quot;totoroay&quot;).password(new BCryptPasswordEncoder().encode(&quot;totoroay&quot;)).roles(&quot;vip1&quot;,&quot;vip2&quot;,&quot;vip3&quot;)
+              .and()
+              .withUser(&quot;root&quot;).password(new BCryptPasswordEncoder().encode(&quot;root&quot;)).roles(&quot;vip1&quot;,&quot;vip2&quot;)
+              .and()
+              .withUser(&quot;guest&quot;).password(new BCryptPasswordEncoder().encode(&quot;guest&quot;)).roles(&quot;vip1&quot;);
+  }
+}
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[SpringBoot11：整合MyBatis]]></title>
         <id>https://totoroay.github.io/post/springboot11zheng-he-mybatis/</id>
@@ -1816,37 +2230,6 @@ public class AnnotationPointcut {
 
 &lt;aop:aspectj-autoproxy /&gt;有一个proxy-target-class属性，默认为false，表示使用jdk动态代理织入增强，当配为&lt;aop:aspectj-autoproxy  poxy-target-class=&quot;true&quot;/&gt;时，表示使用CGLib动态代理技术织入增强。不过即使proxy-target-class设置为false，如果目标类没有声明接口，则spring将自动使用CGLib动态代理。
 </code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Ngork内网穿透]]></title>
-        <id>https://totoroay.github.io/post/ngork-nei-wang-chuan-tou/</id>
-        <link href="https://totoroay.github.io/post/ngork-nei-wang-chuan-tou/">
-        </link>
-        <updated>2020-05-09T02:33:15.000Z</updated>
-        <content type="html"><![CDATA[<p>1、到官网注册</p>
-<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1588997942816.png" alt="" loading="lazy"></figure>
-<p>2、注册成功后开通隧道</p>
-<figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1588997949246.png" alt="" loading="lazy"></figure>
-<p>3、填写相关信息</p>
-<figure data-type="image" tabindex="3"><img src="https://totoroay.github.io//post-images/1588997954532.png" alt="" loading="lazy"></figure>
-<p>4、选择对应的版本，下载解压启动工具</p>
-<figure data-type="image" tabindex="4"><img src="https://totoroay.github.io//post-images/1588997960465.png" alt="" loading="lazy"></figure>
-<figure data-type="image" tabindex="5"><img src="https://totoroay.github.io//post-images/1588997967933.png" alt="" loading="lazy"></figure>
-<p>5、填写隧道id并回车</p>
-<figure data-type="image" tabindex="6"><img src="https://totoroay.github.io//post-images/1588997979308.png" alt="" loading="lazy"></figure>
-<figure data-type="image" tabindex="7"><img src="https://totoroay.github.io//post-images/1588997988830.png" alt="" loading="lazy"></figure>
-<figure data-type="image" tabindex="8"><img src="https://totoroay.github.io//post-images/1588997996995.png" alt="" loading="lazy"></figure>
-<p>6、访问</p>
-<ul>
-<li>PC端启动项目后</li>
-</ul>
-<figure data-type="image" tabindex="9"><img src="https://totoroay.github.io//post-images/1588998006236.png" alt="" loading="lazy"></figure>
-<ul>
-<li>手机访问</li>
-</ul>
-<figure data-type="image" tabindex="10"><img src="https://totoroay.github.io//post-images/1588998018034.png" alt="" loading="lazy"></figure>
-<figure data-type="image" tabindex="11"><img src="https://totoroay.github.io//post-images/1588998024505.jpg" alt="" loading="lazy"></figure>
 ]]></content>
     </entry>
 </feed>
