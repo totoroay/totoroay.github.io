@@ -1,0 +1,464 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>totoroay</title>
+<meta name="description" content="每天学习5小时！！！" />
+<link rel="shortcut icon" href="https://totoroay.github.io//favicon.ico?v=1590302856438">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+
+<link rel="stylesheet" href="https://totoroay.github.io//styles/main.css">
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main px-4 flex flex-col lg:flex-row">
+      <div id="sidebar" class="sidebar-wrapper lg:static lg:w-1/4">
+  <div class="lg:sticky top-0">
+    <div class="sidebar-content">
+      <div class="flex lg:block p-4 lg:px-0 items-center fixed lg:static lg:block top-0 right-0 left-0 bg-white z-50">
+        <i class="ri-menu-2-line lg:mt-4 text-2xl cursor-pointer animated fadeIn" onclick="openMenu()"></i>
+        <a href="https://totoroay.github.io/">
+          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://totoroay.github.io//images/avatar.png?v=1590302856438" alt="">
+        </a>
+        <h1 class="animated fadeInLeft lg:text-4xl font-extrabold lg:mt-8 mt-0 text-xl" style="animation-delay: 0.2s">totoroay</h1>
+      </div>
+      
+        <div class="animated fadeInLeft" style="animation-delay: 0.4s">
+          <p class="my-4 text-gray-600 font-light hidden lg:block">
+            文章目录
+          </p>
+          <div class="toc-container hidden lg:block">
+            <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E5%BC%82%E6%AD%A5%E4%BB%BB%E5%8A%A1">异步任务</a></li>
+<li><a href="#%E9%82%AE%E4%BB%B6%E4%BB%BB%E5%8A%A1">邮件任务</a></li>
+<li><a href="#%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1">定时任务</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      
+    </div>
+  </div>
+</div>
+
+<div class="menu-container">
+  <i class="ri-arrow-left-line text-2xl cursor-pointer animated fadeIn close-menu-btn" onclick="closeMenu()"></i>
+  <div>
+    
+      
+        <a href="/" class="menu" style="animation-delay: 0s">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu" style="animation-delay: 0.2s">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu" style="animation-delay: 0.4s">
+          标签（分类）
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu" style="animation-delay: 0.6000000000000001s">
+          关于博主
+        </a>
+      
+    
+  </div>
+  <div class="site-footer">
+    <div class="py-4 text-gray-700"></div>
+    <a class="rss" href="https://totoroay.github.io//atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+<div class="mask" onclick="closeMenu()">
+</div>
+      <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
+        <h1 class="text-3xl font-bold lg:mt-16">SpringBoot15：异步、定时、邮件任务</h1>
+        <div class="text-sm text-gray-700 lg:my-8">
+          2020-05-24 / 8 min read
+        </div>
+        
+        <div class="post-content yue">
+          <h2 id="异步任务">异步任务</h2>
+<p>1、创建一个service包</p>
+<p>2、创建一个类AsyncService</p>
+<p>异步处理还是非常常用的，比如我们在网站上发送邮件，后台会去发送邮件，此时前台会造成响应不动，直到邮件发送完毕，响应才会成功，所以我们一般会采用多线程的方式去处理这些任务。</p>
+<p>编写方法，假装正在处理数据，使用线程设置一些延时，模拟同步等待的情况；</p>
+<pre><code class="language-java">@Service
+public class AsyncService {
+
+   public void hello(){
+       try {
+           Thread.sleep(3000);
+      } catch (InterruptedException e) {
+           e.printStackTrace();
+      }
+       System.out.println(&quot;数据处理中....&quot;);
+  }
+}
+</code></pre>
+<p>3、编写controller包</p>
+<p>4、编写AsyncController类</p>
+<p>我们去写一个Controller测试一下</p>
+<pre><code class="language-java">@RestController
+public class AsyncController {
+
+   @Autowired
+   AsyncService asyncService;
+
+   @GetMapping(&quot;/hello&quot;)
+   public String hello(){
+       asyncService.hello();
+       return &quot;success&quot;;
+  }
+
+}
+</code></pre>
+<p>5、访问http://localhost:8080/hello进行测试，3秒后出现success，这是同步等待的情况。</p>
+<p>问题：我们如果想让用户直接得到消息，就在后台使用多线程的方式进行处理即可，但是每次都需要自己手动去编写多线程的实现的话，太麻烦了，我们只需要用一个简单的办法，在我们的方法上加一个简单的注解即可，如下：</p>
+<p>6、给hello方法添加@Async注解；</p>
+<pre><code class="language-java">//告诉Spring这是一个异步方法
+@Async
+public void hello(){
+   try {
+       Thread.sleep(3000);
+  } catch (InterruptedException e) {
+       e.printStackTrace();
+  }
+   System.out.println(&quot;数据处理中....&quot;);
+}
+</code></pre>
+<p>SpringBoot就会自己开一个线程池，进行调用！但是要让这个注解生效，我们还需要在主程序上添加一个注解@EnableAsync ，开启异步注解功能；</p>
+<pre><code class="language-java">@EnableAsync //开启异步注解功能
+@SpringBootApplication
+public class SpringbootTaskApplication {
+
+   public static void main(String[] args) {
+       SpringApplication.run(SpringbootTaskApplication.class, args);
+  }
+
+}
+</code></pre>
+<p>7、重启测试，网页瞬间响应，后台代码依旧执行！</p>
+<h2 id="邮件任务">邮件任务</h2>
+<p>邮件发送，在我们的日常开发中，也非常的多，Springboot也帮我们做了支持</p>
+<ul>
+<li>邮件发送需要引入spring-boot-start-mail</li>
+<li>SpringBoot 自动配置MailSenderAutoConfiguration</li>
+<li>定义MailProperties内容，配置在application.yml中</li>
+<li>自动装配JavaMailSender</li>
+<li>测试邮件发送</li>
+</ul>
+<p><strong>测试：</strong></p>
+<p>1、引入pom依赖</p>
+<pre><code class="language-xml">&lt;dependency&gt;
+   &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+   &lt;artifactId&gt;spring-boot-starter-mail&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>看它引入的依赖，可以看到 jakarta.mail</p>
+<pre><code class="language-xml">&lt;dependency&gt;
+   &lt;groupId&gt;com.sun.mail&lt;/groupId&gt;
+   &lt;artifactId&gt;jakarta.mail&lt;/artifactId&gt;
+   &lt;scope&gt;compile&lt;/scope&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>2、查看自动配置类：MailSenderAutoConfiguration</p>
+<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1590302826170.png" alt="" loading="lazy"></figure>
+<p><mark><strong>这个类中存在bean，JavaMailSenderImpl</strong></mark></p>
+<figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1590302821421.png" alt="" loading="lazy"></figure>
+<p>然后我们去看下配置文件</p>
+<pre><code class="language-java">@ConfigurationProperties(
+   prefix = &quot;spring.mail&quot;
+)
+public class MailProperties {
+   private static final Charset DEFAULT_CHARSET;
+   private String host;
+   private Integer port;
+   private String username;
+   private String password;
+   private String protocol = &quot;smtp&quot;;
+   private Charset defaultEncoding;
+   private Map&lt;String, String&gt; properties;
+   private String jndiName;
+}
+</code></pre>
+<p>3、配置文件：</p>
+<pre><code class="language-properties">spring.mail.username=2650334417@qq.com
+spring.mail.password=你的qq授权码
+spring.mail.host=smtp.qq.com
+# qq需要配置ssl
+spring.mail.properties.mail.smtp.ssl.enable=true
+</code></pre>
+<p>获取授权码：在QQ邮箱中的设置-&gt;账户-&gt;开启pop3和smtp服务</p>
+<p>4、Spring单元测试</p>
+<pre><code class="language-java">@Autowired
+JavaMailSenderImpl mailSender;
+
+@Test
+public void contextLoads() {
+   // 邮件设置1：一个简单的邮件
+   SimpleMailMessage message = new SimpleMailMessage();
+   message.setSubject(&quot;通知&quot;);
+   message.setText(&quot;还不滚去学习！！！&quot;);
+
+   message.setTo(&quot;3026925139@qq.com&quot;);
+   message.setFrom(&quot;2650334417@qq.com&quot;);
+   mailSender.send(message);
+}
+
+@Test
+public void contextLoads2() throws MessagingException {
+   // 邮件设置2：一个复杂的邮件
+   MimeMessage mimeMessage = mailSender.createMimeMessage();
+   // 组装
+   MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+
+   helper.setSubject(&quot;通知-pluse&quot;);
+   helper.setText(&quot;&lt;p style='color:red'&gt;还不滚去学习！！！&lt;/p&gt;&quot;,true);
+
+   //发送附件
+   helper.addAttachment(&quot;作业1.png&quot;,new File(&quot;C:\\Users\\aYang\\Pictures\\作业1.png&quot;));
+   helper.addAttachment(&quot;2.jpg&quot;,new File(&quot;C:\\Users\\aYang\\Pictures\\2.jpg&quot;));
+
+   helper.setTo(&quot;3026925139@qq.com&quot;);
+   helper.setFrom(&quot;2650334417@qq.com&quot;);
+
+   mailSender.send(mimeMessage);
+}
+</code></pre>
+<p>查看邮箱，邮件接收成功！</p>
+<p>我们只需要使用Thymeleaf进行前后端结合即可开发自己网站邮件收发功能了！</p>
+<h2 id="定时任务">定时任务</h2>
+<p>项目开发中经常需要执行一些定时任务，比如需要在每天凌晨的时候，分析一次前一天的日志信息，Spring为我们提供了异步执行任务调度的方式，提供了两个接口。</p>
+<ul>
+<li>TaskExecutor接口	任务执行者</li>
+<li>TaskScheduler接口	任务调度者</li>
+</ul>
+<p>两个注解：</p>
+<ul>
+<li>@EnableScheduling		开启定时功能的注解</li>
+<li>@Scheduled		什么时候执行</li>
+</ul>
+<p>**cron表达式：**自行百度</p>
+<p><strong>测试步骤：</strong></p>
+<p>1、创建一个ScheduledService</p>
+<p>我们里面存在一个hello方法，他需要定时执行，怎么处理呢？</p>
+<pre><code class="language-java">@Service
+public class ScheduledService {
+   
+   //秒   分   时     日   月   周几
+   //0 * * * * MON-FRI
+   //注意cron表达式的用法；
+   @Scheduled(cron = &quot;0 * * * * 0-7&quot;)
+   public void hello(){
+       System.out.println(&quot;还不滚去学习！！！&quot;);
+  }
+}
+</code></pre>
+<p>2、这里写完定时任务之后，我们需要在主程序上增加@EnableScheduling 开启定时任务功能</p>
+<pre><code class="language-java">@EnableAsync //开启异步注解功能
+@EnableScheduling //开启基于注解的定时任务
+@SpringBootApplication
+public class SpringbootTaskApplication {
+
+   public static void main(String[] args) {
+       SpringApplication.run(SpringbootTaskApplication.class, args);
+  }
+
+}
+</code></pre>
+<p>3、我们来详细了解下cron表达式；</p>
+<p>https://cron.qqe2.com/</p>
+<p>4、常用的表达式</p>
+<pre><code>（1）0/2 * * * * ?   表示每2秒 执行任务
+（1）0 0/2 * * * ?   表示每2分钟 执行任务
+（1）0 0 2 1 * ?   表示在每月的1日的凌晨2点调整任务
+（2）0 15 10 ? * MON-FRI   表示周一到周五每天上午10:15执行作业
+（3）0 15 10 ? 6L 2002-2006   表示2002-2006年的每个月的最后一个星期五上午10:15执行作
+（4）0 0 10,14,16 * * ?   每天上午10点，下午2点，4点
+（5）0 0/30 9-17 * * ?   朝九晚五工作时间内每半小时
+（6）0 0 12 ? * WED   表示每个星期三中午12点
+（7）0 0 12 * * ?   每天中午12点触发
+（8）0 15 10 ? * *   每天上午10:15触发
+（9）0 15 10 * * ?     每天上午10:15触发
+（10）0 15 10 * * ?   每天上午10:15触发
+（11）0 15 10 * * ? 2005   2005年的每天上午10:15触发
+（12）0 * 14 * * ?     在每天下午2点到下午2:59期间的每1分钟触发
+（13）0 0/5 14 * * ?   在每天下午2点到下午2:55期间的每5分钟触发
+（14）0 0/5 14,18 * * ?     在每天下午2点到2:55期间和下午6点到6:55期间的每5分钟触发
+（15）0 0-5 14 * * ?   在每天下午2点到下午2:05期间的每1分钟触发
+（16）0 10,44 14 ? 3 WED   每年三月的星期三的下午2:10和2:44触发
+（17）0 15 10 ? * MON-FRI   周一至周五的上午10:15触发
+（18）0 15 10 15 * ?   每月15日上午10:15触发
+（19）0 15 10 L * ?   每月最后一日的上午10:15触发
+（20）0 15 10 ? * 6L   每月的最后一个星期五上午10:15触发
+（21）0 15 10 ? * 6L 2002-2005   2002年至2005年的每月的最后一个星期五上午10:15触发
+（22）0 15 10 ? * 6#3   每月的第三个星期五上午10:15触发
+</code></pre>
+
+        </div>
+
+        
+
+
+        <div class="flex justify-between py-8">
+          
+
+          
+            <div class="next-post">
+              <a href="https://totoroay.github.io/post/springboot14ji-cheng-swagger/">
+                <h3 class="post-title">
+                  SpringBoot14：集成Swagger
+                  <i class="ri-arrow-right-line"></i>
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '76af3abf5b345815d20f',
+    clientSecret: 'cd22dd44f3d5b861d2552cd4270bee0b3b1ad9cc',
+    repo: 'totoroay.github.io',
+    owner: 'totoroay',
+    admin: ['totoroay'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+      </div>
+    </div>
+
+    <script src="https://totoroay.github.io//media/prism.js"></script>  
+<script>
+
+Prism.highlightAll()
+let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+// This should probably be throttled.
+// Especially because it triggers during smooth scrolling.
+// https://lodash.com/docs/4.17.10#throttle
+// You could do like...
+// window.addEventListener("scroll", () => {
+//    _.throttle(doThatStuff, 100);
+// });
+// Only not doing it here to keep this Pen dependency-free.
+
+window.addEventListener("scroll", event => {
+  let fromTop = window.scrollY;
+
+  mainNavLinks.forEach((link, index) => {
+    let section = document.getElementById(decodeURI(link.hash).substring(1));
+    let nextSection = null
+    if (mainNavLinks[index + 1]) {
+      nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+    }
+    if (section.offsetTop <= fromTop) {
+      if (nextSection) {
+        if (nextSection.offsetTop > fromTop) {
+          link.classList.add("current");
+        } else {
+          link.classList.remove("current");    
+        }
+      } else {
+        link.classList.add("current");
+      }
+    } else {
+      link.classList.remove("current");
+    }
+  });
+});
+
+
+document.addEventListener("DOMContentLoaded", function() {
+  var lazyImages = [].slice.call(document.querySelectorAll(".post-feature-image.lazy"));
+
+  if ("IntersectionObserver" in window) {
+    let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          let lazyImage = entry.target
+          lazyImage.style.backgroundImage = `url(${lazyImage.dataset.bg})`
+          lazyImage.classList.remove("lazy")
+          lazyImageObserver.unobserve(lazyImage)
+        }
+      });
+    });
+
+    lazyImages.forEach(function(lazyImage) {
+      lazyImageObserver.observe(lazyImage)
+    })
+  } else {
+    // Possibly fall back to a more compatible method here
+  }
+});
+
+const menuContainer = document.querySelector('.menu-container')
+const menus = document.querySelectorAll('.menu-container .menu')
+const mask = document.querySelector('.mask')
+const contentWrapper = document.querySelector('.content-wrapper')
+const latestArticle = document.querySelector('.latest-article')
+const readMore = document.querySelector('.read-more')
+const indexPage = document.querySelector('.index-page')
+
+const isHome = location.pathname === '/'
+if (latestArticle) {
+  latestArticle.style.display = isHome ? 'block' : 'none'
+  readMore.style.display = isHome ? 'block' : 'none'
+  indexPage.style.display = isHome ? 'none' : 'block'
+}
+
+const openMenu = () => {
+  menuContainer.classList.add('open')
+  menus.forEach(menu => {
+    menu.classList.add('animated', 'fadeInLeft')
+  })
+  mask.classList.add('open')
+  contentWrapper.classList.add('is-second')
+}
+
+const closeMenu = () => {
+  menuContainer.classList.remove('open')
+  menus.forEach(menu => {
+    menu.classList.remove('animated', 'fadeInLeft')
+  })
+  mask.classList.remove('open')
+  contentWrapper.classList.remove('is-second')
+}
+</script>
+  
+  </body>
+</html>

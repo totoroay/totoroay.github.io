@@ -1,0 +1,552 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>totoroay</title>
+<meta name="description" content="每天学习5小时！！！" />
+<link rel="shortcut icon" href="https://totoroay.github.io//favicon.ico?v=1590302856438">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+
+<link rel="stylesheet" href="https://totoroay.github.io//styles/main.css">
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main px-4 flex flex-col lg:flex-row">
+      <div id="sidebar" class="sidebar-wrapper lg:static lg:w-1/4">
+  <div class="lg:sticky top-0">
+    <div class="sidebar-content">
+      <div class="flex lg:block p-4 lg:px-0 items-center fixed lg:static lg:block top-0 right-0 left-0 bg-white z-50">
+        <i class="ri-menu-2-line lg:mt-4 text-2xl cursor-pointer animated fadeIn" onclick="openMenu()"></i>
+        <a href="https://totoroay.github.io/">
+          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://totoroay.github.io//images/avatar.png?v=1590302856438" alt="">
+        </a>
+        <h1 class="animated fadeInLeft lg:text-4xl font-extrabold lg:mt-8 mt-0 text-xl" style="animation-delay: 0.2s">totoroay</h1>
+      </div>
+      
+        <div class="animated fadeInLeft" style="animation-delay: 0.4s">
+          <p class="my-4 text-gray-600 font-light hidden lg:block">
+            文章目录
+          </p>
+          <div class="toc-container hidden lg:block">
+            <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#swagger%E7%AE%80%E4%BB%8B">Swagger简介</a></li>
+<li><a href="#springboot%E9%9B%86%E6%88%90swagger">SpringBoot集成Swagger</a></li>
+<li><a href="#%E9%85%8D%E7%BD%AEswagger">配置Swagger</a></li>
+<li><a href="#%E9%85%8D%E7%BD%AE%E6%89%AB%E6%8F%8F%E6%8E%A5%E5%8F%A3">配置扫描接口</a></li>
+<li><a href="#%E9%85%8D%E7%BD%AEswagger%E5%BC%80%E5%85%B3">配置Swagger开关</a></li>
+<li><a href="#%E9%85%8D%E7%BD%AEapi%E5%88%86%E7%BB%84">配置API分组</a></li>
+<li><a href="#%E5%AE%9E%E4%BD%93%E9%85%8D%E7%BD%AE">实体配置</a></li>
+<li><a href="#%E5%B8%B8%E7%94%A8%E6%B3%A8%E8%A7%A3">常用注解</a></li>
+<li><a href="#%E6%80%BB%E7%BB%93">总结</a></li>
+<li><a href="#%E6%8B%93%E5%B1%95%E5%85%B6%E4%BB%96%E7%9A%AE%E8%82%A4">拓展：其他皮肤</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      
+    </div>
+  </div>
+</div>
+
+<div class="menu-container">
+  <i class="ri-arrow-left-line text-2xl cursor-pointer animated fadeIn close-menu-btn" onclick="closeMenu()"></i>
+  <div>
+    
+      
+        <a href="/" class="menu" style="animation-delay: 0s">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu" style="animation-delay: 0.2s">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu" style="animation-delay: 0.4s">
+          标签（分类）
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu" style="animation-delay: 0.6000000000000001s">
+          关于博主
+        </a>
+      
+    
+  </div>
+  <div class="site-footer">
+    <div class="py-4 text-gray-700"></div>
+    <a class="rss" href="https://totoroay.github.io//atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+<div class="mask" onclick="closeMenu()">
+</div>
+      <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
+        <h1 class="text-3xl font-bold lg:mt-16">SpringBoot14：集成Swagger</h1>
+        <div class="text-sm text-gray-700 lg:my-8">
+          2020-05-24 / 10 min read
+        </div>
+        
+          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://totoroay.github.io//post-images/springboot14ji-cheng-swagger.jpg" alt="">
+        
+        <div class="post-content yue">
+          <h2 id="swagger简介">Swagger简介</h2>
+<p><strong>前后端分离</strong></p>
+<ul>
+<li>前端 -&gt; 前端控制层、视图层</li>
+<li>后端 -&gt; 后端控制层、服务层、数据访问层</li>
+<li>前后端通过API进行交互</li>
+<li>前后端相对独立且松耦合</li>
+</ul>
+<p><strong>产生的问题</strong></p>
+<ul>
+<li>前后端集成，前端或者后端无法做到“及时协商，尽早解决”，最终导致问题集中爆发</li>
+</ul>
+<p><strong>解决方案</strong></p>
+<ul>
+<li>首先定义schema [ 计划的提纲 ]，并实时跟踪最新的API，降低集成风险</li>
+</ul>
+<p><strong>Swagger</strong></p>
+<ul>
+<li>号称世界上最流行的API框架</li>
+<li>Restful Api 文档在线自动生成器 =&gt; <strong>API 文档 与API 定义同步更新</strong></li>
+<li>直接运行，在线测试API</li>
+<li>支持多种语言 （如：Java，PHP等）</li>
+<li>官网：https://swagger.io/</li>
+</ul>
+<h2 id="springboot集成swagger">SpringBoot集成Swagger</h2>
+<p><strong>SpringBoot集成Swagger</strong> =&gt; <strong>springfox</strong>，两个jar包</p>
+<ul>
+<li><strong>Springfox-swagger2</strong></li>
+<li>swagger-springmvc</li>
+</ul>
+<p><strong>使用Swagger</strong></p>
+<p>要求：jdk 1.8 + 否则swagger2无法运行</p>
+<p>步骤：</p>
+<p>1、新建一个SpringBoot-web项目</p>
+<p>2、添加Maven依赖</p>
+<pre><code class="language-xml">&lt;!-- https://mvnrepository.com/artifact/io.springfox/springfox-swagger2 --&gt;
+&lt;dependency&gt;
+   &lt;groupId&gt;io.springfox&lt;/groupId&gt;
+   &lt;artifactId&gt;springfox-swagger2&lt;/artifactId&gt;
+   &lt;version&gt;2.9.2&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;!-- https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui --&gt;
+&lt;dependency&gt;
+   &lt;groupId&gt;io.springfox&lt;/groupId&gt;
+   &lt;artifactId&gt;springfox-swagger-ui&lt;/artifactId&gt;
+   &lt;version&gt;2.9.2&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>3、编写HelloController，测试确保运行成功！</p>
+<p>4、要使用Swagger，我们需要编写一个配置类-SwaggerConfig来配置 Swagger</p>
+<pre><code class="language-java">@Configuration //配置类
+@EnableSwagger2// 开启Swagger2的自动配置
+public class SwaggerConfig {  
+}
+</code></pre>
+<p>5、访问测试 ：http://localhost:8080/swagger-ui.html ，可以看到swagger的界面；</p>
+<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1590302719691.png" alt="" loading="lazy"></figure>
+<h2 id="配置swagger">配置Swagger</h2>
+<p>1、Swagger实例Bean是Docket，所以在SwaggerConfig中通过配置Docket实例来配置Swaggger。</p>
+<pre><code class="language-java">@Bean //配置docket以配置Swagger具体参数
+public Docket docket() {
+   return new Docket(DocumentationType.SWAGGER_2);
+}
+</code></pre>
+<p>2、可以通过apiInfo()属性配置文档信息</p>
+<pre><code class="language-java">//配置文档信息
+private ApiInfo apiInfo() {
+   Contact contact = new Contact(&quot;联系人名字&quot;, &quot;http://xxx.xxx.com/联系人访问链接&quot;, &quot;联系人邮箱&quot;);
+   return new ApiInfo(
+           &quot;Swagger学习&quot;, // 标题
+           &quot;学习演示如何配置Swagger&quot;, // 描述
+           &quot;v1.0&quot;, // 版本
+           &quot;http://terms.service.url/组织链接&quot;, // 组织链接
+           contact, // 联系人信息
+           &quot;Apach 2.0 许可&quot;, // 许可
+           &quot;许可链接&quot;, // 许可连接
+           new ArrayList&lt;&gt;()// 扩展
+  );
+}
+</code></pre>
+<p>3、Docket 实例关联上 apiInfo()</p>
+<pre><code class="language-java">@Bean
+public Docket docket() {
+   return new Docket(DocumentationType.SWAGGER_2).apiInfo(apiInfo());
+}
+</code></pre>
+<p>4、重启项目，访问测试 http://localhost:8080/swagger-ui.html  看下效果；</p>
+<h2 id="配置扫描接口">配置扫描接口</h2>
+<p>1、构建Docket时通过select()方法配置怎么扫描接口。</p>
+<pre><code class="language-java">@Bean
+public Docket docket() {
+   return new Docket(DocumentationType.SWAGGER_2)
+      .apiInfo(apiInfo())
+      .select()// 通过.select()方法，去配置扫描接口,RequestHandlerSelectors配置如何扫描接口
+      .apis(RequestHandlerSelectors.basePackage(&quot;com.totoroay.controller&quot;))
+      .build();
+}
+</code></pre>
+<p>2、重启项目测试，由于我们配置根据包的路径扫描接口，所以我们只能看到一个类</p>
+<p>3、除了通过包路径配置扫描接口外，还可以通过配置其他方式扫描接口，这里注释一下所有的配置方式：</p>
+<pre><code class="language-java">any() // 扫描所有，项目中的所有接口都会被扫描到
+none() // 不扫描接口
+// 通过方法上的注解扫描，如withMethodAnnotation(GetMapping.class)只扫描get请求
+withMethodAnnotation(final Class&lt;? extends Annotation&gt; annotation)
+// 通过类上的注解扫描，如.withClassAnnotation(Controller.class)只扫描有controller注解的类中的接口
+withClassAnnotation(final Class&lt;? extends Annotation&gt; annotation)
+basePackage(final String basePackage) // 根据包路径扫描接口
+</code></pre>
+<p>4、除此之外，我们还可以配置接口扫描过滤：</p>
+<pre><code class="language-java">@Bean
+public Docket docket() {
+   return new Docket(DocumentationType.SWAGGER_2)
+      .apiInfo(apiInfo())
+      .select()// 通过.select()方法，去配置扫描接口,RequestHandlerSelectors配置如何扫描接口
+      .apis(RequestHandlerSelectors.basePackage(&quot;com.totoroay.controller&quot;))
+       // 配置如何通过path过滤,即这里只扫描请求以/totoroay开头的接口
+      .paths(PathSelectors.ant(&quot;/totoroay/**&quot;))
+      .build();
+}
+</code></pre>
+<p>5、这里的可选值还有</p>
+<pre><code class="language-java">any() // 任何请求都扫描
+none() // 任何请求都不扫描
+regex(final String pathRegex) // 通过正则表达式控制
+ant(final String antPattern) // 通过ant()控制
+</code></pre>
+<h2 id="配置swagger开关">配置Swagger开关</h2>
+<p>1、通过enable()方法配置是否启用swagger，如果是false，swagger将不能在浏览器中访问了</p>
+<pre><code class="language-java">@Bean
+public Docket docket() {
+   return new Docket(DocumentationType.SWAGGER_2)
+      .apiInfo(apiInfo())
+      .enable(false) //配置是否启用Swagger，如果是false，在浏览器将无法访问
+      .select()// 通过.select()方法，去配置扫描接口,RequestHandlerSelectors配置如何扫描接口
+      .apis(RequestHandlerSelectors.basePackage(&quot;com.totoroay.controller&quot;))
+       // 配置如何通过path过滤,即这里只扫描请求以/totoroay开头的接口
+      .paths(PathSelectors.ant(&quot;/totoroay/**&quot;))
+      .build();
+}
+</code></pre>
+<p>2、如何动态配置当项目处于test、dev环境时显示swagger，处于prod时不显示？</p>
+<pre><code class="language-java">@Bean
+public Docket docket(Environment environment) {
+   // 设置要显示swagger的环境
+   Profiles of = Profiles.of(&quot;dev&quot;);
+   // 判断当前是否处于该环境
+   // 通过 enable() 接收此参数判断是否要显示
+   boolean b = environment.acceptsProfiles(of);
+   
+   return new Docket(DocumentationType.SWAGGER_2)
+      .apiInfo(apiInfo())
+      .enable(b) //配置是否启用Swagger，如果是false，在浏览器将无法访问
+      .select()// 通过.select()方法，去配置扫描接口,RequestHandlerSelectors配置如何扫描接口
+      .apis(RequestHandlerSelectors.basePackage(&quot;com.totoroay.controller&quot;))
+       // 配置如何通过path过滤,即这里只扫描请求以/kuang开头的接口
+      .paths(PathSelectors.ant(&quot;/totoroay/**&quot;))
+      .build();
+}
+</code></pre>
+<p>3、可以在项目中增加一个dev以及prod的配置文件查看效果！</p>
+<h2 id="配置api分组">配置API分组</h2>
+<p>1、如果没有配置分组，默认是default。通过groupName()方法即可配置分组：</p>
+<pre><code class="language-java">@Bean
+public Docket docket(Environment environment) {
+   return new Docket(DocumentationType.SWAGGER_2).apiInfo(apiInfo())
+      .groupName(&quot;hello&quot;) // 配置分组
+       // 省略配置....
+}
+</code></pre>
+<p>2、重启项目查看分组</p>
+<p>3、如何配置多个分组？配置多个分组只需要配置多个docket即可：</p>
+<pre><code>@Bean
+public Docket docket1(){
+   return new Docket(DocumentationType.SWAGGER_2).groupName(&quot;group1&quot;);
+}
+@Bean
+public Docket docket2(){
+   return new Docket(DocumentationType.SWAGGER_2).groupName(&quot;group2&quot;);
+}
+@Bean
+public Docket docket3(){
+   return new Docket(DocumentationType.SWAGGER_2).groupName(&quot;group3&quot;);
+}
+</code></pre>
+<p>4、重启项目查看即可</p>
+<figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1590302695137.png" alt="" loading="lazy"></figure>
+<h2 id="实体配置">实体配置</h2>
+<p>1、新建一个实体类</p>
+<pre><code class="language-java">@ApiModel(&quot;用户实体&quot;)
+public class User {
+   @ApiModelProperty(&quot;用户名&quot;)
+   public String username;
+   @ApiModelProperty(&quot;密码&quot;)
+   public String password;
+}
+</code></pre>
+<p>2、只要这个实体在<strong>请求接口</strong>的返回值上（即使是泛型），都能映射到实体项中：</p>
+<pre><code class="language-java">@RequestMapping(&quot;/getUser&quot;)
+public User getUser(){
+   return new User();
+}
+</code></pre>
+<p>3、重启查看测试</p>
+<figure data-type="image" tabindex="3"><img src="https://totoroay.github.io//post-images/1590302687762.png" alt="" loading="lazy"></figure>
+<p>注：并不是因为@ApiModel这个注解让实体显示在这里了，而是只要出现在接口方法的返回值上的实体都会显示在这里，而@ApiModel和@ApiModelProperty这两个注解只是为实体添加注释的。</p>
+<p>@ApiModel为类添加注释</p>
+<p>@ApiModelProperty为类属性添加注释</p>
+<h2 id="常用注解">常用注解</h2>
+<p>Swagger的所有注解定义在io.swagger.annotations包下</p>
+<p>下面列一些经常用到的，未列举出来的可以另行查阅说明：</p>
+<table>
+<thead>
+<tr>
+<th>Swagger注解</th>
+<th>简单说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>@Api(tags = &quot;xxx模块说明&quot;)</td>
+<td>作用在模块类上</td>
+</tr>
+<tr>
+<td>@ApiOperation(&quot;xxx接口说明&quot;)</td>
+<td>作用在接口方法上</td>
+</tr>
+<tr>
+<td>@ApiModel(&quot;xxxPOJO说明&quot;)</td>
+<td>作用在模型类上：如VO、BO</td>
+</tr>
+<tr>
+<td>@ApiModelProperty(value = &quot;xxx属性说明&quot;,hidden = true)</td>
+<td>作用在类方法和属性上，hidden设置为true可以隐藏该属性</td>
+</tr>
+<tr>
+<td>@ApiParam(&quot;xxx参数说明&quot;)</td>
+<td>作用在参数、方法和字段上，类似@ApiModelProperty</td>
+</tr>
+</tbody>
+</table>
+<p>我们也可以给请求的接口配置一些注释</p>
+<pre><code class="language-java">@ApiOperation(&quot;totoroay的接口&quot;)
+@PostMapping(&quot;/totoroay&quot;)
+@ResponseBody
+public String kuang(@ApiParam(&quot;这个名字会被返回&quot;)String username){
+   return username;
+}
+</code></pre>
+<p>这样的话，可以给一些比较难理解的属性或者接口，增加一些配置信息，让人更容易阅读！</p>
+<p>相较于传统的Postman或Curl方式测试接口，使用swagger简直就是傻瓜式操作，不需要额外说明文档(写得好本身就是文档)而且更不容易出错，只需要录入数据然后点击Execute，如果再配合自动化框架，可以说基本就不需要人为操作了。</p>
+<p>Swagger是个优秀的工具，现在国内已经有很多的中小型互联网公司都在使用它，相较于传统的要先出Word接口文档再测试的方式，显然这样也更符合现在的快速迭代开发行情。当然了，提醒下大家在正式环境要记得关闭Swagger，一来出于安全考虑二来也可以节省运行时内存。</p>
+<h2 id="总结">总结</h2>
+<ul>
+<li>可以通过Swagger给一些比较难理解的属性或接口，增加注释信息</li>
+<li>接口文档实时更新</li>
+<li>可以在线测试</li>
+</ul>
+<p>注意：项目正式上线关闭Swagger</p>
+<h2 id="拓展其他皮肤">拓展：其他皮肤</h2>
+<p>1、bootstrap-ui  <strong>访问 http://localhost:8080/doc.html</strong></p>
+<pre><code class="language-xml">&lt;!-- 引入swagger-bootstrap-ui包 /doc.html--&gt;
+&lt;dependency&gt;
+   &lt;groupId&gt;com.github.xiaoymin&lt;/groupId&gt;
+   &lt;artifactId&gt;swagger-bootstrap-ui&lt;/artifactId&gt;
+   &lt;version&gt;1.9.1&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>2、Layui-ui  <strong>访问 http://localhost:8080/docs.html</strong></p>
+<pre><code>&lt;!-- 引入swagger-ui-layer包 /docs.html--&gt;
+&lt;dependency&gt;
+   &lt;groupId&gt;com.github.caspar-chen&lt;/groupId&gt;
+   &lt;artifactId&gt;swagger-ui-layer&lt;/artifactId&gt;
+   &lt;version&gt;1.1.3&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>3、mg-ui  <strong>访问 http://localhost:8080/document.html</strong></p>
+<pre><code>&lt;!-- 引入swagger-ui-layer包 /document.html--&gt;
+&lt;dependency&gt;
+   &lt;groupId&gt;com.zyplayer&lt;/groupId&gt;
+   &lt;artifactId&gt;swagger-mg-ui&lt;/artifactId&gt;
+   &lt;version&gt;1.0.6&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+
+        </div>
+
+        
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://totoroay.github.io/tag/LkiY-qT6m/">
+            <span class="flex-auto">SpringBoot</span>
+          </a>
+        
+
+
+        <div class="flex justify-between py-8">
+          
+            <div class="prev-post">
+              <a href="https://totoroay.github.io/post/springboot15yi-bu-ding-shi-you-jian-ren-wu/">
+                <h3 class="post-title">
+                  <i class="ri-arrow-left-line"></i>
+                  SpringBoot15：异步、定时、邮件任务
+                </h3>
+              </a>
+            </div>
+          
+
+          
+            <div class="next-post">
+              <a href="https://totoroay.github.io/post/xiang-yuan-mo-shi/">
+                <h3 class="post-title">
+                  享元模式
+                  <i class="ri-arrow-right-line"></i>
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '76af3abf5b345815d20f',
+    clientSecret: 'cd22dd44f3d5b861d2552cd4270bee0b3b1ad9cc',
+    repo: 'totoroay.github.io',
+    owner: 'totoroay',
+    admin: ['totoroay'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+      </div>
+    </div>
+
+    <script src="https://totoroay.github.io//media/prism.js"></script>  
+<script>
+
+Prism.highlightAll()
+let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+// This should probably be throttled.
+// Especially because it triggers during smooth scrolling.
+// https://lodash.com/docs/4.17.10#throttle
+// You could do like...
+// window.addEventListener("scroll", () => {
+//    _.throttle(doThatStuff, 100);
+// });
+// Only not doing it here to keep this Pen dependency-free.
+
+window.addEventListener("scroll", event => {
+  let fromTop = window.scrollY;
+
+  mainNavLinks.forEach((link, index) => {
+    let section = document.getElementById(decodeURI(link.hash).substring(1));
+    let nextSection = null
+    if (mainNavLinks[index + 1]) {
+      nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+    }
+    if (section.offsetTop <= fromTop) {
+      if (nextSection) {
+        if (nextSection.offsetTop > fromTop) {
+          link.classList.add("current");
+        } else {
+          link.classList.remove("current");    
+        }
+      } else {
+        link.classList.add("current");
+      }
+    } else {
+      link.classList.remove("current");
+    }
+  });
+});
+
+
+document.addEventListener("DOMContentLoaded", function() {
+  var lazyImages = [].slice.call(document.querySelectorAll(".post-feature-image.lazy"));
+
+  if ("IntersectionObserver" in window) {
+    let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          let lazyImage = entry.target
+          lazyImage.style.backgroundImage = `url(${lazyImage.dataset.bg})`
+          lazyImage.classList.remove("lazy")
+          lazyImageObserver.unobserve(lazyImage)
+        }
+      });
+    });
+
+    lazyImages.forEach(function(lazyImage) {
+      lazyImageObserver.observe(lazyImage)
+    })
+  } else {
+    // Possibly fall back to a more compatible method here
+  }
+});
+
+const menuContainer = document.querySelector('.menu-container')
+const menus = document.querySelectorAll('.menu-container .menu')
+const mask = document.querySelector('.mask')
+const contentWrapper = document.querySelector('.content-wrapper')
+const latestArticle = document.querySelector('.latest-article')
+const readMore = document.querySelector('.read-more')
+const indexPage = document.querySelector('.index-page')
+
+const isHome = location.pathname === '/'
+if (latestArticle) {
+  latestArticle.style.display = isHome ? 'block' : 'none'
+  readMore.style.display = isHome ? 'block' : 'none'
+  indexPage.style.display = isHome ? 'none' : 'block'
+}
+
+const openMenu = () => {
+  menuContainer.classList.add('open')
+  menus.forEach(menu => {
+    menu.classList.add('animated', 'fadeInLeft')
+  })
+  mask.classList.add('open')
+  contentWrapper.classList.add('is-second')
+}
+
+const closeMenu = () => {
+  menuContainer.classList.remove('open')
+  menus.forEach(menu => {
+    menu.classList.remove('animated', 'fadeInLeft')
+  })
+  mask.classList.remove('open')
+  contentWrapper.classList.remove('is-second')
+}
+</script>
+  
+  </body>
+</html>

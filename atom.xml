@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://totoroay.github.io/</id>
     <title>totoroay</title>
-    <updated>2020-05-19T12:57:47.098Z</updated>
+    <updated>2020-05-24T06:47:47.901Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://totoroay.github.io/"/>
     <link rel="self" href="https://totoroay.github.io/atom.xml"/>
@@ -10,6 +10,522 @@
     <logo>https://totoroay.github.io/images/avatar.png</logo>
     <icon>https://totoroay.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, totoroay</rights>
+    <entry>
+        <title type="html"><![CDATA[SpringBoot15：异步、定时、邮件任务]]></title>
+        <id>https://totoroay.github.io/post/springboot15yi-bu-ding-shi-you-jian-ren-wu/</id>
+        <link href="https://totoroay.github.io/post/springboot15yi-bu-ding-shi-you-jian-ren-wu/">
+        </link>
+        <updated>2020-05-24T06:46:31.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="异步任务">异步任务</h2>
+<p>1、创建一个service包</p>
+<p>2、创建一个类AsyncService</p>
+<p>异步处理还是非常常用的，比如我们在网站上发送邮件，后台会去发送邮件，此时前台会造成响应不动，直到邮件发送完毕，响应才会成功，所以我们一般会采用多线程的方式去处理这些任务。</p>
+<p>编写方法，假装正在处理数据，使用线程设置一些延时，模拟同步等待的情况；</p>
+<pre><code class="language-java">@Service
+public class AsyncService {
+
+   public void hello(){
+       try {
+           Thread.sleep(3000);
+      } catch (InterruptedException e) {
+           e.printStackTrace();
+      }
+       System.out.println(&quot;数据处理中....&quot;);
+  }
+}
+</code></pre>
+<p>3、编写controller包</p>
+<p>4、编写AsyncController类</p>
+<p>我们去写一个Controller测试一下</p>
+<pre><code class="language-java">@RestController
+public class AsyncController {
+
+   @Autowired
+   AsyncService asyncService;
+
+   @GetMapping(&quot;/hello&quot;)
+   public String hello(){
+       asyncService.hello();
+       return &quot;success&quot;;
+  }
+
+}
+</code></pre>
+<p>5、访问http://localhost:8080/hello进行测试，3秒后出现success，这是同步等待的情况。</p>
+<p>问题：我们如果想让用户直接得到消息，就在后台使用多线程的方式进行处理即可，但是每次都需要自己手动去编写多线程的实现的话，太麻烦了，我们只需要用一个简单的办法，在我们的方法上加一个简单的注解即可，如下：</p>
+<p>6、给hello方法添加@Async注解；</p>
+<pre><code class="language-java">//告诉Spring这是一个异步方法
+@Async
+public void hello(){
+   try {
+       Thread.sleep(3000);
+  } catch (InterruptedException e) {
+       e.printStackTrace();
+  }
+   System.out.println(&quot;数据处理中....&quot;);
+}
+</code></pre>
+<p>SpringBoot就会自己开一个线程池，进行调用！但是要让这个注解生效，我们还需要在主程序上添加一个注解@EnableAsync ，开启异步注解功能；</p>
+<pre><code class="language-java">@EnableAsync //开启异步注解功能
+@SpringBootApplication
+public class SpringbootTaskApplication {
+
+   public static void main(String[] args) {
+       SpringApplication.run(SpringbootTaskApplication.class, args);
+  }
+
+}
+</code></pre>
+<p>7、重启测试，网页瞬间响应，后台代码依旧执行！</p>
+<h2 id="邮件任务">邮件任务</h2>
+<p>邮件发送，在我们的日常开发中，也非常的多，Springboot也帮我们做了支持</p>
+<ul>
+<li>邮件发送需要引入spring-boot-start-mail</li>
+<li>SpringBoot 自动配置MailSenderAutoConfiguration</li>
+<li>定义MailProperties内容，配置在application.yml中</li>
+<li>自动装配JavaMailSender</li>
+<li>测试邮件发送</li>
+</ul>
+<p><strong>测试：</strong></p>
+<p>1、引入pom依赖</p>
+<pre><code class="language-xml">&lt;dependency&gt;
+   &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+   &lt;artifactId&gt;spring-boot-starter-mail&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>看它引入的依赖，可以看到 jakarta.mail</p>
+<pre><code class="language-xml">&lt;dependency&gt;
+   &lt;groupId&gt;com.sun.mail&lt;/groupId&gt;
+   &lt;artifactId&gt;jakarta.mail&lt;/artifactId&gt;
+   &lt;scope&gt;compile&lt;/scope&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>2、查看自动配置类：MailSenderAutoConfiguration</p>
+<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1590302826170.png" alt="" loading="lazy"></figure>
+<p><mark><strong>这个类中存在bean，JavaMailSenderImpl</strong></mark></p>
+<figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1590302821421.png" alt="" loading="lazy"></figure>
+<p>然后我们去看下配置文件</p>
+<pre><code class="language-java">@ConfigurationProperties(
+   prefix = &quot;spring.mail&quot;
+)
+public class MailProperties {
+   private static final Charset DEFAULT_CHARSET;
+   private String host;
+   private Integer port;
+   private String username;
+   private String password;
+   private String protocol = &quot;smtp&quot;;
+   private Charset defaultEncoding;
+   private Map&lt;String, String&gt; properties;
+   private String jndiName;
+}
+</code></pre>
+<p>3、配置文件：</p>
+<pre><code class="language-properties">spring.mail.username=2650334417@qq.com
+spring.mail.password=你的qq授权码
+spring.mail.host=smtp.qq.com
+# qq需要配置ssl
+spring.mail.properties.mail.smtp.ssl.enable=true
+</code></pre>
+<p>获取授权码：在QQ邮箱中的设置-&gt;账户-&gt;开启pop3和smtp服务</p>
+<p>4、Spring单元测试</p>
+<pre><code class="language-java">@Autowired
+JavaMailSenderImpl mailSender;
+
+@Test
+public void contextLoads() {
+   // 邮件设置1：一个简单的邮件
+   SimpleMailMessage message = new SimpleMailMessage();
+   message.setSubject(&quot;通知&quot;);
+   message.setText(&quot;还不滚去学习！！！&quot;);
+
+   message.setTo(&quot;3026925139@qq.com&quot;);
+   message.setFrom(&quot;2650334417@qq.com&quot;);
+   mailSender.send(message);
+}
+
+@Test
+public void contextLoads2() throws MessagingException {
+   // 邮件设置2：一个复杂的邮件
+   MimeMessage mimeMessage = mailSender.createMimeMessage();
+   // 组装
+   MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+
+   helper.setSubject(&quot;通知-pluse&quot;);
+   helper.setText(&quot;&lt;p style='color:red'&gt;还不滚去学习！！！&lt;/p&gt;&quot;,true);
+
+   //发送附件
+   helper.addAttachment(&quot;作业1.png&quot;,new File(&quot;C:\\Users\\aYang\\Pictures\\作业1.png&quot;));
+   helper.addAttachment(&quot;2.jpg&quot;,new File(&quot;C:\\Users\\aYang\\Pictures\\2.jpg&quot;));
+
+   helper.setTo(&quot;3026925139@qq.com&quot;);
+   helper.setFrom(&quot;2650334417@qq.com&quot;);
+
+   mailSender.send(mimeMessage);
+}
+</code></pre>
+<p>查看邮箱，邮件接收成功！</p>
+<p>我们只需要使用Thymeleaf进行前后端结合即可开发自己网站邮件收发功能了！</p>
+<h2 id="定时任务">定时任务</h2>
+<p>项目开发中经常需要执行一些定时任务，比如需要在每天凌晨的时候，分析一次前一天的日志信息，Spring为我们提供了异步执行任务调度的方式，提供了两个接口。</p>
+<ul>
+<li>TaskExecutor接口	任务执行者</li>
+<li>TaskScheduler接口	任务调度者</li>
+</ul>
+<p>两个注解：</p>
+<ul>
+<li>@EnableScheduling		开启定时功能的注解</li>
+<li>@Scheduled		什么时候执行</li>
+</ul>
+<p>**cron表达式：**自行百度</p>
+<p><strong>测试步骤：</strong></p>
+<p>1、创建一个ScheduledService</p>
+<p>我们里面存在一个hello方法，他需要定时执行，怎么处理呢？</p>
+<pre><code class="language-java">@Service
+public class ScheduledService {
+   
+   //秒   分   时     日   月   周几
+   //0 * * * * MON-FRI
+   //注意cron表达式的用法；
+   @Scheduled(cron = &quot;0 * * * * 0-7&quot;)
+   public void hello(){
+       System.out.println(&quot;还不滚去学习！！！&quot;);
+  }
+}
+</code></pre>
+<p>2、这里写完定时任务之后，我们需要在主程序上增加@EnableScheduling 开启定时任务功能</p>
+<pre><code class="language-java">@EnableAsync //开启异步注解功能
+@EnableScheduling //开启基于注解的定时任务
+@SpringBootApplication
+public class SpringbootTaskApplication {
+
+   public static void main(String[] args) {
+       SpringApplication.run(SpringbootTaskApplication.class, args);
+  }
+
+}
+</code></pre>
+<p>3、我们来详细了解下cron表达式；</p>
+<p>https://cron.qqe2.com/</p>
+<p>4、常用的表达式</p>
+<pre><code>（1）0/2 * * * * ?   表示每2秒 执行任务
+（1）0 0/2 * * * ?   表示每2分钟 执行任务
+（1）0 0 2 1 * ?   表示在每月的1日的凌晨2点调整任务
+（2）0 15 10 ? * MON-FRI   表示周一到周五每天上午10:15执行作业
+（3）0 15 10 ? 6L 2002-2006   表示2002-2006年的每个月的最后一个星期五上午10:15执行作
+（4）0 0 10,14,16 * * ?   每天上午10点，下午2点，4点
+（5）0 0/30 9-17 * * ?   朝九晚五工作时间内每半小时
+（6）0 0 12 ? * WED   表示每个星期三中午12点
+（7）0 0 12 * * ?   每天中午12点触发
+（8）0 15 10 ? * *   每天上午10:15触发
+（9）0 15 10 * * ?     每天上午10:15触发
+（10）0 15 10 * * ?   每天上午10:15触发
+（11）0 15 10 * * ? 2005   2005年的每天上午10:15触发
+（12）0 * 14 * * ?     在每天下午2点到下午2:59期间的每1分钟触发
+（13）0 0/5 14 * * ?   在每天下午2点到下午2:55期间的每5分钟触发
+（14）0 0/5 14,18 * * ?     在每天下午2点到2:55期间和下午6点到6:55期间的每5分钟触发
+（15）0 0-5 14 * * ?   在每天下午2点到下午2:05期间的每1分钟触发
+（16）0 10,44 14 ? 3 WED   每年三月的星期三的下午2:10和2:44触发
+（17）0 15 10 ? * MON-FRI   周一至周五的上午10:15触发
+（18）0 15 10 15 * ?   每月15日上午10:15触发
+（19）0 15 10 L * ?   每月最后一日的上午10:15触发
+（20）0 15 10 ? * 6L   每月的最后一个星期五上午10:15触发
+（21）0 15 10 ? * 6L 2002-2005   2002年至2005年的每月的最后一个星期五上午10:15触发
+（22）0 15 10 ? * 6#3   每月的第三个星期五上午10:15触发
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[SpringBoot14：集成Swagger]]></title>
+        <id>https://totoroay.github.io/post/springboot14ji-cheng-swagger/</id>
+        <link href="https://totoroay.github.io/post/springboot14ji-cheng-swagger/">
+        </link>
+        <updated>2020-05-24T06:43:16.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="swagger简介">Swagger简介</h2>
+<p><strong>前后端分离</strong></p>
+<ul>
+<li>前端 -&gt; 前端控制层、视图层</li>
+<li>后端 -&gt; 后端控制层、服务层、数据访问层</li>
+<li>前后端通过API进行交互</li>
+<li>前后端相对独立且松耦合</li>
+</ul>
+<p><strong>产生的问题</strong></p>
+<ul>
+<li>前后端集成，前端或者后端无法做到“及时协商，尽早解决”，最终导致问题集中爆发</li>
+</ul>
+<p><strong>解决方案</strong></p>
+<ul>
+<li>首先定义schema [ 计划的提纲 ]，并实时跟踪最新的API，降低集成风险</li>
+</ul>
+<p><strong>Swagger</strong></p>
+<ul>
+<li>号称世界上最流行的API框架</li>
+<li>Restful Api 文档在线自动生成器 =&gt; <strong>API 文档 与API 定义同步更新</strong></li>
+<li>直接运行，在线测试API</li>
+<li>支持多种语言 （如：Java，PHP等）</li>
+<li>官网：https://swagger.io/</li>
+</ul>
+<h2 id="springboot集成swagger">SpringBoot集成Swagger</h2>
+<p><strong>SpringBoot集成Swagger</strong> =&gt; <strong>springfox</strong>，两个jar包</p>
+<ul>
+<li><strong>Springfox-swagger2</strong></li>
+<li>swagger-springmvc</li>
+</ul>
+<p><strong>使用Swagger</strong></p>
+<p>要求：jdk 1.8 + 否则swagger2无法运行</p>
+<p>步骤：</p>
+<p>1、新建一个SpringBoot-web项目</p>
+<p>2、添加Maven依赖</p>
+<pre><code class="language-xml">&lt;!-- https://mvnrepository.com/artifact/io.springfox/springfox-swagger2 --&gt;
+&lt;dependency&gt;
+   &lt;groupId&gt;io.springfox&lt;/groupId&gt;
+   &lt;artifactId&gt;springfox-swagger2&lt;/artifactId&gt;
+   &lt;version&gt;2.9.2&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;!-- https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui --&gt;
+&lt;dependency&gt;
+   &lt;groupId&gt;io.springfox&lt;/groupId&gt;
+   &lt;artifactId&gt;springfox-swagger-ui&lt;/artifactId&gt;
+   &lt;version&gt;2.9.2&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>3、编写HelloController，测试确保运行成功！</p>
+<p>4、要使用Swagger，我们需要编写一个配置类-SwaggerConfig来配置 Swagger</p>
+<pre><code class="language-java">@Configuration //配置类
+@EnableSwagger2// 开启Swagger2的自动配置
+public class SwaggerConfig {  
+}
+</code></pre>
+<p>5、访问测试 ：http://localhost:8080/swagger-ui.html ，可以看到swagger的界面；</p>
+<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1590302719691.png" alt="" loading="lazy"></figure>
+<h2 id="配置swagger">配置Swagger</h2>
+<p>1、Swagger实例Bean是Docket，所以在SwaggerConfig中通过配置Docket实例来配置Swaggger。</p>
+<pre><code class="language-java">@Bean //配置docket以配置Swagger具体参数
+public Docket docket() {
+   return new Docket(DocumentationType.SWAGGER_2);
+}
+</code></pre>
+<p>2、可以通过apiInfo()属性配置文档信息</p>
+<pre><code class="language-java">//配置文档信息
+private ApiInfo apiInfo() {
+   Contact contact = new Contact(&quot;联系人名字&quot;, &quot;http://xxx.xxx.com/联系人访问链接&quot;, &quot;联系人邮箱&quot;);
+   return new ApiInfo(
+           &quot;Swagger学习&quot;, // 标题
+           &quot;学习演示如何配置Swagger&quot;, // 描述
+           &quot;v1.0&quot;, // 版本
+           &quot;http://terms.service.url/组织链接&quot;, // 组织链接
+           contact, // 联系人信息
+           &quot;Apach 2.0 许可&quot;, // 许可
+           &quot;许可链接&quot;, // 许可连接
+           new ArrayList&lt;&gt;()// 扩展
+  );
+}
+</code></pre>
+<p>3、Docket 实例关联上 apiInfo()</p>
+<pre><code class="language-java">@Bean
+public Docket docket() {
+   return new Docket(DocumentationType.SWAGGER_2).apiInfo(apiInfo());
+}
+</code></pre>
+<p>4、重启项目，访问测试 http://localhost:8080/swagger-ui.html  看下效果；</p>
+<h2 id="配置扫描接口">配置扫描接口</h2>
+<p>1、构建Docket时通过select()方法配置怎么扫描接口。</p>
+<pre><code class="language-java">@Bean
+public Docket docket() {
+   return new Docket(DocumentationType.SWAGGER_2)
+      .apiInfo(apiInfo())
+      .select()// 通过.select()方法，去配置扫描接口,RequestHandlerSelectors配置如何扫描接口
+      .apis(RequestHandlerSelectors.basePackage(&quot;com.totoroay.controller&quot;))
+      .build();
+}
+</code></pre>
+<p>2、重启项目测试，由于我们配置根据包的路径扫描接口，所以我们只能看到一个类</p>
+<p>3、除了通过包路径配置扫描接口外，还可以通过配置其他方式扫描接口，这里注释一下所有的配置方式：</p>
+<pre><code class="language-java">any() // 扫描所有，项目中的所有接口都会被扫描到
+none() // 不扫描接口
+// 通过方法上的注解扫描，如withMethodAnnotation(GetMapping.class)只扫描get请求
+withMethodAnnotation(final Class&lt;? extends Annotation&gt; annotation)
+// 通过类上的注解扫描，如.withClassAnnotation(Controller.class)只扫描有controller注解的类中的接口
+withClassAnnotation(final Class&lt;? extends Annotation&gt; annotation)
+basePackage(final String basePackage) // 根据包路径扫描接口
+</code></pre>
+<p>4、除此之外，我们还可以配置接口扫描过滤：</p>
+<pre><code class="language-java">@Bean
+public Docket docket() {
+   return new Docket(DocumentationType.SWAGGER_2)
+      .apiInfo(apiInfo())
+      .select()// 通过.select()方法，去配置扫描接口,RequestHandlerSelectors配置如何扫描接口
+      .apis(RequestHandlerSelectors.basePackage(&quot;com.totoroay.controller&quot;))
+       // 配置如何通过path过滤,即这里只扫描请求以/totoroay开头的接口
+      .paths(PathSelectors.ant(&quot;/totoroay/**&quot;))
+      .build();
+}
+</code></pre>
+<p>5、这里的可选值还有</p>
+<pre><code class="language-java">any() // 任何请求都扫描
+none() // 任何请求都不扫描
+regex(final String pathRegex) // 通过正则表达式控制
+ant(final String antPattern) // 通过ant()控制
+</code></pre>
+<h2 id="配置swagger开关">配置Swagger开关</h2>
+<p>1、通过enable()方法配置是否启用swagger，如果是false，swagger将不能在浏览器中访问了</p>
+<pre><code class="language-java">@Bean
+public Docket docket() {
+   return new Docket(DocumentationType.SWAGGER_2)
+      .apiInfo(apiInfo())
+      .enable(false) //配置是否启用Swagger，如果是false，在浏览器将无法访问
+      .select()// 通过.select()方法，去配置扫描接口,RequestHandlerSelectors配置如何扫描接口
+      .apis(RequestHandlerSelectors.basePackage(&quot;com.totoroay.controller&quot;))
+       // 配置如何通过path过滤,即这里只扫描请求以/totoroay开头的接口
+      .paths(PathSelectors.ant(&quot;/totoroay/**&quot;))
+      .build();
+}
+</code></pre>
+<p>2、如何动态配置当项目处于test、dev环境时显示swagger，处于prod时不显示？</p>
+<pre><code class="language-java">@Bean
+public Docket docket(Environment environment) {
+   // 设置要显示swagger的环境
+   Profiles of = Profiles.of(&quot;dev&quot;);
+   // 判断当前是否处于该环境
+   // 通过 enable() 接收此参数判断是否要显示
+   boolean b = environment.acceptsProfiles(of);
+   
+   return new Docket(DocumentationType.SWAGGER_2)
+      .apiInfo(apiInfo())
+      .enable(b) //配置是否启用Swagger，如果是false，在浏览器将无法访问
+      .select()// 通过.select()方法，去配置扫描接口,RequestHandlerSelectors配置如何扫描接口
+      .apis(RequestHandlerSelectors.basePackage(&quot;com.totoroay.controller&quot;))
+       // 配置如何通过path过滤,即这里只扫描请求以/kuang开头的接口
+      .paths(PathSelectors.ant(&quot;/totoroay/**&quot;))
+      .build();
+}
+</code></pre>
+<p>3、可以在项目中增加一个dev以及prod的配置文件查看效果！</p>
+<h2 id="配置api分组">配置API分组</h2>
+<p>1、如果没有配置分组，默认是default。通过groupName()方法即可配置分组：</p>
+<pre><code class="language-java">@Bean
+public Docket docket(Environment environment) {
+   return new Docket(DocumentationType.SWAGGER_2).apiInfo(apiInfo())
+      .groupName(&quot;hello&quot;) // 配置分组
+       // 省略配置....
+}
+</code></pre>
+<p>2、重启项目查看分组</p>
+<p>3、如何配置多个分组？配置多个分组只需要配置多个docket即可：</p>
+<pre><code>@Bean
+public Docket docket1(){
+   return new Docket(DocumentationType.SWAGGER_2).groupName(&quot;group1&quot;);
+}
+@Bean
+public Docket docket2(){
+   return new Docket(DocumentationType.SWAGGER_2).groupName(&quot;group2&quot;);
+}
+@Bean
+public Docket docket3(){
+   return new Docket(DocumentationType.SWAGGER_2).groupName(&quot;group3&quot;);
+}
+</code></pre>
+<p>4、重启项目查看即可</p>
+<figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1590302695137.png" alt="" loading="lazy"></figure>
+<h2 id="实体配置">实体配置</h2>
+<p>1、新建一个实体类</p>
+<pre><code class="language-java">@ApiModel(&quot;用户实体&quot;)
+public class User {
+   @ApiModelProperty(&quot;用户名&quot;)
+   public String username;
+   @ApiModelProperty(&quot;密码&quot;)
+   public String password;
+}
+</code></pre>
+<p>2、只要这个实体在<strong>请求接口</strong>的返回值上（即使是泛型），都能映射到实体项中：</p>
+<pre><code class="language-java">@RequestMapping(&quot;/getUser&quot;)
+public User getUser(){
+   return new User();
+}
+</code></pre>
+<p>3、重启查看测试</p>
+<figure data-type="image" tabindex="3"><img src="https://totoroay.github.io//post-images/1590302687762.png" alt="" loading="lazy"></figure>
+<p>注：并不是因为@ApiModel这个注解让实体显示在这里了，而是只要出现在接口方法的返回值上的实体都会显示在这里，而@ApiModel和@ApiModelProperty这两个注解只是为实体添加注释的。</p>
+<p>@ApiModel为类添加注释</p>
+<p>@ApiModelProperty为类属性添加注释</p>
+<h2 id="常用注解">常用注解</h2>
+<p>Swagger的所有注解定义在io.swagger.annotations包下</p>
+<p>下面列一些经常用到的，未列举出来的可以另行查阅说明：</p>
+<table>
+<thead>
+<tr>
+<th>Swagger注解</th>
+<th>简单说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>@Api(tags = &quot;xxx模块说明&quot;)</td>
+<td>作用在模块类上</td>
+</tr>
+<tr>
+<td>@ApiOperation(&quot;xxx接口说明&quot;)</td>
+<td>作用在接口方法上</td>
+</tr>
+<tr>
+<td>@ApiModel(&quot;xxxPOJO说明&quot;)</td>
+<td>作用在模型类上：如VO、BO</td>
+</tr>
+<tr>
+<td>@ApiModelProperty(value = &quot;xxx属性说明&quot;,hidden = true)</td>
+<td>作用在类方法和属性上，hidden设置为true可以隐藏该属性</td>
+</tr>
+<tr>
+<td>@ApiParam(&quot;xxx参数说明&quot;)</td>
+<td>作用在参数、方法和字段上，类似@ApiModelProperty</td>
+</tr>
+</tbody>
+</table>
+<p>我们也可以给请求的接口配置一些注释</p>
+<pre><code class="language-java">@ApiOperation(&quot;totoroay的接口&quot;)
+@PostMapping(&quot;/totoroay&quot;)
+@ResponseBody
+public String kuang(@ApiParam(&quot;这个名字会被返回&quot;)String username){
+   return username;
+}
+</code></pre>
+<p>这样的话，可以给一些比较难理解的属性或者接口，增加一些配置信息，让人更容易阅读！</p>
+<p>相较于传统的Postman或Curl方式测试接口，使用swagger简直就是傻瓜式操作，不需要额外说明文档(写得好本身就是文档)而且更不容易出错，只需要录入数据然后点击Execute，如果再配合自动化框架，可以说基本就不需要人为操作了。</p>
+<p>Swagger是个优秀的工具，现在国内已经有很多的中小型互联网公司都在使用它，相较于传统的要先出Word接口文档再测试的方式，显然这样也更符合现在的快速迭代开发行情。当然了，提醒下大家在正式环境要记得关闭Swagger，一来出于安全考虑二来也可以节省运行时内存。</p>
+<h2 id="总结">总结</h2>
+<ul>
+<li>可以通过Swagger给一些比较难理解的属性或接口，增加注释信息</li>
+<li>接口文档实时更新</li>
+<li>可以在线测试</li>
+</ul>
+<p>注意：项目正式上线关闭Swagger</p>
+<h2 id="拓展其他皮肤">拓展：其他皮肤</h2>
+<p>1、bootstrap-ui  <strong>访问 http://localhost:8080/doc.html</strong></p>
+<pre><code class="language-xml">&lt;!-- 引入swagger-bootstrap-ui包 /doc.html--&gt;
+&lt;dependency&gt;
+   &lt;groupId&gt;com.github.xiaoymin&lt;/groupId&gt;
+   &lt;artifactId&gt;swagger-bootstrap-ui&lt;/artifactId&gt;
+   &lt;version&gt;1.9.1&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>2、Layui-ui  <strong>访问 http://localhost:8080/docs.html</strong></p>
+<pre><code>&lt;!-- 引入swagger-ui-layer包 /docs.html--&gt;
+&lt;dependency&gt;
+   &lt;groupId&gt;com.github.caspar-chen&lt;/groupId&gt;
+   &lt;artifactId&gt;swagger-ui-layer&lt;/artifactId&gt;
+   &lt;version&gt;1.1.3&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>3、mg-ui  <strong>访问 http://localhost:8080/document.html</strong></p>
+<pre><code>&lt;!-- 引入swagger-ui-layer包 /document.html--&gt;
+&lt;dependency&gt;
+   &lt;groupId&gt;com.zyplayer&lt;/groupId&gt;
+   &lt;artifactId&gt;swagger-mg-ui&lt;/artifactId&gt;
+   &lt;version&gt;1.0.6&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[享元模式]]></title>
         <id>https://totoroay.github.io/post/xiang-yuan-mo-shi/</id>
@@ -1692,420 +2208,6 @@ public class WebMvcAutoConfiguration {
 <p>总结一句话：@EnableWebMvc将WebMvcConfigurationSupport组件导入进来了；</p>
 <p>而导入的WebMvcConfigurationSupport只是SpringMVC最基本的功能！</p>
 <p><strong>在SpringBoot中会有非常多的扩展配置，只要看见了这个，我们就应该多留心注意~</strong></p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Spring：声明事务]]></title>
-        <id>https://totoroay.github.io/post/springsheng-ming-shi-wu/</id>
-        <link href="https://totoroay.github.io/post/springsheng-ming-shi-wu/">
-        </link>
-        <updated>2020-05-10T03:18:47.000Z</updated>
-        <content type="html"><![CDATA[<h2 id="声明式事务">声明式事务</h2>
-<ul>
-<li>事务在项目开发过程非常重要，涉及到数据的一致性的问题，不容马虎！</li>
-<li>事务管理是企业级应用程序开发中必备技术，用来确保数据的完整性和一致性。</li>
-</ul>
-<p><mark>事务就是把一系列的动作当成一个独立的工作单元，这些动作要么全部完成，要么全部不起作用。</mark></p>
-<p><strong>事务四个属性ACID</strong></p>
-<ol>
-<li>
-<p>原子性（atomicity）</p>
-</li>
-<li>
-<ul>
-<li>事务是原子性操作，由一系列动作组成，事务的原子性确保动作要么全部完成，要么完全不起作用</li>
-</ul>
-</li>
-<li>
-<p>一致性（consistency）</p>
-</li>
-<li>
-<ul>
-<li>一旦所有事务动作完成，事务就要被提交。数据和资源处于一种满足业务规则的一致性状态中</li>
-</ul>
-</li>
-<li>
-<p>隔离性（isolation）</p>
-</li>
-<li>
-<ul>
-<li>可能多个事务会同时处理相同的数据，因此每个事务都应该与其他事务隔离开来，防止数据损坏</li>
-</ul>
-</li>
-<li>
-<p>持久性（durability）</p>
-</li>
-<li>
-<ul>
-<li>事务一旦完成，无论系统发生什么错误，结果都不会受到影响。通常情况下，事务的结果被写到持久化存储器中</li>
-</ul>
-</li>
-</ol>
-<h2 id="测试">测试</h2>
-<p>将上面的代码拷贝到一个新项目中</p>
-<p>在之前的案例中，我们给userDao接口新增两个方法，删除和增加用户；</p>
-<pre><code class="language-java">//添加一个用户
-int addUser(User user);
-
-//根据id删除用户
-int deleteUser(int id);
-</code></pre>
-<p>mapper文件，我们故意把 deletes 写错，测试！</p>
-<pre><code class="language-java">&lt;insert id=&quot;addUser&quot; parameterType=&quot;com.totoroay.pojo.User&quot;&gt;
-insert into user (id,name,pwd) values (#{id},#{name},#{pwd})
-&lt;/insert&gt;
-
-&lt;delete id=&quot;deleteUser&quot; parameterType=&quot;int&quot;&gt;
-deletes from user where id = #{id}
-&lt;/delete
-</code></pre>
-<p>编写接口的实现类，在实现类中，我们去操作一波</p>
-<pre><code class="language-java">public class UserDaoImpl extends SqlSessionDaoSupport implementsUserMapper {
-
-   //增加一些操作
-   public List&lt;User&gt; selectUser() {
-       User user = new User(4,&quot;小明&quot;,&quot;123456&quot;);
-       UserMapper mapper = getSqlSession().getMapper(UserMapper.class);
-       mapper.addUser(user);
-       mapper.deleteUser(4);
-       return mapper.selectUser();
-  }
-
-   //新增
-   public int addUser(User user) {
-       UserMapper mapper = getSqlSession().getMapper(UserMapper.class);
-       return mapper.addUser(user);
-  }
-   //删除
-   public int deleteUser(int id) {
-       UserMapper mapper = getSqlSession().getMapper(UserMapper.class);
-       return mapper.deleteUser(id);
-  }
-
-}
-</code></pre>
-<p>测试：</p>
-<pre><code class="language-java">@Test
-public void test2(){
-   ApplicationContext context = newClassPathXmlApplicationContext(&quot;beans.xml&quot;);
-   UserMapper mapper = (UserMapper) context.getBean(&quot;userDao&quot;);
-   List&lt;User&gt; user = mapper.selectUser();
-   System.out.println(user);
-}
-</code></pre>
-<p>报错：sql异常，delete写错了</p>
-<p>结果 ：插入成功！</p>
-<p>没有进行事务的管理；我们想让他们都成功才成功，有一个失败，就都失败，我们就应该需要==<strong>事务！</strong>==</p>
-<p>以前我们都需要自己手动管理事务，十分麻烦！</p>
-<p>但是Spring给我们提供了事务管理，我们只需要配置即可；</p>
-<h2 id="spring中的事务管理">Spring中的事务管理</h2>
-<p>Spring在不同的事务管理API之上定义了一个抽象层，使得开发人员不必了解底层的事务管理API就可以使用Spring的事务管理机制。Spring支持编程式事务管理和声明式的事务管理。</p>
-<p><strong>编程式事务管理</strong></p>
-<ul>
-<li>将事务管理代码嵌到业务方法中来控制事务的提交和回滚</li>
-<li>缺点：必须在每个事务操作业务逻辑中包含额外的事务管理代码</li>
-</ul>
-<p><strong>声明式事务管理</strong></p>
-<ul>
-<li>一般情况下比编程式事务好用。</li>
-<li>将事务管理代码从业务方法中分离出来，以声明的方式来实现事务管理。</li>
-<li>将事务管理作为横切关注点，通过aop方法模块化。Spring中通过Spring AOP框架支持声明式事务管理。</li>
-</ul>
-<p><strong>使用Spring管理事务，注意头文件的约束导入 : tx</strong></p>
-<pre><code class="language-xml">xmlns:tx=&quot;http://www.springframework.org/schema/tx&quot;
-
-http://www.springframework.org/schema/tx
-http://www.springframework.org/schema/tx/spring-tx.xsd&quot;&gt;
-</code></pre>
-<p><strong>事务管理器</strong></p>
-<ul>
-<li>无论使用Spring的哪种事务管理策略（编程式或者声明式）事务管理器都是必须的。</li>
-<li>就是 Spring的核心事务管理抽象，管理封装了一组独立于技术的方法。</li>
-</ul>
-<p><strong>JDBC事务</strong></p>
-<pre><code class="language-xml">&lt;bean id=&quot;transactionManager&quot; class=&quot;org.springframework.jdbc.datasource.DataSourceTransactionManager&quot;&gt;
-       &lt;property name=&quot;dataSource&quot; ref=&quot;dataSource&quot; /&gt;
-&lt;/bean&gt;
-</code></pre>
-<p><strong>配置好事务管理器后我们需要去配置事务的通知</strong></p>
-<pre><code class="language-xml">&lt;!--配置事务通知--&gt;
-&lt;tx:advice id=&quot;txAdvice&quot; transaction-manager=&quot;transactionManager&quot;&gt;
-   &lt;tx:attributes&gt;
-       &lt;!--配置哪些方法使用什么样的事务,配置事务的传播特性--&gt;
-       &lt;tx:method name=&quot;add&quot; propagation=&quot;REQUIRED&quot;/&gt;
-       &lt;tx:method name=&quot;delete&quot; propagation=&quot;REQUIRED&quot;/&gt;
-       &lt;tx:method name=&quot;update&quot; propagation=&quot;REQUIRED&quot;/&gt;
-       &lt;tx:method name=&quot;search*&quot; propagation=&quot;REQUIRED&quot;/&gt;
-       &lt;tx:method name=&quot;get&quot; read-only=&quot;true&quot;/&gt;
-       &lt;tx:method name=&quot;*&quot; propagation=&quot;REQUIRED&quot;/&gt;
-   &lt;/tx:attributes&gt;
-&lt;/tx:advice&gt;
-</code></pre>
-<p><strong>spring事务传播特性：</strong></p>
-<p>事务传播行为就是多个事务方法相互调用时，事务如何在这些方法间传播。spring支持7种事务传播行为：</p>
-<ul>
-<li>propagation_requierd：如果当前没有事务，就新建一个事务，如果已存在一个事务中，加入到这个事务中，这是最常见的选择。</li>
-<li>propagation_supports：支持当前事务，如果没有当前事务，就以非事务方法执行。</li>
-<li>propagation_mandatory：使用当前事务，如果没有当前事务，就抛出异常。</li>
-<li>propagation_required_new：新建事务，如果当前存在事务，把当前事务挂起。</li>
-<li>propagation_not_supported：以非事务方式执行操作，如果当前存在事务，就把当前事务挂起。</li>
-<li>propagation_never：以非事务方式执行操作，如果当前事务存在则抛出异常。</li>
-<li>propagation_nested：如果当前存在事务，则在嵌套事务内执行。如果当前没有事务，则执行与propagation_required类似的操作</li>
-</ul>
-<p>Spring 默认的事务传播行为是 PROPAGATION_REQUIRED，它适合于绝大多数的情况。</p>
-<p>假设 ServiveX#methodX() 都工作在事务环境下（即都被 Spring 事务增强了），假设程序中存在如下的调用链：Service1#method1()-&gt;Service2#method2()-&gt;Service3#method3()，那么这 3 个服务类的 3 个方法通过 Spring 的事务传播机制都工作在同一个事务中。</p>
-<p>就好比，我们刚才的几个方法存在调用，所以会被放在一组事务当中！</p>
-<p><strong>配置AOP</strong></p>
-<p>导入aop的头文件！</p>
-<pre><code class="language-xml">&lt;!--配置aop织入事务--&gt;
-&lt;aop:config&gt;
-   &lt;aop:pointcut id=&quot;txPointcut&quot; expression=&quot;execution(* com.totoroay.dao.*.*(..))&quot;/&gt;
-   &lt;aop:advisor advice-ref=&quot;txAdvice&quot; pointcut-ref=&quot;txPointcut&quot;/&gt;
-&lt;/aop:config&gt;
-</code></pre>
-<p><strong>进行测试</strong></p>
-<p>删掉刚才插入的数据，再次测试！</p>
-<pre><code class="language-java">@Test
-public void test2(){
-   ApplicationContext context = newClassPathXmlApplicationContext(&quot;beans.xml&quot;);
-   UserMapper mapper = (UserMapper) context.getBean(&quot;userDao&quot;);
-   List&lt;User&gt; user = mapper.selectUser();
-   System.out.println(user);
-}
-</code></pre>
-<blockquote>
-<p>思考问题？</p>
-</blockquote>
-<p>为什么需要配置事务？</p>
-<ul>
-<li>如果不配置，就需要我们手动提交控制事务；</li>
-<li>事务在项目开发过程非常重要，涉及到数据的一致性的问题，不容马虎！</li>
-</ul>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[ SpringBoot07：Thymeleaf模板引擎]]></title>
-        <id>https://totoroay.github.io/post/springboot07thymeleaf-mo-ban-yin-qing/</id>
-        <link href="https://totoroay.github.io/post/springboot07thymeleaf-mo-ban-yin-qing/">
-        </link>
-        <updated>2020-05-09T13:11:42.000Z</updated>
-        <content type="html"><![CDATA[<h2 id="thymeleaf">Thymeleaf</h2>
-<p>前端交给我们的页面，是html页面。如果是我们以前开发，我们需要把他们转成jsp页面，jsp好处就是当我们查出一些数据转发到JSP页面以后，我们可以用jsp轻松实现数据的显示，及交互等。</p>
-<p>jsp支持非常强大的功能，包括能写Java代码，但是呢，我们现在的这种情况，SpringBoot这个项目首先是以jar的方式，不是war，像第二，我们用的还是嵌入式的Tomcat，所以呢，<strong>他现在默认是不支持jsp的</strong>。</p>
-<p>那不支持jsp，如果我们直接用纯静态页面的方式，那给我们开发会带来非常大的麻烦，那怎么办呢？</p>
-<p><strong>SpringBoot推荐你可以来使用模板引擎：</strong></p>
-<p>模板引擎，我们其实大家听到很多，其实jsp就是一个模板引擎，还有用的比较多的freemarker，包括SpringBoot给我们推荐的Thymeleaf，模板引擎有非常多，但再多的模板引擎，他们的思想都是一样的，什么样一个思想呢我们来看一下这张图：</p>
-<p><img src="https://totoroay.github.io//post-images/1589030049112.png" alt="" loading="lazy"><br>
-模板引擎的作用就是我们来写一个页面模板，比如有些值呢，是动态的，我们写一些表达式。而这些值，从哪来呢，就是我们在后台封装一些数据。然后把这个模板和这个数据交给我们模板引擎，模板引擎按照我们这个数据帮你把这表达式解析、填充到我们指定的位置，然后把这个数据最终生成一个我们想要的内容给我们写出去，这就是我们这个模板引擎，不管是jsp还是其他模板引擎，都是这个思想。只不过呢，就是说不同模板引擎之间，他们可能这个语法有点不一样。其他的我就不介绍了，我主要来介绍一下SpringBoot给我们推荐的Thymeleaf模板引擎，这模板引擎呢，是一个高级语言的模板引擎，他的这个语法更简单。而且呢，功能更强大。</p>
-<p>我们呢，就来看一下这个模板引擎，那既然要看这个模板引擎。首先，我们来看SpringBoot里边怎么用。</p>
-<h2 id="引入thymeleaf">引入Thymeleaf</h2>
-<p>怎么引入呢，对于springboot来说，什么事情不都是一个start的事情嘛，我们去在项目中引入一下。给大家三个网址：</p>
-<p>Thymeleaf 官网：https://www.thymeleaf.org/</p>
-<p>Thymeleaf 在Github 的主页：https://github.com/thymeleaf/thymeleaf</p>
-<p>Spring官方文档：找到我们对应的版本</p>
-<p>https://docs.spring.io/spring-boot/docs/2.2.5.RELEASE/reference/htmlsingle/#using-boot-starter</p>
-<p>找到对应的pom依赖：可以适当点进源码看下本来的包！</p>
-<pre><code class="language-xml">&lt;!--thymeleaf--&gt;
-&lt;dependency&gt;
-    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-    &lt;artifactId&gt;spring-boot-starter-thymeleaf&lt;/artifactId&gt;
-&lt;/dependency&gt;
-</code></pre>
-<p>Maven会自动下载jar包，我们可以去看下下载的东西；</p>
-<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1589030040046.png" alt="" loading="lazy"></figure>
-<h2 id="thymeleaf分析">Thymeleaf分析</h2>
-<p>前面呢，我们已经引入了Thymeleaf，那这个要怎么使用呢？</p>
-<p>我们首先得按照SpringBoot的自动配置原理看一下我们这个Thymeleaf的自动配置规则，在按照那个规则，我们进行使用。</p>
-<p>我们去找一下Thymeleaf的自动配置类：ThymeleafProperties</p>
-<pre><code class="language-java">@ConfigurationProperties(
-    prefix = &quot;spring.thymeleaf&quot;
-)
-public class ThymeleafProperties {
-    private static final Charset DEFAULT_ENCODING;
-    public static final String DEFAULT_PREFIX = &quot;classpath:/templates/&quot;;
-    public static final String DEFAULT_SUFFIX = &quot;.html&quot;;
-    private boolean checkTemplate = true;
-    private boolean checkTemplateLocation = true;
-    private String prefix = &quot;classpath:/templates/&quot;;
-    private String suffix = &quot;.html&quot;;
-    private String mode = &quot;HTML&quot;;
-    private Charset encoding;
-}
-</code></pre>
-<p>我们可以在其中看到默认的前缀和后缀！</p>
-<p>我们只需要把我们的html页面放在类路径下的templates下，thymeleaf就可以帮我们自动渲染了。</p>
-<p>使用thymeleaf什么都不需要配置，只需要将他放在指定的文件夹下即可！</p>
-<h2 id="测试">测试</h2>
-<p>1、编写一个TestController</p>
-<pre><code class="language-java">@Controller
-public class TestController {
-    
-    @RequestMapping(&quot;/t1&quot;)
-    public String test1(){
-        //classpath:/templates/test.html
-        return &quot;test&quot;;
-    }
-    
-}
-</code></pre>
-<p>2、编写一个测试页面  test.html 放在 templates 目录下</p>
-<pre><code class="language-html">&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-&lt;head&gt;
-    &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;title&gt;Title&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-&lt;h1&gt;测试页面&lt;/h1&gt;
-
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p>3、启动项目请求测试</p>
-<h2 id="thymeleaf-语法学习">Thymeleaf 语法学习</h2>
-<p>要学习语法，还是参考官网文档最为准确，我们找到对应的版本看一下；</p>
-<p>Thymeleaf 官网：https://www.thymeleaf.org/ ， 简单看一下官网！我们去下载Thymeleaf的官方文档！</p>
-<p><strong>我们做个最简单的练习 ：我们需要查出一些数据，在页面中展示</strong></p>
-<p>1、修改测试请求，增加数据传输；</p>
-<pre><code class="language-java">@RequestMapping(&quot;/t1&quot;)
-public String test1(Model model){
-    //存入数据
-    model.addAttribute(&quot;msg&quot;,&quot;Hello,Thymeleaf&quot;);
-    //classpath:/templates/test.html
-    return &quot;test&quot;;
-}
-</code></pre>
-<p>2、我们要使用thymeleaf，需要在html文件中导入命名空间的约束，方便提示。</p>
-<p>我们可以去官方文档的#3中看一下命名空间拿来过来：</p>
-<pre><code> xmlns:th=&quot;http://www.thymeleaf.org&quot;
-</code></pre>
-<p>3、我们去编写下前端页面</p>
-<pre><code class="language-html">&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot; xmlns:th=&quot;http://www.thymeleaf.org&quot;&gt;
-&lt;head&gt;
-    &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;title&gt;Title&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-&lt;h1&gt;test&lt;/h1&gt;
-&lt;!--所有的html元素都可以被thymeleaf替换:   th:元素名--&gt;
-&lt;!--th:text就是将div中的内容设置为它指定的值，和Vue一样--&gt;
-&lt;div th:text=&quot;${msg}&quot;&gt;&lt;/div&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p>4、启动测试</p>
-<figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1589030024666.png" alt="" loading="lazy"></figure>
-<p><strong>OK，入门搞定，我们来认真研习一下Thymeleaf的使用语法！</strong></p>
-<p><strong>1、我们可以使用任意的 th:attr 来替换Html中原生属性的值！</strong></p>
-<figure data-type="image" tabindex="3"><img src="https://totoroay.github.io//post-images/1589030016433.jpg" alt="" loading="lazy"></figure>
-<p><strong>2、我们能写哪些表达式呢？</strong><br>
-<img src="https://totoroay.github.io//post-images/1589379234610.png" alt="" loading="lazy"></p>
-<pre><code>Simple expressions:（表达式语法）
-Variable Expressions: ${...}：获取变量值；OGNL；
-    1）、获取对象的属性、调用方法
-    2）、使用内置的基本对象：#18
-         #ctx : the context object.
-         #vars: the context variables.
-         #locale : the context locale.
-         #request : (only in Web Contexts) the HttpServletRequest object.
-         #response : (only in Web Contexts) the HttpServletResponse object.
-         #session : (only in Web Contexts) the HttpSession object.
-         #servletContext : (only in Web Contexts) the ServletContext object.
-
-    3）、内置的一些工具对象：
-　　　　　　#execInfo : information about the template being processed.
-　　　　　　#uris : methods for escaping parts of URLs/URIs
-　　　　　　#conversions : methods for executing the configured conversion service (if any).
-　　　　　　#dates : methods for java.util.Date objects: formatting, component extraction, etc.
-　　　　　　#calendars : analogous to #dates , but for java.util.Calendar objects.
-　　　　　　#numbers : methods for formatting numeric objects.
-　　　　　　#strings : methods for String objects: contains, startsWith, prepending/appending, etc.
-　　　　　　#objects : methods for objects in general.
-　　　　　　#bools : methods for boolean evaluation.
-　　　　　　#arrays : methods for arrays.
-　　　　　　#lists : methods for lists.
-　　　　　　#sets : methods for sets.
-　　　　　　#maps : methods for maps.
-　　　　　　#aggregates : methods for creating aggregates on arrays or collections.
-==================================================================================
-
-  Selection Variable Expressions: *{...}：选择表达式：和${}在功能上是一样；
-  Message Expressions: #{...}：获取国际化内容
-  Link URL Expressions: @{...}：定义URL；
-  Fragment Expressions: ~{...}：片段引用表达式
-
-Literals（字面量）
-      Text literals: 'one text' , 'Another one!' ,…
-      Number literals: 0 , 34 , 3.0 , 12.3 ,…
-      Boolean literals: true , false
-      Null literal: null
-      Literal tokens: one , sometext , main ,…
-      
-Text operations:（文本操作）
-    String concatenation: +
-    Literal substitutions: |The name is ${name}|
-    
-Arithmetic operations:（数学运算）
-    Binary operators: + , - , * , / , %
-    Minus sign (unary operator): -
-    
-Boolean operations:（布尔运算）
-    Binary operators: and , or
-    Boolean negation (unary operator): ! , not
-    
-Comparisons and equality:（比较运算）
-    Comparators: &gt; , &lt; , &gt;= , &lt;= ( gt , lt , ge , le )
-    Equality operators: == , != ( eq , ne )
-    
-Conditional operators:条件运算（三元运算符）
-    If-then: (if) ? (then)
-    If-then-else: (if) ? (then) : (else)
-    Default: (value) ?: (defaultvalue)
-    
-Special tokens:
-    No-Operation: _
-</code></pre>
-<p><strong>练习测试：</strong></p>
-<p>1、 我们编写一个Controller，放一些数据</p>
-<pre><code class="language-java">@RequestMapping(&quot;/t2&quot;)
-public String test2(Map&lt;String,Object&gt; map){
-    //存入数据
-    map.put(&quot;msg&quot;,&quot;&lt;h1&gt;Hello&lt;/h1&gt;&quot;);
-    map.put(&quot;users&quot;, Arrays.asList(&quot;qinjiang&quot;,&quot;kuangshen&quot;));
-    //classpath:/templates/test.html
-    return &quot;test&quot;;
-}
-</code></pre>
-<p>2、测试页面取出数据</p>
-<pre><code class="language-html">&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot; xmlns:th=&quot;http://www.thymeleaf.org&quot;&gt;
-&lt;head&gt;
-    &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;title&gt;Title&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-&lt;h1&gt;test&lt;/h1&gt;
-
-&lt;div th:text=&quot;${msg}&quot;&gt;&lt;/div&gt;
-&lt;!--不转义--&gt;
-&lt;div th:utext=&quot;${msg}&quot;&gt;&lt;/div&gt;
-
-&lt;!--遍历数据--&gt;
-&lt;!--th:each每次遍历都会生成当前这个标签：官网#9--&gt;
-&lt;h4 th:each=&quot;user :${users}&quot; th:text=&quot;${user}&quot;&gt;&lt;/h4&gt;
-
-&lt;h4&gt;
-    &lt;!--行内写法：官网#12--&gt;
-    &lt;span th:each=&quot;user:${users}&quot;&gt;[[${user}]]&lt;/span&gt;
-&lt;/h4&gt;
-
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p>3、启动项目测试</p>
-<figure data-type="image" tabindex="4"><img src="https://totoroay.github.io//post-images/1589030000687.png" alt="" loading="lazy"></figure>
-<p><strong>我们看完语法，很多样式，我们即使现在学习了，也会忘记，所以我们在学习过程中，需要使用什么，根据官方文档来查询，才是最重要的，要熟练使用官方文档！</strong></p>
 ]]></content>
     </entry>
 </feed>
