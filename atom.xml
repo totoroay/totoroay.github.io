@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://totoroay.github.io/</id>
     <title>totoroay</title>
-    <updated>2020-05-26T08:23:06.520Z</updated>
+    <updated>2020-05-26T10:08:01.209Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://totoroay.github.io/"/>
     <link rel="self" href="https://totoroay.github.io/atom.xml"/>
@@ -10,6 +10,82 @@
     <logo>https://totoroay.github.io/images/avatar.png</logo>
     <icon>https://totoroay.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, totoroay</rights>
+    <entry>
+        <title type="html"><![CDATA[策略模式]]></title>
+        <id>https://totoroay.github.io/post/ce-lue-mo-shi/</id>
+        <link href="https://totoroay.github.io/post/ce-lue-mo-shi/">
+        </link>
+        <updated>2020-05-26T10:03:56.000Z</updated>
+        <content type="html"><![CDATA[<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1590487636583.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1590487631317.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="3"><img src="https://totoroay.github.io//post-images/1590487627733.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="4"><img src="https://totoroay.github.io//post-images/1590487622002.png" alt="" loading="lazy"></figure>
+<p><mark><strong>代码实现</strong></mark></p>
+<hr>
+<pre><code class="language-java">package totoroay.strategy;
+//抽象策略类     计算器
+public interface ICalculator {
+    int calc(int a, int b);
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.strategy;
+//具体策略类     加法
+public class Add implements ICalculator {
+    @Override
+    public int calc(int a, int b) {
+        return a + b;
+    }
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.strategy;
+//具体策略类     减法
+public class Sub implements ICalculator {
+    @Override
+    public int calc(int a, int b) {
+        return a - b;
+    }
+}
+</code></pre>
+<p>还有乘法、除法可自行添加</p>
+<pre><code class="language-java">package totoroay.strategy;
+//环境类       （上下文）
+public class Context {
+    private  ICalculator iCalculator;
+
+    public Context(ICalculator calculator){
+        this.iCalculator = calculator;
+    }
+
+    public int calc(int a, int b){
+        return this.iCalculator.calc(a, b);
+    }
+}
+</code></pre>
+<pre><code class="language-java">package totoroay.strategy;
+//测试类
+public class StrategyCalculator {
+    public static void main(String[] args) {
+        ICalculator add = new Add();
+        Context context = new Context(add);
+        int calc = context.calc(9, 3);
+        System.out.println(calc);
+
+        ICalculator sub = new Sub();
+        Context context1 = new Context(sub);
+        int calc1 = context1.calc(9, 3);
+        System.out.println(calc1);
+    }
+}
+</code></pre>
+<p><strong>结果</strong></p>
+<figure data-type="image" tabindex="5"><img src="https://totoroay.github.io//post-images/1590487614464.png" alt="" loading="lazy"></figure>
+<hr>
+<hr>
+<figure data-type="image" tabindex="6"><img src="https://totoroay.github.io//post-images/1590487601532.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="7"><img src="https://totoroay.github.io//post-images/1590487597916.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="8"><img src="https://totoroay.github.io//post-images/1590487593590.png" alt="" loading="lazy"></figure>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[模板方法模式]]></title>
         <id>https://totoroay.github.io/post/mo-ban-fang-fa-mo-shi/</id>
@@ -1803,119 +1879,6 @@ public LocaleResolver localeResolver(){
 }
 </code></pre>
 <p><strong>我们重启项目，来访问一下，发现点击按钮可以实现成功切换！搞定收工！</strong></p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[外观模式]]></title>
-        <id>https://totoroay.github.io/post/wai-guan-mo-shi/</id>
-        <link href="https://totoroay.github.io/post/wai-guan-mo-shi/">
-        </link>
-        <updated>2020-05-12T06:59:11.000Z</updated>
-        <content type="html"><![CDATA[<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1589266822489.png" alt="" loading="lazy"></figure>
-<p><strong>模式结构：主要角色</strong></p>
-<ul>
-<li>外观角色
-<ul>
-<li>为多个子系统对外提供一个共同的接口</li>
-</ul>
-</li>
-<li>子系统角色
-<ul>
-<li>实现系统的部分功能，客户可以通过外观角色访问他</li>
-</ul>
-</li>
-<li>客户角色
-<ul>
-<li>通过一个外观角色访问各个子系统的功能</li>
-</ul>
-</li>
-</ul>
-<pre><code class="language-java">package totoroay.facade;
-// 子系统：cpu
-public class CPU {
-    public void startup() {
-        System.out.println(&quot;cpu startup...&quot;);
-    }
-
-    public void shutdown() {
-        System.out.println(&quot;cpu shutdown...&quot;);
-    }
-}
-</code></pre>
-<pre><code class="language-java">package totoroay.facade;
-// 子系统：memory
-public class Memory {
-    public void startup() {
-        System.out.println(&quot;memory startup...&quot;);
-    }
-
-    public void shutdown() {
-        System.out.println(&quot;memory shutdown...&quot;);
-    }
-}
-</code></pre>
-<pre><code class="language-java">package totoroay.facade;
-// 子系统：disk
-public class Disk {
-    public void startup() {
-        System.out.println(&quot;disk startup...&quot;);
-    }
-
-    public void shutdown() {
-        System.out.println(&quot;disk shutdown...&quot;);
-    }
-}
-</code></pre>
-<pre><code class="language-java">package totoroay.facade;
-// 外观角色：Computer
-public class Computer {
-    private CPU cpu;
-    private Memory memory;
-    private Disk disk;
-
-    public Computer() {
-        cpu = new CPU();
-        memory = new Memory();
-        disk = new Disk();
-    }
-
-    public void startup(){
-        System.out.println(&quot;computer startup...&quot;);
-        cpu.startup();
-        memory.startup();
-        disk.startup();
-        System.out.println(&quot;computer start successful...&quot;);
-    }
-
-    public void shutdown() {
-        System.out.println(&quot;computer shutdown...&quot;);
-        cpu.shutdown();
-        memory.shutdown();
-        disk.shutdown();
-        System.out.println(&quot;computer shutdown successful...&quot;);
-    }
-}
-</code></pre>
-<pre><code class="language-java">package totoroay.facade;
-// 客户角色：
-public class ComputerFacade {
-    public static void main(String[] args) {
-        Computer computer = new Computer();
-        computer.startup();
-        System.out.println(&quot;电脑运行中...&quot;);
-
-        computer.shutdown();
-    }
-}
-</code></pre>
-<p><strong>结果</strong></p>
-<figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1589266814798.png" alt="" loading="lazy"></figure>
-<p><strong>结构分析</strong></p>
-<figure data-type="image" tabindex="3"><img src="https://totoroay.github.io//post-images/1589266811218.png" alt="" loading="lazy"></figure>
-<p><strong>应用场景</strong></p>
-<figure data-type="image" tabindex="4"><img src="https://totoroay.github.io//post-images/1589266806093.png" alt="" loading="lazy"></figure>
-<p><strong>扩展：系统升级！！！</strong></p>
-<figure data-type="image" tabindex="5"><img src="https://totoroay.github.io//post-images/1589266801540.png" alt="" loading="lazy"></figure>
 ]]></content>
     </entry>
 </feed>
