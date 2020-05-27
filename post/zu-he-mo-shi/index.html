@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>totoroay</title>
 <meta name="description" content="每天学习5小时！！！" />
-<link rel="shortcut icon" href="https://totoroay.github.io//favicon.ico?v=1590487667411">
+<link rel="shortcut icon" href="https://totoroay.github.io//favicon.ico?v=1590549524606">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
@@ -23,7 +23,7 @@
       <div class="flex lg:block p-4 lg:px-0 items-center fixed lg:static lg:block top-0 right-0 left-0 bg-white z-50">
         <i class="ri-menu-2-line lg:mt-4 text-2xl cursor-pointer animated fadeIn" onclick="openMenu()"></i>
         <a href="https://totoroay.github.io/">
-          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://totoroay.github.io//images/avatar.png?v=1590487667411" alt="">
+          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://totoroay.github.io//images/avatar.png?v=1590549524606" alt="">
         </a>
         <h1 class="animated fadeInLeft lg:text-4xl font-extrabold lg:mt-8 mt-0 text-xl" style="animation-delay: 0.2s">totoroay</h1>
       </div>
@@ -80,18 +80,168 @@
       <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
         <h1 class="text-3xl font-bold lg:mt-16">组合模式</h1>
         <div class="text-sm text-gray-700 lg:my-8">
-          2020-05-26 / 0 min read
+          2020-05-26 / 3 min read
         </div>
         
           <img class="post-feature-image rounded-lg mx-auto my-4" src="https://totoroay.github.io//post-images/zu-he-mo-shi.png" alt="">
         
         <div class="post-content yue">
-          <figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1590478559894.png" alt="" loading="lazy"></figure>
-<figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1590478564678.png" alt="" loading="lazy"></figure>
-<figure data-type="image" tabindex="3"><img src="https://totoroay.github.io//post-images/1590478569734.png" alt="" loading="lazy"></figure>
-<figure data-type="image" tabindex="4"><img src="https://totoroay.github.io//post-images/1590478573410.png" alt="" loading="lazy"></figure>
-<figure data-type="image" tabindex="5"><img src="https://totoroay.github.io//post-images/1590478597017.png" alt="" loading="lazy"></figure>
-<figure data-type="image" tabindex="6"><img src="https://totoroay.github.io//post-images/1590478603143.png" alt="" loading="lazy"></figure>
+          <figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1590549387102.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1590549382195.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="3"><img src="https://totoroay.github.io//post-images/1590549376448.png" alt="" loading="lazy"></figure>
+<p><strong>代码实现</strong></p>
+<pre><code class="language-java">package totoroay.composite;
+
+import java.util.ArrayList;
+//透明组合模式
+public class CompositePattern {
+    public static void main(String[] args){
+        Component c0=new Composite();
+        Component c1=new Composite();
+        Component leaf1=new Leaf(&quot;1&quot;);
+        Component leaf2=new Leaf(&quot;2&quot;);
+        Component leaf3=new Leaf(&quot;3&quot;);
+        c0.add(leaf1);
+        c0.add(c1);
+        c1.add(leaf2);
+        c1.add(leaf3);
+        c0.operation();
+    }
+}
+//抽象构件，补充代码
+interface Component{
+    public void add(Component c);
+    public void remove(Component c);
+    public Component getChild(int i);
+    public void operation();
+}
+//树叶构件，补充代码
+class Leaf implements Component{
+    private String name;
+
+    public Leaf(String name){
+        this.name = name;
+    }
+
+    public void add(Component c){}
+    public void remove(Component c){}
+
+    public Component getChild(int i){
+        return null;
+    }
+
+    public void operation(){
+        System.out.println(&quot;树叶&quot;+name+&quot;： 被访问！&quot;);
+    }
+}
+//树枝构件，补充代码
+class Composite implements Component{
+    private ArrayList&lt;Component&gt; children = new ArrayList&lt;Component&gt;();
+
+    public void add(Component c){
+        children.add(c);
+    }
+
+    public void remove(Component c){
+        children.remove(c);
+    }
+
+    public Component getChild(int i){
+        return children.get(i);
+    }
+
+    public void operation(){
+        for(Object obj : children){
+            ((Component)obj).operation();
+        }
+    }
+}
+</code></pre>
+<p><strong>测试结果</strong></p>
+<figure data-type="image" tabindex="4"><img src="https://totoroay.github.io//post-images/1590549364974.png" alt="" loading="lazy"></figure>
+<hr>
+<hr>
+<figure data-type="image" tabindex="5"><img src="https://totoroay.github.io//post-images/1590549321666.png" alt="" loading="lazy"></figure>
+<p><strong>代码实现</strong></p>
+<pre><code class="language-java">package totoroay.composite;
+
+import java.util.ArrayList;
+import java.util.List;
+//安全组合模式
+public class FileComposite {
+    public static void main(String[] args) {
+        Folder diskC = new Folder(&quot;C:\\&quot;);
+        Folder windows = new Folder(&quot;---Windows&quot;);
+        Folder system32 = new Folder(&quot;------system32&quot;);
+        File calcFile = new File(&quot;---------calc.exe&quot;);
+        File pingFile = new File(&quot;---------ping.exe&quot;);
+
+        diskC.addDir(windows);
+        windows.addDir(system32);
+        system32.addDir(calcFile);
+        system32.addDir(pingFile);
+
+        diskC.print();
+    }
+}
+
+//抽象根类：Component，补充代码
+abstract class Directory{
+    protected String name;
+
+    public Directory(String name){
+        this.name = name;
+    }
+
+    public abstract void print();
+}
+
+//叶子节点：Leaf，补充代码
+class File extends Directory{
+    public File(String name){
+        super(name);
+    }
+
+    public void print(){
+        System.out.println(this.name + &quot;: file&quot;);
+    }
+}
+
+//树枝节点：Composite，补充代码
+class Folder extends Directory{
+    private List&lt;Directory&gt; mDirs;
+
+    public Folder(String name){
+        super(name);
+        this.mDirs = new ArrayList&lt;Directory&gt;();
+    }
+
+    public void print(){
+        System.out.println(this.name + &quot;: Folder&quot;);
+        for(Directory dir : this.mDirs){
+            dir.print();
+        }
+    }
+
+    public boolean addDir(Directory dir){
+        return this.mDirs.add(dir);
+    }
+
+    public boolean removeDir(Directory dir){
+        return this.mDirs.remove(dir);
+    }
+
+    public Directory getDir(int index){
+        return this.mDirs.get(index);
+    }
+}
+</code></pre>
+<p><strong>测试结果</strong></p>
+<figure data-type="image" tabindex="6"><img src="https://totoroay.github.io//post-images/1590549312922.png" alt="" loading="lazy"></figure>
+<hr>
+<hr>
+<figure data-type="image" tabindex="7"><img src="https://totoroay.github.io//post-images/1590549307689.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="8"><img src="https://totoroay.github.io//post-images/1590549303591.png" alt="" loading="lazy"></figure>
 
         </div>
 

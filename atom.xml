@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://totoroay.github.io/</id>
     <title>totoroay</title>
-    <updated>2020-05-26T10:08:01.209Z</updated>
+    <updated>2020-05-27T03:19:45.813Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://totoroay.github.io/"/>
     <link rel="self" href="https://totoroay.github.io/atom.xml"/>
@@ -10,6 +10,146 @@
     <logo>https://totoroay.github.io/images/avatar.png</logo>
     <icon>https://totoroay.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, totoroay</rights>
+    <entry>
+        <title type="html"><![CDATA[ 命令模式]]></title>
+        <id>https://totoroay.github.io/post/ming-ling-mo-shi/</id>
+        <link href="https://totoroay.github.io/post/ming-ling-mo-shi/">
+        </link>
+        <updated>2020-05-27T03:16:57.000Z</updated>
+        <content type="html"><![CDATA[<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1590549483270.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1590549475047.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="3"><img src="https://totoroay.github.io//post-images/1590549469038.png" alt="" loading="lazy"></figure>
+<p><strong>代码实现</strong></p>
+<pre><code class="language-java">package command;
+//接受者：  录音机
+public class Radio {
+    public void play(){
+        System.out.println(&quot;播放&quot;);
+    }
+
+    public void rewind(){
+        System.out.println(&quot;倒带&quot;);
+    }
+
+    public void stop(){
+        System.out.println(&quot;暂停&quot;);
+    }
+}
+</code></pre>
+<pre><code class="language-java">package command;
+//抽象命令类
+public interface Command {
+    public void execute();
+}
+</code></pre>
+<pre><code class="language-java">package command;
+//具体命令类：    播放
+public class PlayCommand implements Command {
+    private Radio radio;
+
+    public PlayCommand(Radio radio){
+        this.radio = radio;
+    }
+
+    @Override
+    public void execute() {
+        this.radio.play();
+    }
+}
+</code></pre>
+<pre><code class="language-java">package command;
+//具体命令类：    倒带
+public class RewindCommand implements Command {
+    private Radio radio;
+
+    public RewindCommand(Radio radio){
+        this.radio = radio;
+    }
+
+    @Override
+    public void execute() {
+        this.radio.rewind();
+    }
+}
+</code></pre>
+<pre><code class="language-java">package command;
+//具体命令类：    暂停
+public class StopCommand implements Command {
+    private Radio radio;
+
+    public StopCommand(Radio radio){
+        this.radio = radio;
+    }
+
+    @Override
+    public void execute() {
+        this.radio.stop();
+    }
+}
+</code></pre>
+<pre><code class="language-java">package command;
+//请求者角色：    键盘
+public class Keyboard {
+    private Command playCommand;
+    private Command rewindCommand;
+    private Command stopCommand;
+
+    public void setPlayCommand(Command playCommand) {
+        this.playCommand = playCommand;
+    }
+
+    public void setRewindCommand(Command rewindCommand) {
+        this.rewindCommand = rewindCommand;
+    }
+
+    public void setStopCommand(Command stopCommand) {
+        this.stopCommand = stopCommand;
+    }
+
+    public void play(){
+        playCommand.execute();
+    }
+
+    public void rewind(){
+        playCommand.execute();
+    }
+
+    public void stop(){
+        playCommand.execute();
+    }
+}
+</code></pre>
+<pre><code class="language-java">package command;
+//测试类
+public class CommandRadio {
+    public static void main(String[] args) {
+        //创建接受者对象
+        Radio radio = new Radio();
+
+        PlayCommand playCommand = new PlayCommand(radio);
+        RewindCommand rewindCommand = new RewindCommand(radio);
+        StopCommand stopCommand = new StopCommand(radio);
+
+        Keyboard keyboard = new Keyboard();
+        keyboard.setPlayCommand(playCommand);
+        keyboard.setRewindCommand(rewindCommand);
+        keyboard.setStopCommand(stopCommand);
+
+        keyboard.play();
+        keyboard.rewind();
+        keyboard.stop();
+    }
+}
+</code></pre>
+<p><strong>测试结果</strong></p>
+<figure data-type="image" tabindex="4"><img src="https://totoroay.github.io//post-images/1590549458525.png" alt="" loading="lazy"></figure>
+<hr>
+<hr>
+<figure data-type="image" tabindex="5"><img src="https://totoroay.github.io//post-images/1590549451000.png" alt="" loading="lazy"></figure>
+<p><img src="https://totoroay.github.io//post-images/1590549447508.png" alt="" loading="lazy">)</p>
+<figure data-type="image" tabindex="6"><img src="https://totoroay.github.io//post-images/1590549443248.png" alt="" loading="lazy"></figure>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[策略模式]]></title>
         <id>https://totoroay.github.io/post/ce-lue-mo-shi/</id>
@@ -187,12 +327,162 @@ public class TemplateMethodCook {
         <link href="https://totoroay.github.io/post/zu-he-mo-shi/">
         </link>
         <updated>2020-05-26T07:35:05.000Z</updated>
-        <content type="html"><![CDATA[<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1590478559894.png" alt="" loading="lazy"></figure>
-<figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1590478564678.png" alt="" loading="lazy"></figure>
-<figure data-type="image" tabindex="3"><img src="https://totoroay.github.io//post-images/1590478569734.png" alt="" loading="lazy"></figure>
-<figure data-type="image" tabindex="4"><img src="https://totoroay.github.io//post-images/1590478573410.png" alt="" loading="lazy"></figure>
-<figure data-type="image" tabindex="5"><img src="https://totoroay.github.io//post-images/1590478597017.png" alt="" loading="lazy"></figure>
-<figure data-type="image" tabindex="6"><img src="https://totoroay.github.io//post-images/1590478603143.png" alt="" loading="lazy"></figure>
+        <content type="html"><![CDATA[<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1590549387102.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1590549382195.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="3"><img src="https://totoroay.github.io//post-images/1590549376448.png" alt="" loading="lazy"></figure>
+<p><strong>代码实现</strong></p>
+<pre><code class="language-java">package totoroay.composite;
+
+import java.util.ArrayList;
+//透明组合模式
+public class CompositePattern {
+    public static void main(String[] args){
+        Component c0=new Composite();
+        Component c1=new Composite();
+        Component leaf1=new Leaf(&quot;1&quot;);
+        Component leaf2=new Leaf(&quot;2&quot;);
+        Component leaf3=new Leaf(&quot;3&quot;);
+        c0.add(leaf1);
+        c0.add(c1);
+        c1.add(leaf2);
+        c1.add(leaf3);
+        c0.operation();
+    }
+}
+//抽象构件，补充代码
+interface Component{
+    public void add(Component c);
+    public void remove(Component c);
+    public Component getChild(int i);
+    public void operation();
+}
+//树叶构件，补充代码
+class Leaf implements Component{
+    private String name;
+
+    public Leaf(String name){
+        this.name = name;
+    }
+
+    public void add(Component c){}
+    public void remove(Component c){}
+
+    public Component getChild(int i){
+        return null;
+    }
+
+    public void operation(){
+        System.out.println(&quot;树叶&quot;+name+&quot;： 被访问！&quot;);
+    }
+}
+//树枝构件，补充代码
+class Composite implements Component{
+    private ArrayList&lt;Component&gt; children = new ArrayList&lt;Component&gt;();
+
+    public void add(Component c){
+        children.add(c);
+    }
+
+    public void remove(Component c){
+        children.remove(c);
+    }
+
+    public Component getChild(int i){
+        return children.get(i);
+    }
+
+    public void operation(){
+        for(Object obj : children){
+            ((Component)obj).operation();
+        }
+    }
+}
+</code></pre>
+<p><strong>测试结果</strong></p>
+<figure data-type="image" tabindex="4"><img src="https://totoroay.github.io//post-images/1590549364974.png" alt="" loading="lazy"></figure>
+<hr>
+<hr>
+<figure data-type="image" tabindex="5"><img src="https://totoroay.github.io//post-images/1590549321666.png" alt="" loading="lazy"></figure>
+<p><strong>代码实现</strong></p>
+<pre><code class="language-java">package totoroay.composite;
+
+import java.util.ArrayList;
+import java.util.List;
+//安全组合模式
+public class FileComposite {
+    public static void main(String[] args) {
+        Folder diskC = new Folder(&quot;C:\\&quot;);
+        Folder windows = new Folder(&quot;---Windows&quot;);
+        Folder system32 = new Folder(&quot;------system32&quot;);
+        File calcFile = new File(&quot;---------calc.exe&quot;);
+        File pingFile = new File(&quot;---------ping.exe&quot;);
+
+        diskC.addDir(windows);
+        windows.addDir(system32);
+        system32.addDir(calcFile);
+        system32.addDir(pingFile);
+
+        diskC.print();
+    }
+}
+
+//抽象根类：Component，补充代码
+abstract class Directory{
+    protected String name;
+
+    public Directory(String name){
+        this.name = name;
+    }
+
+    public abstract void print();
+}
+
+//叶子节点：Leaf，补充代码
+class File extends Directory{
+    public File(String name){
+        super(name);
+    }
+
+    public void print(){
+        System.out.println(this.name + &quot;: file&quot;);
+    }
+}
+
+//树枝节点：Composite，补充代码
+class Folder extends Directory{
+    private List&lt;Directory&gt; mDirs;
+
+    public Folder(String name){
+        super(name);
+        this.mDirs = new ArrayList&lt;Directory&gt;();
+    }
+
+    public void print(){
+        System.out.println(this.name + &quot;: Folder&quot;);
+        for(Directory dir : this.mDirs){
+            dir.print();
+        }
+    }
+
+    public boolean addDir(Directory dir){
+        return this.mDirs.add(dir);
+    }
+
+    public boolean removeDir(Directory dir){
+        return this.mDirs.remove(dir);
+    }
+
+    public Directory getDir(int index){
+        return this.mDirs.get(index);
+    }
+}
+</code></pre>
+<p><strong>测试结果</strong></p>
+<figure data-type="image" tabindex="6"><img src="https://totoroay.github.io//post-images/1590549312922.png" alt="" loading="lazy"></figure>
+<hr>
+<hr>
+<figure data-type="image" tabindex="7"><img src="https://totoroay.github.io//post-images/1590549307689.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="8"><img src="https://totoroay.github.io//post-images/1590549303591.png" alt="" loading="lazy"></figure>
 ]]></content>
     </entry>
     <entry>
@@ -1701,184 +1991,6 @@ public FilterRegistrationBean webStatFilter() {
 }
 </code></pre>
 <p>平时在工作中，按需求进行配置即可，主要用作监控！</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[SpringBoot09：页面国际化]]></title>
-        <id>https://totoroay.github.io/post/springboot09ye-mian-guo-ji-hua/</id>
-        <link href="https://totoroay.github.io/post/springboot09ye-mian-guo-ji-hua/">
-        </link>
-        <updated>2020-05-13T11:02:37.000Z</updated>
-        <content type="html"><![CDATA[<p>有的时候，我们的网站会去涉及中英文甚至多语言的切换，这时候我们就需要学习国际化了！</p>
-<h2 id="准备工作">准备工作</h2>
-<p>先在IDEA中统一设置properties的编码问题！</p>
-<figure data-type="image" tabindex="1"><img src="https://totoroay.github.io//post-images/1589367893729.png" alt="" loading="lazy"></figure>
-<p>编写国际化配置文件，抽取页面需要显示的国际化页面消息。我们可以去登录页面查看一下，哪些内容我们需要编写国际化的配置！</p>
-<h2 id="配置文件编写">配置文件编写</h2>
-<p>1、我们在resources资源文件下新建一个i18n目录，存放国际化配置文件</p>
-<p>2、建立一个login.properties文件，还有一个login_zh_CN.properties；发现IDEA自动识别了我们要做国际化操作；文件夹自动合并了！</p>
-<figure data-type="image" tabindex="2"><img src="https://totoroay.github.io//post-images/1589367886727.png" alt="" loading="lazy"></figure>
-<p>3、我们可以在这上面去新建一个文件；</p>
-<figure data-type="image" tabindex="3"><img src="https://totoroay.github.io//post-images/1589367880956.png" alt="" loading="lazy"></figure>
-<p>弹出如下页面：我们再添加一个英文的；</p>
-<figure data-type="image" tabindex="4"><img src="https://totoroay.github.io//post-images/1589367876189.png" alt="" loading="lazy"></figure>
-<p><strong>4、接下来，我们就来编写配置，我们可以看到idea下面有另外一个视图；</strong></p>
-<p>这个视图我们点击 + 号就可以直接添加属性了；我们新建一个login.tip，可以看到边上有三个文件框可以输入</p>
-<figure data-type="image" tabindex="5"><img src="https://totoroay.github.io//post-images/1589367871076.png" alt="" loading="lazy"></figure>
-<p>然后去查看我们的配置文件；</p>
-<p>login.properties ：默认</p>
-<pre><code class="language-properties">login.btn=登录
-login.password=密码
-login.remember=记住我
-login.tip=请登录
-login.username=用户名
-</code></pre>
-<p>英文：</p>
-<pre><code class="language-properties">login.btn=sign in
-login.password=password
-login.remember=remember me
-login.tip=Please sign in
-login.username=username
-</code></pre>
-<p>中文：</p>
-<pre><code class="language-properties">login.btn=登录
-login.password=密码
-login.remember=记住我
-login.tip=请登录
-login.username=用户名
-</code></pre>
-<p>OK，配置文件步骤搞定！</p>
-<h2 id="配置文件生效探究">配置文件生效探究</h2>
-<p>我们去看一下SpringBoot对国际化的自动配置！这里又涉及到一个类：MessageSourceAutoConfiguration</p>
-<p>里面有一个方法，这里发现SpringBoot已经自动配置好了管理我们国际化资源文件的组件 ResourceBundleMessageSource；</p>
-<pre><code class="language-java">@Bean
-@ConfigurationProperties(prefix = &quot;spring.messages&quot;)
-public MessageSourceProperties messageSourceProperties() {
-	return new MessageSourceProperties();
-}
-
-
-// 获取 properties 传递过来的值进行判断
-@Bean
-public MessageSource messageSource(MessageSourceProperties properties) {
-    ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-    if (StringUtils.hasText(properties.getBasename())) {
-        // 设置国际化文件的基础名（去掉语言国家代码的）
-        messageSource.setBasenames(
-            StringUtils.commaDelimitedListToStringArray(
-                                       StringUtils.trimAllWhitespace(properties.getBasename())));
-    }
-    if (properties.getEncoding() != null) {
-        messageSource.setDefaultEncoding(properties.getEncoding().name());
-    }
-    messageSource.setFallbackToSystemLocale(properties.isFallbackToSystemLocale());
-    Duration cacheDuration = properties.getCacheDuration();
-    if (cacheDuration != null) {
-        messageSource.setCacheMillis(cacheDuration.toMillis());
-    }
-    messageSource.setAlwaysUseMessageFormat(properties.isAlwaysUseMessageFormat());
-    messageSource.setUseCodeAsDefaultMessage(properties.isUseCodeAsDefaultMessage());
-    return messageSource;
-}
-</code></pre>
-<p>我们真实 的情况是放在了i18n目录下，所以我们要去配置这个messages的路径；</p>
-<pre><code class="language-properties">spring.messages.basename=i18n/login
-</code></pre>
-<h2 id="配置页面国际化值">配置页面国际化值</h2>
-<p>去页面获取国际化的值，查看Thymeleaf的文档，找到message取值操作为：#{...}。我们去页面测试下：</p>
-<p>IDEA还有提示，非常智能的</p>
-<figure data-type="image" tabindex="6"><img src="https://totoroay.github.io//post-images/1589367857228.png" alt="" loading="lazy"></figure>
-<p>我们可以去启动项目，访问一下，发现已经自动识别为中文的了！</p>
-<figure data-type="image" tabindex="7"><img src="https://totoroay.github.io//post-images/1589367851133.png" alt="" loading="lazy"></figure>
-<p><strong>但是我们想要更好！可以根据按钮自动切换中文英文！</strong></p>
-<h2 id="配置国际化解析">配置国际化解析</h2>
-<p>在Spring中有一个国际化的Locale （区域信息对象）；里面有一个叫做LocaleResolver （获取区域信息对象）的解析器！</p>
-<p>我们去我们WebMvcAutoConfiguration自动配置文件，寻找一下！看到SpringBoot默认配置：</p>
-<pre><code class="language-java">@Bean
-@ConditionalOnMissingBean
-@ConditionalOnProperty(prefix = &quot;spring.mvc&quot;, name = &quot;locale&quot;)
-public LocaleResolver localeResolver() {
-    // 容器中没有就自己配，有的话就用用户配置的
-    if (this.mvcProperties.getLocaleResolver() == WebMvcProperties.LocaleResolver.FIXED) {
-        return new FixedLocaleResolver(this.mvcProperties.getLocale());
-    }
-    // 接收头国际化分解
-    AcceptHeaderLocaleResolver localeResolver = new AcceptHeaderLocaleResolver();
-    localeResolver.setDefaultLocale(this.mvcProperties.getLocale());
-    return localeResolver;
-}
-</code></pre>
-<p>AcceptHeaderLocaleResolver 这个类中有一个方法</p>
-<pre><code class="language-java">public Locale resolveLocale(HttpServletRequest request) {
-    Locale defaultLocale = this.getDefaultLocale();
-    // 默认的就是根据请求头带来的区域信息获取Locale进行国际化
-    if (defaultLocale != null &amp;&amp; request.getHeader(&quot;Accept-Language&quot;) == null) {
-        return defaultLocale;
-    } else {
-        Locale requestLocale = request.getLocale();
-        List&lt;Locale&gt; supportedLocales = this.getSupportedLocales();
-        if (!supportedLocales.isEmpty() &amp;&amp; !supportedLocales.contains(requestLocale)) {
-            Locale supportedLocale = this.findSupportedLocale(request, supportedLocales);
-            if (supportedLocale != null) {
-                return supportedLocale;
-            } else {
-                return defaultLocale != null ? defaultLocale : requestLocale;
-            }
-        } else {
-            return requestLocale;
-        }
-    }
-}
-</code></pre>
-<p>那假如我们现在想点击链接让我们的国际化资源生效，就需要让我们自己的Locale生效！</p>
-<p>我们去自己写一个自己的LocaleResolver，可以在链接上携带区域信息！</p>
-<p>修改一下前端页面的跳转连接：</p>
-<pre><code class="language-html">&lt;!-- 这里传入参数不需要使用 ？使用 （key=value）--&gt;
-&lt;a class=&quot;btn btn-sm&quot; th:href=&quot;@{/index.html(language='zh_CN')}&quot;&gt;中文&lt;/a&gt;
-&lt;a class=&quot;btn btn-sm&quot; th:href=&quot;@{/index.html(language='en_US')}&quot;&gt;English&lt;/a&gt;
-</code></pre>
-<p>我们去写一个处理的组件类！</p>
-<pre><code class="language-java">package com.totoroay.config;
-
-import org.springframework.util.StringUtils;
-import org.springframework.web.servlet.LocaleResolver;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.Locale;
-
-public class MyLocaleResolver implements LocaleResolver {
-    // 解析请求
-    @Override
-    public Locale resolveLocale(HttpServletRequest request) {
-        // 获取请求中的语言参数
-        String language = request.getParameter(&quot;language&quot;);
-        // 默认
-        Locale locale = Locale.getDefault();
-        // 如果请求中的链接携带了国际化的参数
-        if (!StringUtils.isEmpty(language)) {
-            // zh_CN
-            String[] split = language.split(&quot;_&quot;);
-            // 国家，地区
-            locale = new Locale(split[0], split[1]);
-        }
-        return locale;
-    }
-
-    @Override
-    public void setLocale(HttpServletRequest request, HttpServletResponse response, Locale locale) {
-
-    }
-}
-</code></pre>
-<p>为了让我们的区域化信息能够生效，我们需要再配置一下这个组件！在我们自己的MyMvcConfig下添加bean；</p>
-<pre><code class="language-java">// 自定义国际化组件
-@Bean
-public LocaleResolver localeResolver(){
-    return new MyLocaleResolver();
-}
-</code></pre>
-<p><strong>我们重启项目，来访问一下，发现点击按钮可以实现成功切换！搞定收工！</strong></p>
 ]]></content>
     </entry>
 </feed>
