@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>totoroay</title>
 <meta name="description" content="每天学习5小时！！！" />
-<link rel="shortcut icon" href="https://totoroay.github.io//favicon.ico?v=1590549524606">
+<link rel="shortcut icon" href="https://totoroay.github.io//favicon.ico?v=1590585075719">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
@@ -23,7 +23,7 @@
       <div class="flex lg:block p-4 lg:px-0 items-center fixed lg:static lg:block top-0 right-0 left-0 bg-white z-50">
         <i class="ri-menu-2-line lg:mt-4 text-2xl cursor-pointer animated fadeIn" onclick="openMenu()"></i>
         <a href="https://totoroay.github.io/">
-          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://totoroay.github.io//images/avatar.png?v=1590549524606" alt="">
+          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://totoroay.github.io//images/avatar.png?v=1590585075719" alt="">
         </a>
         <h1 class="animated fadeInLeft lg:text-4xl font-extrabold lg:mt-8 mt-0 text-xl" style="animation-delay: 0.2s">totoroay</h1>
       </div>
@@ -37,6 +37,13 @@
 <li><a href="#springboot05%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E5%8E%9F%E7%90%86">SpringBoot05：自动配置原理</a>
 <ul>
 <li><a href="#%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%E5%8E%9F%E7%90%86">自动配置原理</a></li>
+<li><a href="#%E8%87%AA%E5%AE%9A%E4%B9%89starter">自定义starter</a>
+<ul>
+<li><a href="#%E8%AF%B4%E6%98%8E">说明</a></li>
+<li><a href="#%E7%BC%96%E5%86%99%E5%90%AF%E5%8A%A8%E5%99%A8">编写启动器</a></li>
+<li><a href="#%E6%96%B0%E5%BB%BA%E9%A1%B9%E7%9B%AE%E6%B5%8B%E8%AF%95%E6%88%91%E4%BB%AC%E8%87%AA%E5%B7%B1%E5%86%99%E7%9A%84%E5%90%AF%E5%8A%A8%E5%99%A8">新建项目测试我们自己写的启动器</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -85,9 +92,9 @@
 <div class="mask" onclick="closeMenu()">
 </div>
       <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
-        <h1 class="text-3xl font-bold lg:mt-16">SpringBoot05：自动配置原理</h1>
+        <h1 class="text-3xl font-bold lg:mt-16">SpringBoot05：自动配置原理及自定义starter</h1>
         <div class="text-sm text-gray-700 lg:my-8">
-          2020-05-07 / 5 min read
+          2020-05-07 / 8 min read
         </div>
         
           <img class="post-feature-image rounded-lg mx-auto my-4" src="https://totoroay.github.io//post-images/springboot05zi-dong-pei-zhi-yuan-li.jpg" alt="">
@@ -193,6 +200,161 @@ debug=true
 <p><strong>Unconditional classes: （没有条件的类）</strong></p>
 <p>【演示：查看输出的日志】</p>
 <p>掌握吸收理解原理，即可以不变应万变！</p>
+<h2 id="自定义starter">自定义starter</h2>
+<p>分析完毕源码以及自动装配的过程，我们可以尝试自定义一个启动器来玩玩！</p>
+<h3 id="说明">说明</h3>
+<p>启动器模块是一个 空 jar 文件，仅提供辅助性依赖管理，这些依赖可能用于自动装配或者其他类库；</p>
+<p><strong>命名归约：</strong></p>
+<p>官方命名：</p>
+<ul>
+<li>前缀：spring-boot-starter-xxx</li>
+<li>比如：spring-boot-starter-web....</li>
+</ul>
+<p>自定义命名：</p>
+<ul>
+<li>xxx-spring-boot-starter</li>
+<li>比如：mybatis-spring-boot-starter</li>
+</ul>
+<h3 id="编写启动器">编写启动器</h3>
+<p>1、在IDEA中新建一个空项目 spring-boot-starter-diy</p>
+<p>2、再里面新建一个普通Maven模块：totoroay-spring-boot-starter</p>
+<figure data-type="image" tabindex="4"><img src="https://totoroay.github.io//post-images/1590584015445.png" alt="" loading="lazy"></figure>
+<p>3、新建一个Springboot模块：totoroay-spring-boot-starter-autoconfigure</p>
+<figure data-type="image" tabindex="5"><img src="https://totoroay.github.io//post-images/1590584007265.png" alt="" loading="lazy"></figure>
+<p>4、点击apply即可，基本结构</p>
+<figure data-type="image" tabindex="6"><img src="https://totoroay.github.io//post-images/1590583999657.png" alt="" loading="lazy"></figure>
+<p>5、在我们的 starter 中 导入  autoconfigure 的依赖！</p>
+<pre><code class="language-xml">&lt;!-- 启动器 --&gt;
+&lt;dependencies&gt;
+    &lt;!--  引入自动配置模块 --&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;com.totoroay&lt;/groupId&gt;
+        &lt;artifactId&gt;totoroay-spring-boot-starter-autoconfigure&lt;/artifactId&gt;
+        &lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;
+</code></pre>
+<p>6、将 autoconfigure 项目下多余的文件都删掉，Pom中只留下一个 starter，这是所有的启动器基本配置！</p>
+<figure data-type="image" tabindex="7"><img src="https://totoroay.github.io//post-images/1590583991605.png" alt="" loading="lazy"></figure>
+<p>7、我们编写一个自己的服务</p>
+<pre><code class="language-java">package com.totoroay;
+
+public class HelloService {
+
+    HelloProperties helloProperties;
+
+    public HelloProperties getHelloProperties() {
+        return helloProperties;
+    }
+
+    public void setHelloProperties(HelloProperties helloProperties) {
+        this.helloProperties = helloProperties;
+    }
+
+    public String sayHello(String name){
+        return helloProperties.getPrefix() + name + helloProperties.getSuffix();
+    }
+
+}
+</code></pre>
+<p>8、编写HelloProperties 配置类</p>
+<pre><code class="language-java">package com.totoroay;
+
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
+// 前缀 totoroay.hello
+@ConfigurationProperties(prefix = &quot;totoroay.hello&quot;)
+public class HelloProperties {
+
+    private String prefix;
+    private String suffix;
+
+    public String getPrefix() {
+        return prefix;
+    }
+
+    public void setPrefix(String prefix) {
+        this.prefix = prefix;
+    }
+
+    public String getSuffix() {
+        return suffix;
+    }
+
+    public void setSuffix(String suffix) {
+        this.suffix = suffix;
+    }
+}
+</code></pre>
+<p>9、编写我们的自动配置类并注入bean，测试！</p>
+<pre><code class="language-java">package com.totoroay;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+@ConditionalOnWebApplication //web应用生效
+@EnableConfigurationProperties(HelloProperties.class)
+public class HelloServiceAutoConfiguration {
+
+    @Autowired
+    HelloProperties helloProperties;
+
+    @Bean
+    public HelloService helloService(){
+        HelloService service = new HelloService();
+        service.setHelloProperties(helloProperties);
+        return service;
+    }
+
+}
+</code></pre>
+<p>10、在resources编写一个自己的 META-INF\spring.factories</p>
+<pre><code class="language-properties"># Auto Configure
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.totoroay.HelloServiceAutoConfiguration
+</code></pre>
+<p>11、编写完成后，可以安装到maven仓库中！</p>
+<figure data-type="image" tabindex="8"><img src="https://totoroay.github.io//post-images/1590583979090.png" alt="" loading="lazy"></figure>
+<h3 id="新建项目测试我们自己写的启动器">新建项目测试我们自己写的启动器</h3>
+<p>1、新建一个SpringBoot 项目</p>
+<p>2、导入我们自己写的启动器</p>
+<pre><code class="language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;com.totoroay&lt;/groupId&gt;
+    &lt;artifactId&gt;totoroay-spring-boot-starter&lt;/artifactId&gt;
+    &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>3、编写一个 HelloController  进行测试我们自己的写的接口！</p>
+<pre><code class="language-java">package com.totoroay.controller;
+
+import com.totoroay.HelloService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class HelloController {
+
+    @Autowired
+    HelloService helloService;
+
+    @RequestMapping(&quot;/hello&quot;)
+    public String hello(){
+        return helloService.sayHello(&quot;zxc&quot;);
+    }
+
+}
+</code></pre>
+<p>4、编写配置文件 application.properties</p>
+<pre><code class="language-properties">totoroay.hello.prefix=&quot;ppp&quot;
+totoroay.hello.suffix=&quot;sss&quot;
+</code></pre>
+<p>5、启动项目进行测试，结果成功 !</p>
+<figure data-type="image" tabindex="9"><img src="https://totoroay.github.io//post-images/1590583968810.png" alt="" loading="lazy"></figure>
 
         </div>
 
