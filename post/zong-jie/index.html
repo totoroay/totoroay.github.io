@@ -1,0 +1,342 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>totoroay</title>
+<meta name="description" content="每天学习5小时！！！" />
+<link rel="shortcut icon" href="https://totoroay.github.io//favicon.ico?v=1590627733140">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+
+<link rel="stylesheet" href="https://totoroay.github.io//styles/main.css">
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main px-4 flex flex-col lg:flex-row">
+      <div id="sidebar" class="sidebar-wrapper lg:static lg:w-1/4">
+  <div class="lg:sticky top-0">
+    <div class="sidebar-content">
+      <div class="flex lg:block p-4 lg:px-0 items-center fixed lg:static lg:block top-0 right-0 left-0 bg-white z-50">
+        <i class="ri-menu-2-line lg:mt-4 text-2xl cursor-pointer animated fadeIn" onclick="openMenu()"></i>
+        <a href="https://totoroay.github.io/">
+          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://totoroay.github.io//images/avatar.png?v=1590627733140" alt="">
+        </a>
+        <h1 class="animated fadeInLeft lg:text-4xl font-extrabold lg:mt-8 mt-0 text-xl" style="animation-delay: 0.2s">totoroay</h1>
+      </div>
+      
+        <div class="animated fadeInLeft" style="animation-delay: 0.4s">
+          <p class="my-4 text-gray-600 font-light hidden lg:block">
+            文章目录
+          </p>
+          <div class="toc-container hidden lg:block">
+            <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E4%B8%89%E5%B1%82%E6%9E%B6%E6%9E%84-mvc">三层架构 + MVC</a></li>
+<li><a href="#%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84-%E6%96%B0%E6%9E%B6%E6%9E%84">微服务架构---&gt;新架构</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      
+    </div>
+  </div>
+</div>
+
+<div class="menu-container">
+  <i class="ri-arrow-left-line text-2xl cursor-pointer animated fadeIn close-menu-btn" onclick="closeMenu()"></i>
+  <div>
+    
+      
+        <a href="/" class="menu" style="animation-delay: 0s">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu" style="animation-delay: 0.2s">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu" style="animation-delay: 0.4s">
+          标签（分类）
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu" style="animation-delay: 0.6000000000000001s">
+          关于博主
+        </a>
+      
+    
+  </div>
+  <div class="site-footer">
+    <div class="py-4 text-gray-700"></div>
+    <a class="rss" href="https://totoroay.github.io//atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+<div class="mask" onclick="closeMenu()">
+</div>
+      <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
+        <h1 class="text-3xl font-bold lg:mt-16">总结</h1>
+        <div class="text-sm text-gray-700 lg:my-8">
+          2020-05-27 / 3 min read
+        </div>
+        
+          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://totoroay.github.io//post-images/zong-jie.jpg" alt="">
+        
+        <div class="post-content yue">
+          <h2 id="三层架构-mvc">三层架构 + MVC</h2>
+<p>​	目的：架构   ---&gt;   解耦</p>
+<p>开发框架</p>
+<ul>
+<li>Spring<br>
+IOC		AOP</li>
+</ul>
+<p>​							IOC ：控制反转</p>
+<p>​									约泡：<br>
+​											泡温泉，泡茶.....泡友</p>
+<p>​											附近的人，打招呼。加微信，聊天，天天聊，---&gt;约泡</p>
+<p>​									浴场(容器) :温泉， 茶庄，泡友<br>
+​											直接进温泉，就有人和你一起了!</p>
+<p>​									原来我们都是自己一步步操作，现在交给容器了!我们需要什么就去拿就可以了</p>
+<p>​							AOP :切面(本质，动态代理)<br>
+​								为了解决什么?不影响业务本来的情况下，实现动态增加功能，大量应用在日志，事务...等等</p>
+<p>方面</p>
+<p>​				Spring是一个轻量级的Java开源框架，容器</p>
+<p>​				目的:解决企业开发的复杂性问题</p>
+<p>​				Spring是春天，觉得他是春天，也十分复杂，配置文件!</p>
+<ul>
+<li>SpringBoot</li>
+</ul>
+<p>​				SpringBoot并不是新东西，就是Spring的升级版!</p>
+<pre><code>			新一代JavaEE的开发标准，开箱即用! &gt;拿过来就可以用! 它自动帮我们配置了非常多的东西，我们拿来即用!
+</code></pre>
+<p>​				特性:约定大于配置!</p>
+<p>随着公司体系越来越大，用户越来越多!</p>
+<h2 id="微服务架构-新架构">微服务架构---&gt;新架构</h2>
+<p>​		模块化，功能化!</p>
+<p>​		用户，支付，签到，娱乐，..... ;</p>
+<p>​		人越来越多：一台服务器解决不了；再增加服务器 ! 	 横向解决问题</p>
+<p>​		假设A服务器占用98%资源，B服务器只占用了10% 。——负载均衡;</p>
+<p>​		将原来的整体项目，分成模块化，用户就是一个单独的项目，签到也是一个单独的项目， 项目和项目之前需要通信，如何通信?</p>
+<p>​		用户非常多，而签到十分少!			给用户多一点服务器，给签到少一点服务器!</p>
+<p>微服务架构问题?</p>
+<p>分布式架构会遇到的四个核心问题?</p>
+<ol>
+<li>这么多服务，客户端该如何去访问?</li>
+<li>这么多服务，服务之间如何进行通信?</li>
+<li>这么多服务，如何治理呢?</li>
+<li>服务挂了，怎么办?</li>
+</ol>
+<p>解决方案:</p>
+<p>​	SpringCloud,是一套生态，就是来解决以上分布式架构的4个问题</p>
+<p>​	想使用SpringCloud,必须要掌握SpringBoot,因为SpringCloud是基 于SpringBoot;</p>
+<ol>
+<li>
+<p>Spring Cloud NetFlix ，出来了一套解决方案! 一站式解决方案。我们都可以直接去这里拿?</p>
+<p>​	Api网关，zuul组件</p>
+<p>​	Feign --&gt; HttpClient ---&gt; HTTP的通信方式，同步并阻塞</p>
+<p>​	服务注册与发现，Eureka</p>
+<p>​	熔断机制，Hystrix</p>
+<p>​</p>
+<p>​	2018年年底，NetFlix宣布无限期停止维护。生态不再维护，就会脱节。</p>
+</li>
+<li>
+<p>Apache Dubbo zookeeper，第二套解决系统</p>
+<p>​	API ：	没有! 	要么找第三方组件，要么自己实现</p>
+<p>​	Dubbo是一个高性能的基于Java实现的RPC通信框架！ 	2.6.x</p>
+<p>​	服务注册与发现，zookeeper: 动物园管理者(Hadoop ，Hive)</p>
+<p>​	没有：	借助了Hystrix</p>
+<p>​</p>
+<p>​	不完善，Dubbo	关注Dubbo 3.0</p>
+</li>
+<li>
+<p>SpringCloud Alibaba	一站式解决方案 !</p>
+</li>
+</ol>
+<p>目前，又提出了一种方案:</p>
+<p>​			服务网格：下一代微服务标准，Service Mesh</p>
+<p>​			代表解决方案: istio (未来可能需要掌握! )</p>
+<p>万变不离其宗，一通百通!</p>
+<ol>
+<li>
+<p>API网关，服务路由</p>
+<ol start="2">
+<li>
+<p>HTTP，RPC框架，异步调用</p>
+</li>
+<li>
+<p>服务注册与发现，高可用</p>
+</li>
+<li>
+<p>熔断机制，服务降级</p>
+</li>
+</ol>
+</li>
+</ol>
+<p>为什么要解决这个问题？ 本质：网络是不可靠的！</p>
+
+        </div>
+
+        
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://totoroay.github.io/tag/LkiY-qT6m/">
+            <span class="flex-auto">SpringBoot</span>
+          </a>
+        
+
+
+        <div class="flex justify-between py-8">
+          
+
+          
+            <div class="next-post">
+              <a href="https://totoroay.github.io/post/springboot17dubbo-he-zookeeper-ji-cheng/">
+                <h3 class="post-title">
+                  SpringBoot17：Dubbo和Zookeeper集成
+                  <i class="ri-arrow-right-line"></i>
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: '76af3abf5b345815d20f',
+    clientSecret: 'cd22dd44f3d5b861d2552cd4270bee0b3b1ad9cc',
+    repo: 'totoroay.github.io',
+    owner: 'totoroay',
+    admin: ['totoroay'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+
+      </div>
+    </div>
+
+    <script src="https://totoroay.github.io//media/prism.js"></script>  
+<script>
+
+Prism.highlightAll()
+let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+// This should probably be throttled.
+// Especially because it triggers during smooth scrolling.
+// https://lodash.com/docs/4.17.10#throttle
+// You could do like...
+// window.addEventListener("scroll", () => {
+//    _.throttle(doThatStuff, 100);
+// });
+// Only not doing it here to keep this Pen dependency-free.
+
+window.addEventListener("scroll", event => {
+  let fromTop = window.scrollY;
+
+  mainNavLinks.forEach((link, index) => {
+    let section = document.getElementById(decodeURI(link.hash).substring(1));
+    let nextSection = null
+    if (mainNavLinks[index + 1]) {
+      nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+    }
+    if (section.offsetTop <= fromTop) {
+      if (nextSection) {
+        if (nextSection.offsetTop > fromTop) {
+          link.classList.add("current");
+        } else {
+          link.classList.remove("current");    
+        }
+      } else {
+        link.classList.add("current");
+      }
+    } else {
+      link.classList.remove("current");
+    }
+  });
+});
+
+
+document.addEventListener("DOMContentLoaded", function() {
+  var lazyImages = [].slice.call(document.querySelectorAll(".post-feature-image.lazy"));
+
+  if ("IntersectionObserver" in window) {
+    let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          let lazyImage = entry.target
+          lazyImage.style.backgroundImage = `url(${lazyImage.dataset.bg})`
+          lazyImage.classList.remove("lazy")
+          lazyImageObserver.unobserve(lazyImage)
+        }
+      });
+    });
+
+    lazyImages.forEach(function(lazyImage) {
+      lazyImageObserver.observe(lazyImage)
+    })
+  } else {
+    // Possibly fall back to a more compatible method here
+  }
+});
+
+const menuContainer = document.querySelector('.menu-container')
+const menus = document.querySelectorAll('.menu-container .menu')
+const mask = document.querySelector('.mask')
+const contentWrapper = document.querySelector('.content-wrapper')
+const latestArticle = document.querySelector('.latest-article')
+const readMore = document.querySelector('.read-more')
+const indexPage = document.querySelector('.index-page')
+
+const isHome = location.pathname === '/'
+if (latestArticle) {
+  latestArticle.style.display = isHome ? 'block' : 'none'
+  readMore.style.display = isHome ? 'block' : 'none'
+  indexPage.style.display = isHome ? 'none' : 'block'
+}
+
+const openMenu = () => {
+  menuContainer.classList.add('open')
+  menus.forEach(menu => {
+    menu.classList.add('animated', 'fadeInLeft')
+  })
+  mask.classList.add('open')
+  contentWrapper.classList.add('is-second')
+}
+
+const closeMenu = () => {
+  menuContainer.classList.remove('open')
+  menus.forEach(menu => {
+    menu.classList.remove('animated', 'fadeInLeft')
+  })
+  mask.classList.remove('open')
+  contentWrapper.classList.remove('is-second')
+}
+</script>
+  
+  </body>
+</html>
